@@ -1,0 +1,3 @@
+from .movies_repository import MovieRepository
+from .movies_cast_repository import MovieCastRepository
+from .movies_genre_repository import MovieGenreRepository

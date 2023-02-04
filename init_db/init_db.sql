@@ -1,0 +1,7 @@
+CREATE USER 'movieuser'@'localhost' IDENTIFIED BY 'movieuser_pass';
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD
+on *.* TO 'movieuser'@'localhost' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+
+CREATE DATABASE IF NOT EXISTS movie_reviews;
