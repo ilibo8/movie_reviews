@@ -1,4 +1,6 @@
-from app.actor.exceptions import ActorNotFoundException
+from sqlalchemy.exc import IntegrityError
+
+from app.actor.exceptions import ActorNotFoundException, NoDataFoundException
 from app.actor.repository import ActorRepository
 from app.db.database import SessionLocal
 
@@ -11,7 +13,7 @@ class ActorService:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
                 return actor_repository.add_actor(full_name, nationality)
-        except Exception as e:
+        except IntegrityError as e:
             raise e
 
     @staticmethod
@@ -19,7 +21,9 @@ class ActorService:
         try:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
-                return actor_repository.get_all_actors()
+                actors = actor_repository.get_all_actors()
+                if len(actors) == 0:
+                    raise NoDataFoundException("No actors in database.")
         except Exception as e:
             raise e
 
