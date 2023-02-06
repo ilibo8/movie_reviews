@@ -21,9 +21,7 @@ class ActorService:
         try:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
-                actors = actor_repository.get_all_actors()
-                if len(actors) == 0:
-                    raise NoDataFoundException("No actors in database.")
+                return actor_repository.get_all_actors()
         except Exception as e:
             raise e
 
@@ -55,6 +53,15 @@ class ActorService:
             raise e
 
     @staticmethod
+    def find_actor_by_full_name(full_name: str):
+        try:
+            with SessionLocal() as db:
+                actor_repository = ActorRepository(db)
+                return actor_repository.find_actor_by_full_name(full_name)
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def change_actor_full_name(actor_id, full_name):
         try:
             with SessionLocal() as db:
@@ -80,5 +87,7 @@ class ActorService:
                 if actor_repository.delete_actor_by_id(actor_id) is None:
                     raise ActorNotFoundException(f'There is no actor with id {actor_id} in database.')
                 return True
+        except ActorNotFoundException as e:
+            raise ActorNotFoundException(e.message)
         except Exception as e:
             raise e

@@ -1,3 +1,5 @@
+from typing import Tuple, Any
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.actor.exceptions import ActorNotFoundException
@@ -57,6 +59,15 @@ class ActorRepository:
         except Exception as e:
             raise e
 
+    def find_actor_name_by_id(self, id) -> Actor:
+        try:
+            actor = self.db.query(Actor).filter(Actor.id == id).first()
+            if actor is None:
+                raise ActorNotFoundException(f"There is no actor with id {id}.")
+            return actor
+        except Exception as e:
+            raise e
+
     def change_actor_full_name(self, actor_id, full_name) -> Actor:
         try:
             actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
@@ -87,7 +98,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
             if actor is None:
-                return False
+                raise ActorNotFoundException(f"No actor with id {actor_id}.")
             self.db.delete(actor)
             self.db.commit()
             return True

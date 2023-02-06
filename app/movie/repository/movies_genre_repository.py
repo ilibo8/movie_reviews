@@ -1,6 +1,8 @@
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+
+from app.movie.exceptions import MovieNotFoundException
 from app.movie.model import MovieGenre
 
 
@@ -22,8 +24,8 @@ class MovieGenreRepository:
         except IntegrityError as e:
             raise e
 
-    def get_genre_of_movie(self, movie_id: int) -> list[MovieGenre]:
-        movie_genres = self.db.query(MovieGenre).filter(MovieGenre.movie_id == movie_id).all()
+    def get_genres_of_movie(self, movie_id: int) -> list[tuple]:
+        movie_genres = self.db.query(MovieGenre.genre_name).filter(MovieGenre.movie_id == movie_id).all()
         return movie_genres
 
     def delete_movie_genre(self, movie_id: int, genre_name : str) -> bool:
@@ -31,7 +33,7 @@ class MovieGenreRepository:
             movie = self.db.query(MovieGenre).filter\
                 (and_(MovieGenre.movie_id == movie_id, MovieGenre.genre_name == genre_name)).first()
             if movie is None:
-                return False
+                raise MovieNotFoundException(f"There is no movie with id {movie_id} and genre {genre_name}")
             self.db.delete(movie)
             self.db.commit()
             return True

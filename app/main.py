@@ -12,7 +12,7 @@ Base.metadata.create_all(bind=engine)
 
 def init_app():
     app = FastAPI()
-    #app.include_router(movie_router)
+    app.include_router(movie_router)
     app.include_router(actor_router)
     app.include_router(genre_router)
     return app

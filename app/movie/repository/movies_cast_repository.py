@@ -22,7 +22,7 @@ class MovieCastRepository:
         movies_cast = self.db.query(MovieCast).all()
         return movies_cast
 
-    def get_cast_ids_by_movie_id(self, movie_id):
+    def get_cast_ids_by_movie_id(self, movie_id) -> list[tuple]:
         movie_cast = self.db.query(MovieCast.actor_id).filter(MovieCast.movie_id == movie_id).all()
         return movie_cast
 
@@ -37,4 +37,3 @@ class MovieCastRepository:
             return True
         except Exception as e:
             raise e
-

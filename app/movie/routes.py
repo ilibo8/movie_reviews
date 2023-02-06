@@ -10,6 +10,6 @@ def get_all_movies():
     return MovieController.get_all_movies()
 
 
-@movie_router.get("/get-genre-od-movie/{movie_id}", response_model=list[MovieGenreSchema])
-def get_genre_of_movie(movie_id : int):
+@movie_router.get("/get-genres-od-movie/{movie_id}", response_model=list[MovieGenreSchema])
+def get_genres_of_movie(movie_id : int):
     return MovieController.get_genre_of_movie(movie_id)

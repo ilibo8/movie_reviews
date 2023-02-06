@@ -1,6 +1,5 @@
 from sqlalchemy.exc import IntegrityError
-
-from app.actor.exceptions import ActorNotFoundException, NoDataFoundException
+from app.actor.exceptions import ActorNotFoundException
 from app.actor.service import ActorService
 from fastapi import HTTPException, Response
 
@@ -20,8 +19,6 @@ class ActorController:
     def get_all_actors():
         try:
             return ActorService.get_all_actors()
-        except NoDataFoundException as e:
-            raise HTTPException(status_code=500, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -36,6 +33,13 @@ class ActorController:
     def find_actor_by_last_name(last_name: str):
         try:
             return ActorService.find_actor_by_last_name(last_name)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    @staticmethod
+    def find_actor_by_full_name(full_name: str):
+        try:
+            return ActorService.find_actor_by_full_name(full_name)
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))
 

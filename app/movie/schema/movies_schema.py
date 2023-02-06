@@ -1,18 +1,16 @@
-import typing
 from pydantic import BaseModel, StrictInt
-from pydantic.schema import date
-from app.actor.schema import ActorFullNameSchema
-from app.genre.schema import GenreSchema
+from app.movie.schema import MovieCastSchema, MovieGenreSchema
 
 
 class MovieSchema(BaseModel):
     id : int
     title : str
     director : str
-    movie_cast : typing.List[ActorFullNameSchema]
-    genre : typing.List[GenreSchema]
     release_year : int
     country_of_origin : str
+
+    movie_cast: list[MovieCastSchema.actor_id]
+    movie_genre: list[MovieGenreSchema.genre_name]
 
     class Config:
         orm_mode = True
@@ -21,8 +19,6 @@ class MovieSchema(BaseModel):
 class MovieSchemaIn(BaseModel):
     title: str
     director: str
-    movie_cast: typing.List[ActorFullNameSchema]
-    genre: typing.List[GenreSchema]
     release_year: StrictInt
     country_of_origin: str
 
