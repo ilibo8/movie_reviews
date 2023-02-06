@@ -22,6 +22,8 @@ class MovieService:
             with SessionLocal() as db:
                 movie_repository = MovieRepository(db)
                 movies = movie_repository.get_all_movies()
+                # for movie in movies:
+                #     movie.movie_cast = movie.movie_cast
                 return movies
             #     movies_with_cast_and_genre = []
             #     for movie in movies:
