@@ -68,6 +68,15 @@ class ActorRepository:
         except Exception as e:
             raise e
 
+    def get_actor_full_name_by_id(self, id) -> tuple:
+        try:
+            actor = self.db.query(Actor.full_name).filter(Actor.id == id).first()
+            if actor is None:
+                raise ActorNotFoundException(f"There is no actor with id {id}.")
+            return actor
+        except Exception as e:
+            raise e
+
     def change_actor_full_name(self, actor_id, full_name) -> Actor:
         try:
             actor = self.db.query(Actor).filter(Actor.id == actor_id).first()

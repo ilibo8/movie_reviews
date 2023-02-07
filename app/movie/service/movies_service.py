@@ -1,4 +1,6 @@
 from sqlalchemy.exc import IntegrityError
+
+from app.actor.repository import ActorRepository
 from app.db.database import SessionLocal
 from app.movie.exceptions import MovieNotFoundException
 from app.movie.repository import MovieRepository, MovieGenreRepository
@@ -22,24 +24,20 @@ class MovieService:
             with SessionLocal() as db:
                 movie_repository = MovieRepository(db)
                 movies = movie_repository.get_all_movies()
-                # for movie in movies:
-                #     movie.movie_cast = movie.movie_cast
-                return movies
-            #     movies_with_cast_and_genre = []
-            #     for movie in movies:
-            #         movie.actors = []
-            #         movie.genres = []
-            #         movie_cast_repo = MovieCastRepository(db)
-            #         cast_ids = movie_cast_repo.get_cast_ids_by_movie_id(movie.id)
-            #         for id in cast_ids:
-            #             actor_repo = ActorRepository(db)
-            #             actor = actor_repo.find_actor_name_by_id(id[0])
-            #             movie.actors.append(actor.full_name)
-            #         movie_genre_repo = MovieGenreRepository(db)
-            #         movie_genres = movie_genre_repo.get_genres_of_movie(movie.id)
-            #         movie.genres.append([genre[0] for genre in movie_genres])
-            #         movies_with_cast_and_genre.append(movie)
-            # return movies_with_cast_and_genre
+                for movie in movies:
+                    movie_cast_pair = movie.movie_cast
+                    full_names = []
+                    for item in movie_cast_pair:
+                        id = item.actor_id
+                        actor_repo = ActorRepository(db)
+                        full_names.append(actor_repo.get_actor_full_name_by_id(id)[0])
+                    genres = movie.movie_genre
+                    genres_names = []
+                    for movie_genre in genres:
+                        genres_names.append(movie_genre.genre_name)
+                    movie.genre = genres_names
+                    movie.actors = full_names
+            return movies
         except Exception as e:
             raise e
 

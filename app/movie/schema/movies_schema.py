@@ -9,8 +9,8 @@ class MovieSchema(BaseModel):
     release_year : int
     country_of_origin : str
 
-    movie_cast: list[MovieCastSchema]
-    movie_genre: list[MovieGenreSchema]
+    actors: list
+    genre: list
 
     class Config:
         orm_mode = True
