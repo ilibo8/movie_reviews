@@ -8,13 +8,16 @@ class MovieCastRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def add(self, movie_id, actor_name) -> MovieCast:
+    def add(self, movie_id: int, actor_ids: list[int]) -> list[MovieCast]:
         try:
-            movie_cast = MovieCast(movie_id, actor_name)
-            self.db.add(movie_cast)
-            self.db.commit()
-            self.db.refresh(movie_cast)
-            return movie_cast
+            movie_cast_list = []
+            for id in actor_ids:
+                movie_cast = MovieCast(movie_id, id)
+                self.db.add(movie_cast)
+                self.db.commit()
+                self.db.refresh(movie_cast)
+                movie_cast_list.append(movie_cast)
+            return movie_cast_list
         except IntegrityError as e:
             raise e
 

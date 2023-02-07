@@ -2,10 +2,9 @@ from fastapi import APIRouter
 from fastapi import Response
 
 from app.actor.controller import ActorController
-from app.actor.schema import ActorSchema, ActorFullNameSchema, ActorSchemaIn
+from app.actor.schema import ActorSchema, ActorSchemaIn
 
 actor_router = APIRouter(prefix="/api/movies/actors", tags=["Actors"])
-
 
 
 @actor_router.get("/get-all", response_model=list[ActorSchema])
@@ -13,9 +12,9 @@ def get_all_actors():
     return ActorController.get_all_actors()
 
 
-@actor_router.get("/get-all/names", response_model=list[ActorFullNameSchema])
+@actor_router.get("/get-all/names", response_model=list[str])
 def get_all_actors_names():
-    return ActorController.get_all_actors()
+    return ActorController.get_all_actors_names()
 
 
 @actor_router.get("/get-actors-by/name", response_model=list[ActorSchema])

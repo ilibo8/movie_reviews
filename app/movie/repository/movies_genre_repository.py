@@ -1,7 +1,6 @@
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-
 from app.movie.exceptions import MovieNotFoundException
 from app.movie.model import MovieGenre
 
@@ -10,25 +9,28 @@ class MovieGenreRepository:
     def __init__(self, db: Session):
         self.db = db
 
+    def add_movie_genre(self, movie_id, genre_name: str) -> MovieGenre:
+        try:
+            movie_genre = MovieGenre(movie_id=movie_id, genre_name=genre_name)
+            self.db.add(movie_genre)
+            self.db.commit()
+            self.db.refresh(movie_genre)
+            return movie_genre
+        except IntegrityError as e:
+            raise e
+
     def get_all(self) -> list[MovieGenre]:
         movie_genre = self.db.query(MovieGenre).all()
         return movie_genre
 
-    def add_movie_genre(self, movie_id, genre_name) -> MovieGenre:
+    def get_all_movie_ids_of_certain_genre(self, genre_name: str) -> list[tuple]:
         try:
-            genre = MovieGenre(movie_id=movie_id, genre_name=genre_name)
-            self.db.add(genre)
-            self.db.commit()
-            self.db.refresh(genre)
-            return genre
+            movie_ids = self.db.query(MovieGenre.movie_id).filter(MovieGenre.genre_name == genre_name).all()
+            return movie_ids
         except IntegrityError as e:
             raise e
 
-    def get_genres_of_movie(self, movie_id: int) -> list[tuple]:
-        movie_genres = self.db.query(MovieGenre.genre_name).filter(MovieGenre.movie_id == movie_id).all()
-        return movie_genres
-
-    def delete_movie_genre(self, movie_id: int, genre_name : str) -> bool:
+    def delete_movie_genre(self, movie_id: int, genre_name: str) -> bool:
         try:
             movie = self.db.query(MovieGenre).filter\
                 (and_(MovieGenre.movie_id == movie_id, MovieGenre.genre_name == genre_name)).first()

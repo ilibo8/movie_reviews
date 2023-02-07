@@ -6,7 +6,7 @@ from app.genre.schema import GenreSchema
 genre_router = APIRouter(prefix="/api/movies/genres", tags=["Genre"])
 
 
-@genre_router.get("/get-all", response_model=list[GenreSchema])
+@genre_router.get("/get-all", response_model=list[str])
 def get_all_genre():
     return GenreController.get_all_genres()
 

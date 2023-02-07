@@ -7,3 +7,6 @@ PYMYSQL
 uvicorn~=0.20.0
 pydantic~=1.10.4
 cryptography
+PyJWT==2.6.0
+python-decouple==3.7
+bcrypt

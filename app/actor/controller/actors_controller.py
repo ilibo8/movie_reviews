@@ -23,6 +23,18 @@ class ActorController:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
+    def get_all_actors_names():
+        try:
+            actor_names = []
+            actors = ActorService.get_all_actors()
+            for actor in actors:
+                actor_names.append(actor.full_name)
+            actor_names.sort()
+            return actor_names
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
     def find_actor_by_name(name: str):
         try:
             return ActorService.find_actor_by_name(name)

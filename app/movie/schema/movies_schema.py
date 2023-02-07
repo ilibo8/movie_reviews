@@ -1,8 +1,23 @@
-from pydantic import BaseModel, StrictInt
+from pydantic import BaseModel, StrictInt, StrictStr
+
 from app.movie.schema import MovieCastSchema, MovieGenreSchema
 
 
 class MovieSchema(BaseModel):
+    id : int
+    title : str
+    director : str
+    release_year : int
+    country_of_origin : str
+
+    movie_cast : MovieCastSchema
+    movie_genre : MovieGenreSchema
+
+    class Config:
+        orm_mode = True
+
+
+class MovieSchemaJoined(BaseModel):
     id : int
     title : str
     director : str
@@ -17,10 +32,10 @@ class MovieSchema(BaseModel):
 
 
 class MovieSchemaIn(BaseModel):
-    title: str
-    director: str
+    title: StrictStr
+    director: StrictStr
     release_year: StrictInt
-    country_of_origin: str
+    country_of_origin: StrictStr
 
     class Config:
         orm_mode = True

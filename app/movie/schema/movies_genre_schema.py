@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, StrictStr, StrictInt
 
 
 class MovieGenreSchema(BaseModel):
-    movie_id :  int
-    genre_name : str
+    movie_id :  StrictInt
+    genre_name : StrictStr
 
     class Config:
         orm_mode = True

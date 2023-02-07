@@ -23,17 +23,20 @@ class MovieRepository:
     def get_all_movies(self) -> list[Movie]:
         return self.db.query(Movie).all()
 
-    def get_movie_by_id(self, id: int) -> Movie:
-        movie = self.db.query(Movie).get(id)
-        if movie is None:
-            raise MovieNotFoundException(f"No movie with id {id} in database.")
-        return movie
+    def get_movie_by_id(self, movie_id: int) -> Movie:
+        return self.db.query(Movie).get(movie_id)
+
+    def get_title_by_id(self, movie_id: int) -> tuple[str, ]:
+        return self.db.query(Movie.title).filter(Movie.id == movie_id).first()
 
     def get_movies_by_word_in_title(self, word: str) -> list[Movie]:
-        movies = self.db.query(Movie).filter(Movie.title.ilike(f'%{word}%')).all()
-        if movies is None:
-            raise MovieNotFoundException("There are no movies with that word in title.")
-        return movies
+        try:
+            movies = self.db.query(Movie).filter(Movie.title.ilike(f'%{word}%')).all()
+            if movies is None:
+                raise MovieNotFoundException("There are no movies with that word in title.")
+            return movies
+        except Exception as e:
+            raise e
 
     def get_movies_by_director(self, director: str) -> list[Movie]:
         movies = self.db.query(Movie).filter(Movie.director.contains(director)).all()

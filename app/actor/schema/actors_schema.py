@@ -10,13 +10,6 @@ class ActorSchema(BaseModel):
         orm_mode = True
 
 
-class ActorFullNameSchema(BaseModel):
-    full_name : str
-
-    class Config:
-        orm_mode = True
-
-
 class ActorSchemaIn(BaseModel):
     full_name: StrictStr
     nationality: StrictStr

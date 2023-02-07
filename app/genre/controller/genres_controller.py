@@ -20,8 +20,11 @@ class GenreController:
     @staticmethod
     def get_all_genres():
         try:
+            genre_names = []
             genres = GenreService.get_all_genres()
-            return genres
+            for genre in genres:
+                genre_names.append(genre.name)
+            return genre_names
         except NoEntryForGenreException as e:
             raise HTTPException(status_code=400, detail=e.message)
         except Exception as e:
