@@ -4,7 +4,7 @@ from starlette.responses import RedirectResponse
 from app.db.database import engine, Base
 
 from app.actor import actor_router
-from app.movie import movie_router
+from app.movie import movie_router, movie_superuser_router
 from app.genre import genre_router
 
 Base.metadata.create_all(bind=engine)
@@ -13,6 +13,7 @@ Base.metadata.create_all(bind=engine)
 def init_app():
     app = FastAPI()
     app.include_router(movie_router)
+    app.include_router(movie_superuser_router)
     app.include_router(actor_router)
     app.include_router(genre_router)
     return app

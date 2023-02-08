@@ -42,8 +42,8 @@ class MovieService:
                 actor_repository = ActorRepository(db)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise NotFoundException(f"No movie with id {movie_id}, first add movie then movie cast.")
-                if actor_repository.find_actor_by_id(actor_id) is not None:
-                    raise DuplicateDataEntryException(f"Move id {movie_id} and actor id {actor_id} already exist.")
+                # if actor_repository.find_actor_by_id(actor_id) is None:
+                #     raise NotFoundException(f"Actor id {actor_id} doesn't exist.")
                 movie_cast = movie_cast_repository.add(movie_id, actor_id)
                 return movie_cast
             except Exception as e:
@@ -138,6 +138,46 @@ class MovieService:
                     full_names.sort()
                     movie.genre = genres_names
                     movie.actors = full_names
+                return movies
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def get_movies_by_actor_id(actor_id: int):
+        try:
+            with SessionLocal() as db:
+                movie_repo = MovieRepository(db)
+                movie_cast_repo = MovieCastRepository(db)
+                movie_ids = movie_cast_repo.get_movie_ids_by_actor_id(actor_id)
+                if len(movie_ids) == 0:
+                    raise NotFoundException(f"No movies in database for actor id {actor_id}")
+                movies_names = []
+                for id in movie_ids:
+                    movie = movie_repo.get_title_by_id(id[0])[0]
+                    movies_names.append(movie)
+                return movies_names
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def get_all_directors():
+        try:
+            with SessionLocal() as db:
+
+                movie_repository = MovieRepository(db)
+                directors = movie_repository.get_all_directors()
+                directors_names = [person[0] for person in directors]
+                directors_names.sort()
+                return directors_names
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def get_all_movies_by_director(director_name: str):
+        try:
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
+                movies = movie_repository.get_movies_by_director(director_name)
                 return movies
         except Exception as e:
             raise e

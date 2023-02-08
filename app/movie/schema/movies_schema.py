@@ -1,8 +1,6 @@
 from pydantic import BaseModel, StrictInt, StrictStr, validator
 from pydantic.types import date
 
-from app.movie.schema import MovieCastSchema, MovieGenreSchema
-
 
 class MovieSchema(BaseModel):
     id : int
@@ -10,9 +8,6 @@ class MovieSchema(BaseModel):
     director : str
     release_year : int
     country_of_origin : str
-
-    movie_cast : list[MovieCastSchema]
-    movie_genre : list[MovieGenreSchema]
 
     class Config:
         orm_mode = True

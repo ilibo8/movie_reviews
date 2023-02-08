@@ -81,6 +81,33 @@ class MovieController:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
+    def get_movies_by_actor_id(actor_id: int):
+        try:
+            movie = MovieService.get_movies_by_actor_id(actor_id)
+            return movie
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    def get_all_movies_by_director(director_name: str):
+        try:
+            movies = MovieService.get_all_movies_by_director(director_name)
+            return movies
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    def get_all_directors():
+        try:
+            return MovieService.get_all_directors()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
     def delete_movie_genre(movie_id: int, genre_name: str):
         try:
             if MovieService.delete_movie_genre(movie_id, genre_name):

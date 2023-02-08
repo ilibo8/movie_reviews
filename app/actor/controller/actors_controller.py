@@ -73,14 +73,6 @@ class ActorController:
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-    @staticmethod
-    def change_actor_nationality(actor_id, nationality):
-        try:
-            return ActorService.change_actor_nationality(actor_id, nationality)
-        except ActorNotFoundException as e:
-            raise HTTPException(status_code=400, detail=str(e.message))
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
     def delete_actor_by_id(actor_id: int):

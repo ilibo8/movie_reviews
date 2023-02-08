@@ -9,7 +9,7 @@ class Actor(Base):
     full_name = Column(String(50))
     nationality = Column(String(50))
 
-    movie_cast = relationship("MovieCast", back_populates="actor")
+    movie_cast = relationship("MovieCast", back_populates="actor", lazy="joined")
 
     def __init__(self, full_name, nationality):
         self.full_name = full_name

@@ -70,14 +70,6 @@ class ActorService:
         except Exception as e:
             raise e
 
-    @staticmethod
-    def change_actor_nationality(actor_id, nationality):
-        try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
-                return actor_repository.change_actor_nationality(actor_id, nationality)
-        except Exception as e:
-            raise e
 
     @staticmethod
     def delete_actor_by_id(actor_id: int):
