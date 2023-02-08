@@ -1,6 +1,8 @@
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+
+from app.movie.exceptions import DuplicateDataEntryException
 from app.movie.model import MovieCast
 
 
@@ -8,17 +10,17 @@ class MovieCastRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def add(self, movie_id: int, actor_ids: list[int]) -> list[MovieCast]:
+    def add(self, movie_id: int, actor_id: int) -> MovieCast:
         try:
-            movie_cast_list = []
-            for id in actor_ids:
-                movie_cast = MovieCast(movie_id, id)
-                self.db.add(movie_cast)
-                self.db.commit()
-                self.db.refresh(movie_cast)
-                movie_cast_list.append(movie_cast)
-            return movie_cast_list
-        except IntegrityError as e:
+            if self.db.query(MovieCast).filter(and_(MovieCast.movie_id == movie_id,
+                                                    MovieCast.actor_id == actor_id)).first() is not None:
+                raise DuplicateDataEntryException(f"Movie id {movie_id} already has actor id {actor_id}.")
+            movie_cast = MovieCast(movie_id,  actor_id)
+            self.db.add(movie_cast)
+            self.db.commit()
+            self.db.refresh(movie_cast)
+            return movie_cast
+        except Exception as e:
             raise e
 
     def get_all(self) -> list[MovieCast]:

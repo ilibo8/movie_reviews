@@ -1,4 +1,3 @@
-from sqlalchemy.exc import IntegrityError
 from app.actor.repository import ActorRepository
 from app.db.database import SessionLocal
 from app.genre.exceptions import GenreNotFoundException
@@ -16,8 +15,6 @@ class MovieService:
                 movie_repository = MovieRepository(db)
                 return movie_repository.add_movie \
                     (title=title, director=director, release_year=release_year, country_of_origin=country_of_origin)
-            except IntegrityError:
-                raise IntegrityError
             except Exception as e:
                 raise e
 
@@ -26,27 +23,27 @@ class MovieService:
         with SessionLocal() as db:
             try:
                 movie_genre_repository = MovieGenreRepository(db)
-                movie_repo = MovieRepository(db)
-                if movie_repo.get_movie_by_id(movie_id) is None:
+                movie_repository = MovieRepository(db)
+                genre_repository = GenreRepository(db)
+                if movie_repository.get_movie_by_id(movie_id) is None:
                     raise NotFoundException(f"No movie with id {movie_id}, first add movie then genre.")
+                if not genre_repository.check_is_there(genre_name):
+                    raise NotFoundException(f"No genre {genre_name}, add to genre list first.")
                 return movie_genre_repository.add_movie_genre(movie_id, genre_name)
             except Exception as e:
                 raise e
 
     @staticmethod
-    def add_actors_id_to_movie_cast(movie_id: int, actors_id: list[int]) -> bool:
-        with SessionLocal().begin() as db: #!!!!!!!!!!
+    def add_actors_id_to_movie_cast(movie_id: int, actor_id: int) :
+        with SessionLocal() as db:
             try:
-
                 movie_cast_repository = MovieCastRepository(db)
                 movie_repository = MovieRepository(db)
                 if movie_repository.get_movie_by_id(movie_id) is None:
-                    raise NotFoundException(f"No movie with id {movie_id}, first add movie then actors id.")
-                movie_cast_repository.add(movie_id, actors_id)
-                return True
-            except IntegrityError as e:
-                db.rollback()
-                db.close()
+                    raise NotFoundException(f"No movie with id {movie_id}, first add movie then movie cast.")
+                movie_cast = movie_cast_repository.add(movie_id, actor_id)
+                return movie_cast
+            except Exception as e:
                 raise e
 
     @staticmethod
@@ -114,10 +111,6 @@ class MovieService:
                     movie_names.append(movie_repository.get_title_by_id(id[0])[0])
                 movie_names.sort()
             return movie_names
-        except GenreNotFoundException:
-            raise GenreNotFoundException(f"Wrong input. No genre {genre_name}.")
-        except NotFoundException:
-            raise NotFoundException(f"No movies with genre {genre_name} in database.")
         except Exception as e:
             raise e
 
@@ -129,9 +122,20 @@ class MovieService:
                 movies = movie_repository.get_movies_by_word_in_title(word)
                 if len(movies) == 0:
                     raise NotFoundException(f"There are no movies with {word} in title.")
+                for movie in movies:
+                    full_names = []
+                    for item in movie.movie_cast:
+                        id = item.actor_id
+                        actor_repo = ActorRepository(db)
+                        full_names.append(actor_repo.get_actor_full_name_by_id(id)[0])
+                    genres = movie.movie_genre
+                    genres_names = []
+                    for movie_genre in genres:
+                        genres_names.append(movie_genre.genre_name)
+                    full_names.sort()
+                    movie.genre = genres_names
+                    movie.actors = full_names
                 return movies
-        except NotFoundException as e:
-            raise NotFoundException(e.message)
         except Exception as e:
             raise e
 

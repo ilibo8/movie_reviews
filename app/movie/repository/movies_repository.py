@@ -23,13 +23,15 @@ class MovieRepository:
         return self.db.query(Movie).all()
 
     def get_movie_by_id(self, movie_id: int) -> Movie:
-        return self.db.query(Movie).get(movie_id)
+        movie = self.db.query(Movie).get(movie_id)
+        return movie
 
-    def get_title_by_id(self, movie_id: int) -> tuple[str, ]:
+    def get_title_by_id(self, movie_id: int) -> tuple:
         return self.db.query(Movie.title).filter(Movie.id == movie_id).first()
 
     def get_movies_by_word_in_title(self, word: str) -> list[Movie]:
-        return self.db.query(Movie).filter(Movie.title.ilike(f'%{word}%')).all()
+        movies = self.db.query(Movie).filter(Movie.title.ilike(f'%{word}%')).all()
+        return movies
 
     def get_movies_by_director(self, director: str) -> list[Movie]:
         movies = self.db.query(Movie).filter(Movie.director.contains(director)).all()

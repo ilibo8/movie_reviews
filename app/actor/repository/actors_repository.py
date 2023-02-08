@@ -19,11 +19,8 @@ class ActorRepository:
             raise e
 
     def get_all_actors(self) -> list[Actor]:
-        try:
             actors = self.db.query(Actor).all()
             return actors
-        except Exception as e:
-            raise e
 
     def find_actor_by_name(self, name) -> list[Actor]:
         try:

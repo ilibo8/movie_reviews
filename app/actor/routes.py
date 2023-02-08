@@ -35,8 +35,8 @@ def add_actor(actor: ActorSchemaIn):
     return ActorController.add_actor(actor.full_name, actor.nationality)
 
 
-@actor_router.put("/change/name/{actor_id}", response_model=ActorSchema)
-def change_actor_name(actor_id: int, full_name: str):
+@actor_router.put("/change/full-name/{actor_id}", response_model=ActorSchema)
+def change_actor_full_name(actor_id: int, full_name: str):
     return ActorController.change_actor_full_name(actor_id, full_name)
 
 
