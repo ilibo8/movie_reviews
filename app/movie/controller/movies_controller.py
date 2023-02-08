@@ -2,7 +2,8 @@ from fastapi import HTTPException
 from fastapi.openapi.models import Response
 from sqlalchemy.exc import IntegrityError
 
-from app.movie.exceptions import MovieNotFoundException
+from app.genre.exceptions import GenreNotFoundException
+from app.movie.exceptions import NotFoundException
 from app.movie.service import MovieService
 
 
@@ -21,8 +22,8 @@ class MovieController:
     def add_genre_to_movie(movie_id: int, genre_name: str):
         try:
             return MovieService.add_genre_to_movie(movie_id, genre_name)
-        except MovieNotFoundException:
-            raise MovieNotFoundException(f"No movie with id {movie_id}, first add movie then genre.")
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -48,8 +49,8 @@ class MovieController:
     def get_movie_by_id(movie_id: int):
         try:
             return MovieService.get_movie_by_id(movie_id)
-        except MovieNotFoundException as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -57,10 +58,10 @@ class MovieController:
     def get_movies_of_certain_genre(genre_name: str):
         try:
             return MovieService.get_all_movies_of_certain_genre(genre_name)
-        except IntegrityError as e:
-            raise HTTPException(status_code=400, detail=str(e))
-        except MovieNotFoundException as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        except GenreNotFoundException as e:
+            raise HTTPException(status_code=204, detail=e.message)
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -68,8 +69,8 @@ class MovieController:
     def get_movies_by_word_in_title(word: str):
         try:
             return MovieService.get_movies_by_word_in_title(word)
-        except MovieNotFoundException as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -78,7 +79,7 @@ class MovieController:
         try:
             if MovieService.delete_movie_genre(movie_id, genre_name):
                 return Response(content=f"Genre {genre_name}deleted for movie with id - {movie_id} ", status_code=200)
-        except MovieNotFoundException as e:
-            raise HTTPException(status_code=400, detail=e.message)
+        except NotFoundException as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

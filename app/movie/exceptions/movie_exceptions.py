@@ -1,8 +1,5 @@
-class MovieNotFoundException(Exception):
-    def __init__(self, message: str):
+class NotFoundException(Exception):
+    def __init__(self, message: str, code=204):
         self.message = message
+        self.code = code
 
-
-class AlreadyExistsException(Exception):
-    def __init__(self, message: str):
-        self.message = message

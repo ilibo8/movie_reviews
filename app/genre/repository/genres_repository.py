@@ -1,6 +1,4 @@
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-
 from app.genre.exceptions import GenreNotFoundException
 from app.genre.model import Genre
 
@@ -20,8 +18,7 @@ class GenreRepository:
             raise e
 
     def get_all_genres(self):
-            genres = self.db.query(Genre).all()
-            return genres
+        return self.db.query(Genre).all()
 
     def delete(self, name: str):
         try:

@@ -1,7 +1,9 @@
 from sqlalchemy.exc import IntegrityError
 from app.actor.repository import ActorRepository
 from app.db.database import SessionLocal
-from app.movie.exceptions import MovieNotFoundException
+from app.genre.exceptions import GenreNotFoundException
+from app.genre.repository import GenreRepository
+from app.movie.exceptions import NotFoundException
 from app.movie.repository import MovieRepository, MovieGenreRepository, MovieCastRepository
 
 
@@ -26,7 +28,7 @@ class MovieService:
                 movie_genre_repository = MovieGenreRepository(db)
                 movie_repo = MovieRepository(db)
                 if movie_repo.get_movie_by_id(movie_id) is None:
-                    raise MovieNotFoundException(f"No movie with id {movie_id}, first add movie then genre.")
+                    raise NotFoundException(f"No movie with id {movie_id}, first add movie then genre.")
                 return movie_genre_repository.add_movie_genre(movie_id, genre_name)
             except Exception as e:
                 raise e
@@ -39,7 +41,7 @@ class MovieService:
                 movie_cast_repository = MovieCastRepository(db)
                 movie_repository = MovieRepository(db)
                 if movie_repository.get_movie_by_id(movie_id) is None:
-                    raise MovieNotFoundException(f"No movie with id {movie_id}, first add movie then actors id.")
+                    raise NotFoundException(f"No movie with id {movie_id}, first add movie then actors id.")
                 movie_cast_repository.add(movie_id, actors_id)
                 return True
             except IntegrityError as e:
@@ -78,7 +80,7 @@ class MovieService:
                 movie_repository = MovieRepository(db)
                 movie = movie_repository.get_movie_by_id(movie_id)
                 if movie is None:
-                    raise MovieNotFoundException(f"No movie with id {movie_id} in database.")
+                    raise NotFoundException(f"No movie with id {movie_id} in database.")
                 full_names = []
                 for item in movie.movie_cast:
                     id = item.actor_id
@@ -100,8 +102,11 @@ class MovieService:
         try:
             with SessionLocal() as db:
                 movie_genre_repository = MovieGenreRepository(db)
+                genre_repository = GenreRepository(db)
+                if not genre_repository.check_is_there(genre_name):
+                    raise GenreNotFoundException(f"Wrong input. No genre {genre_name}.")
                 if len(movie_genre_repository.get_all_movie_ids_of_certain_genre(genre_name)) == 0:
-                    raise MovieNotFoundException(f"No movies with genre {genre_name} in database.")
+                    raise NotFoundException(f"No movies with genre {genre_name} in database.")
                 movie_ids = movie_genre_repository.get_all_movie_ids_of_certain_genre(genre_name)
                 movie_repository = MovieRepository(db)
                 movie_names = []
@@ -109,8 +114,10 @@ class MovieService:
                     movie_names.append(movie_repository.get_title_by_id(id[0])[0])
                 movie_names.sort()
             return movie_names
-        except IntegrityError as e:
-            raise e
+        except GenreNotFoundException:
+            raise GenreNotFoundException(f"Wrong input. No genre {genre_name}.")
+        except NotFoundException:
+            raise NotFoundException(f"No movies with genre {genre_name} in database.")
         except Exception as e:
             raise e
 
@@ -119,9 +126,12 @@ class MovieService:
         try:
             with SessionLocal() as db:
                 movie_repository = MovieRepository(db)
-                return movie_repository.get_movies_by_word_in_title(word)
-        except MovieNotFoundException as e:
-            raise MovieNotFoundException(e.message)
+                movies = movie_repository.get_movies_by_word_in_title(word)
+                if len(movies) == 0:
+                    raise NotFoundException(f"There are no movies with {word} in title.")
+                return movies
+        except NotFoundException as e:
+            raise NotFoundException(e.message)
         except Exception as e:
             raise e
 
@@ -132,8 +142,8 @@ class MovieService:
                 movie_genre_repository = MovieGenreRepository(db)
                 if movie_genre_repository.delete_movie_genre(movie_id, genre_name):
                     return True
-                raise MovieNotFoundException(f"There is no movie with id {movie_id} and genre {genre_name}")
-        except MovieNotFoundException as e:
-            raise MovieNotFoundException(e.message)
+                raise NotFoundException(f"There is no movie with id {movie_id} and genre {genre_name}")
+        except NotFoundException as e:
+            raise NotFoundException(e.message)
         except Exception as e:
             raise e

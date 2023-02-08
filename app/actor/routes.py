@@ -1,6 +1,4 @@
 from fastapi import APIRouter
-from fastapi import Response
-
 from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 

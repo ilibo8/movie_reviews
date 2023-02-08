@@ -1,7 +1,7 @@
 from sqlalchemy.orm import relationship
 
 from app.db.database import Base
-from sqlalchemy import Column, String, Integer, UniqueConstraint, CheckConstraint
+from sqlalchemy import Column, String, Integer, UniqueConstraint
 
 
 class Movie(Base):

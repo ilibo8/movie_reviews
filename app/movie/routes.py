@@ -10,7 +10,7 @@ def get_movies_by_word_in_title(word: str):
     return MovieController.get_movies_by_word_in_title(str(word))
 
 
-@movie_router.get("/get-all-movies-by/genre/{genre}", response_model=list)
+@movie_router.get("/get-all-movies-by/genre/{genre}")
 def get_movies_of_certain_genre(genre: str):
     return MovieController.get_movies_of_certain_genre(str(genre))
 

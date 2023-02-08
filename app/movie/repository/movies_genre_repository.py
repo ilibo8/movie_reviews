@@ -1,7 +1,6 @@
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.movie.exceptions import MovieNotFoundException
 from app.movie.model import MovieGenre
 
 

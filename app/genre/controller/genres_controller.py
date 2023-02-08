@@ -1,6 +1,4 @@
 from fastapi import HTTPException, Response
-from sqlalchemy.exc import IntegrityError
-
 from app.genre.exceptions import GenreNotFoundException, NoEntryForGenreException, GenreAlreadyExistsException
 from app.genre.service import GenreService
 

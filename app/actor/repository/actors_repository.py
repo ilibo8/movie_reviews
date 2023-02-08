@@ -1,5 +1,3 @@
-from typing import Tuple, Any
-
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.actor.exceptions import ActorNotFoundException

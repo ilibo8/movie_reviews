@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError
 
-from app.actor.exceptions import ActorNotFoundException, NoDataFoundException
+from app.actor.exceptions import ActorNotFoundException
 from app.actor.repository import ActorRepository
 from app.db.database import SessionLocal
 

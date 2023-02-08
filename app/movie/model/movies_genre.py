@@ -10,7 +10,7 @@ class MovieGenre(Base):
     genre_name = Column(String(20), ForeignKey("genres.name", ondelete="CASCADE"), primary_key=True)
     __table_args__ = (UniqueConstraint("movie_id", "genre_name", name="movie_genre_uc"),)
 
-    movie = relationship("Movie", foreign_keys=movie_id, back_populates="movie_genre", lazy="subquery")
+    movie = relationship("Movie", foreign_keys=movie_id, back_populates="movie_genre", lazy="joined")
     genre = relationship("Genre", foreign_keys=genre_name, back_populates="movie_genre", lazy="joined")
 
     def __init__(self, movie_id, genre_name):
