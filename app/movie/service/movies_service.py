@@ -2,7 +2,7 @@ from app.actor.repository import ActorRepository
 from app.db.database import SessionLocal
 from app.genre.exceptions import GenreNotFoundException
 from app.genre.repository import GenreRepository
-from app.movie.exceptions import NotFoundException
+from app.movie.exceptions import NotFoundException, DuplicateDataEntryException
 from app.movie.repository import MovieRepository, MovieGenreRepository, MovieCastRepository
 
 
@@ -34,13 +34,16 @@ class MovieService:
                 raise e
 
     @staticmethod
-    def add_actors_id_to_movie_cast(movie_id: int, actor_id: int) :
+    def add_actors_id_to_movie_cast(movie_id: int, actor_id: int):
         with SessionLocal() as db:
             try:
                 movie_cast_repository = MovieCastRepository(db)
                 movie_repository = MovieRepository(db)
+                actor_repository = ActorRepository(db)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise NotFoundException(f"No movie with id {movie_id}, first add movie then movie cast.")
+                if actor_repository.find_actor_by_id(actor_id) is not None:
+                    raise DuplicateDataEntryException(f"Move id {movie_id} and actor id {actor_id} already exist.")
                 movie_cast = movie_cast_repository.add(movie_id, actor_id)
                 return movie_cast
             except Exception as e:
