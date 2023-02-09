@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 
-actor_router = APIRouter(prefix="/api/movies/actors", tags=["Actors"])
+actor_router = APIRouter(prefix="/api/actors", tags=["Actors"])
 
 
 @actor_router.get("/get-all", response_model=list[ActorSchema])
@@ -40,6 +40,6 @@ def change_actor_full_name(actor_id: int, full_name: str):
     return ActorController.change_actor_full_name(actor_id, full_name)
 
 
-@actor_router.delete("/")
+@actor_router.delete("/delete-actor-by-id/{actor_id}")
 def delete_actor_by_id(actor_id: int):
     return ActorController.delete_actor_by_id(actor_id)

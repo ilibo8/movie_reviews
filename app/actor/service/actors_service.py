@@ -1,8 +1,7 @@
 from sqlalchemy.exc import IntegrityError
-
 from app.actor.exceptions import ActorNotFoundException
 from app.actor.repository import ActorRepository
-from app.db.database import SessionLocal
+from app.db import SessionLocal
 
 
 class ActorService:
@@ -69,7 +68,6 @@ class ActorService:
                 return actor_repository.change_actor_full_name(actor_id, full_name)
         except Exception as e:
             raise e
-
 
     @staticmethod
     def delete_actor_by_id(actor_id: int):

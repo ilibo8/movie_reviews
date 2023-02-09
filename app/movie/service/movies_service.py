@@ -1,8 +1,8 @@
 from app.actor.repository import ActorRepository
-from app.db.database import SessionLocal
+from app.db import SessionLocal
 from app.genre.exceptions import GenreNotFoundException
 from app.genre.repository import GenreRepository
-from app.movie.exceptions import NotFoundException, DuplicateDataEntryException
+from app.movie.exceptions import NotFoundException
 from app.movie.repository import MovieRepository, MovieGenreRepository, MovieCastRepository
 
 
@@ -10,18 +10,18 @@ class MovieService:
 
     @staticmethod
     def add_movie(title, director, release_year, country_of_origin):
-        with SessionLocal() as db:
-            try:
+        try:
+            with SessionLocal() as db:
                 movie_repository = MovieRepository(db)
                 return movie_repository.add_movie \
                     (title=title, director=director, release_year=release_year, country_of_origin=country_of_origin)
-            except Exception as e:
-                raise e
+        except Exception as e:
+            raise e
 
     @staticmethod
     def add_genre_to_movie(movie_id: int, genre_name: str):
-        with SessionLocal() as db:
-            try:
+        try:
+            with SessionLocal() as db:
                 movie_genre_repository = MovieGenreRepository(db)
                 movie_repository = MovieRepository(db)
                 genre_repository = GenreRepository(db)
@@ -30,13 +30,13 @@ class MovieService:
                 if not genre_repository.check_is_there(genre_name):
                     raise NotFoundException(f"No genre {genre_name}, add to genre list first.")
                 return movie_genre_repository.add_movie_genre(movie_id, genre_name)
-            except Exception as e:
-                raise e
+        except Exception as e:
+            raise e
 
     @staticmethod
     def add_actors_id_to_movie_cast(movie_id: int, actor_id: int):
-        with SessionLocal() as db:
-            try:
+        try:
+            with SessionLocal() as db:
                 movie_cast_repository = MovieCastRepository(db)
                 movie_repository = MovieRepository(db)
                 actor_repository = ActorRepository(db)
@@ -46,8 +46,8 @@ class MovieService:
                 #     raise NotFoundException(f"Actor id {actor_id} doesn't exist.")
                 movie_cast = movie_cast_repository.add(movie_id, actor_id)
                 return movie_cast
-            except Exception as e:
-                raise e
+        except Exception as e:
+            raise e
 
     @staticmethod
     def get_all_movies() -> list:

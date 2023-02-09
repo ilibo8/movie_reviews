@@ -4,6 +4,7 @@ from starlette.responses import RedirectResponse
 from app.db.database import engine, Base
 
 from app.actor import actor_router
+from app.groups import group_router
 from app.movie import movie_router, movie_superuser_router
 from app.genre import genre_router
 
@@ -16,6 +17,7 @@ def init_app():
     app.include_router(movie_superuser_router)
     app.include_router(actor_router)
     app.include_router(genre_router)
+    app.include_router(group_router)
     return app
 
 

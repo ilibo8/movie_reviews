@@ -1,4 +1,4 @@
-from app.db.database import SessionLocal
+from app.db import SessionLocal
 from app.genre.exceptions import GenreNotFoundException, GenreAlreadyExistsException, NoEntryForGenreException
 from app.genre.repository import GenreRepository
 

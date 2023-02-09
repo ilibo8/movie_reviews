@@ -1,5 +1,5 @@
 mysql-connector-python
-SQLAlchemy
+SQLAlchemy==1.4.0
 sqlalchemy-utils
 fastapi[all]~=0.89.1
 fastapi-utils

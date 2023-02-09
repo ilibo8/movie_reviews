@@ -1,9 +1,6 @@
-from datetime import date
-
 from sqlalchemy.orm import relationship
-
-from app.db.database import Base
-from sqlalchemy import Column, String, Integer, UniqueConstraint, CheckConstraint
+from sqlalchemy import Column, String, Integer, UniqueConstraint
+from app.db import Base
 
 
 class Movie(Base):
@@ -13,7 +10,7 @@ class Movie(Base):
     director = Column(String(50))
     release_year = Column(Integer)
     country_of_origin = Column(String(50))
-    __table_args__ = (UniqueConstraint("title", "director", "release_year", "country_of_origin", name="movie_uc"),)
+    __table_args__ = (UniqueConstraint("title", "director", "release_year", "country_of_origin", name="movie_uc"), {"mysql_engine": "InnoDB"})
 
     movie_cast = relationship("MovieCast", back_populates="movie", lazy="joined")
     movie_genre = relationship("MovieGenre", back_populates="movie", lazy="joined")

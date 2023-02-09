@@ -73,7 +73,6 @@ class ActorController:
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-
     @staticmethod
     def delete_actor_by_id(actor_id: int):
         try:

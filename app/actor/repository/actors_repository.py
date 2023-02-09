@@ -19,8 +19,8 @@ class ActorRepository:
             raise e
 
     def get_all_actors(self) -> list[Actor]:
-            actors = self.db.query(Actor).all()
-            return actors
+        actors = self.db.query(Actor).all()
+        return actors
 
     def find_actor_by_name(self, name) -> list[Actor]:
         try:
