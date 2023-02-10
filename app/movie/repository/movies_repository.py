@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.movie.exceptions import NotFoundException
+from app.movie.exceptions import MovieNotFound
 from app.movie.model import Movie
 
 
@@ -36,19 +36,19 @@ class MovieRepository:
     def get_movies_by_director(self, director: str) -> list[Movie]:
         movies = self.db.query(Movie).filter(Movie.director.contains(director)).all()
         if movies is None:
-            raise NotFoundException("No movies by that director found.")
+            raise MovieNotFound("No movies by that director found.")
         return movies
 
     def get_movies_by_release_year(self, release_year: int) -> list[Movie]:
         movies = self.db.query(Movie).filter(Movie.release_year == release_year).all()
         if movies is None:
-            raise NotFoundException(f"No movies with release year {release_year} found.")
+            raise MovieNotFound(f"No movies with release year {release_year} found.")
         return movies
 
     def get_movies_by_country_of_origin(self, country_of_origin: str) -> list[Movie]:
         movies = self.db.query(Movie).filter(Movie.country_of_origin == country_of_origin).all()
         if movies is None:
-            raise NotFoundException(f"No movies from {country_of_origin} in database.")
+            raise MovieNotFound(f"No movies from {country_of_origin} in database.")
         return movies
 
     def get_all_directors(self):
@@ -63,7 +63,7 @@ class MovieRepository:
     def change_movie_title(self, movie_id: int, title: str) -> (Movie, None):
         movie = self.db.query(Movie.id == movie_id).first()
         if movie is None:
-            raise NotFoundException(f"There is no movie with id {movie_id}")
+            raise MovieNotFound(f"There is no movie with id {movie_id}")
         movie.title = title
         self.db.add(movie)
         self.db.commit()
@@ -73,7 +73,7 @@ class MovieRepository:
     def change_movie_director(self, movie_id: int, director: str) -> (Movie, None):
         movie = self.db.query(Movie.id == movie_id).first()
         if movie is None:
-            raise NotFoundException(f"There is no movie with id {movie_id}")
+            raise MovieNotFound(f"There is no movie with id {movie_id}")
         movie.director = director
         self.db.add(movie)
         self.db.commit()
@@ -83,7 +83,7 @@ class MovieRepository:
     def change_movie_release_year(self, movie_id: int, release_year: int) -> (Movie, None):
         movie = self.db.query(Movie.id == movie_id).first()
         if movie is None:
-            raise NotFoundException(f"There is no movie with id {movie_id}")
+            raise MovieNotFound(f"There is no movie with id {movie_id}")
         movie.release_year = release_year
         self.db.add(movie)
         self.db.commit()
@@ -93,7 +93,7 @@ class MovieRepository:
     def change_movie_country_of_origin(self, movie_id: int, country_of_origin: str) -> (Movie, None):
         movie = self.db.query(Movie.id == movie_id).first()
         if movie is None:
-            raise NotFoundException(f"There is no movie with id {movie_id}")
+            raise MovieNotFound(f"There is no movie with id {movie_id}")
         movie.country_of_origin = country_of_origin
         self.db.add(movie)
         self.db.commit()

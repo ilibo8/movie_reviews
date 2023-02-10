@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError
-from app.actor.exceptions import ActorNotFoundException
+from app.actor.exceptions import ActorNotFound
 from app.actor.service import ActorService
 from fastapi import HTTPException, Response
 
@@ -59,7 +59,7 @@ class ActorController:
     def find_actor_by_id(id: int):
         try:
             return ActorService.find_actor_by_id(id)
-        except ActorNotFoundException as e:
+        except ActorNotFound as e:
             raise HTTPException(status_code=400, detail=str(e.message))
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
@@ -68,7 +68,7 @@ class ActorController:
     def change_actor_full_name(actor_id, full_name):
         try:
             return ActorService.change_actor_full_name(actor_id, full_name)
-        except ActorNotFoundException as e:
+        except ActorNotFound as e:
             raise HTTPException(status_code=400, detail=str(e.message))
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
@@ -78,7 +78,7 @@ class ActorController:
         try:
             if ActorService.delete_actor_by_id(actor_id):
                 return Response(content=f"Actor with id - {actor_id} is deleted", status_code=200)
-        except ActorNotFoundException as e:
+        except ActorNotFound as e:
             raise HTTPException(status_code=400, detail=str(e))
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))

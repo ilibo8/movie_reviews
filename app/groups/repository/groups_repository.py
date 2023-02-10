@@ -14,6 +14,7 @@ class GroupRepository:
             self.db.add(group)
             self.db.commit()
             self.db.refresh(group)
+            print("!!!!!!!!", group)
             return group
         except Exception as e:
             raise e

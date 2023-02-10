@@ -1,5 +1,6 @@
 from app.db import SessionLocal
-from app.genre.exceptions import GenreNotFoundException, GenreAlreadyExistsException, NoEntryForGenreException
+from app.genre.exceptions import NoEntryForGenre, GenreAlreadyExists, GenreNotFound
+
 from app.genre.repository import GenreRepository
 
 
@@ -11,7 +12,7 @@ class GenreService:
             with SessionLocal() as db:
                 genre_repository = GenreRepository(db)
                 if genre_repository.check_is_there(name):
-                    raise GenreAlreadyExistsException
+                    raise GenreAlreadyExists
                 return genre_repository.add_genre(name)
         except Exception as e:
             raise e
@@ -23,7 +24,7 @@ class GenreService:
                 genre_repository = GenreRepository(db)
                 genres = genre_repository.get_all_genres()
                 if genres is None:
-                    raise NoEntryForGenreException
+                    raise NoEntryForGenre
                 return genres
         except Exception as e:
             raise e
@@ -35,6 +36,6 @@ class GenreService:
                 genre_repository = GenreRepository(db)
                 if genre_repository.delete(name):
                     return True
-                raise GenreNotFoundException(f'There is no genre with name {name} in database.')
+                raise GenreNotFound(f'There is no genre with name {name} in database.')
         except Exception as e:
             raise e

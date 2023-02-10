@@ -2,7 +2,7 @@ from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm import Session
-from app.movie.exceptions import NotFoundException, DuplicateDataEntryException
+from app.movie.exceptions import MovieNotFound, DuplicateDataEntry
 from app.movie.model import MovieGenre
 
 
@@ -14,7 +14,7 @@ class MovieGenreRepository:
         try:
             if self.db.query(MovieGenre).filter(and_(MovieGenre.movie_id == movie_id,
                                                      MovieGenre.genre_name == genre_name)).first() is not None:
-                raise DuplicateDataEntryException(f"Movie id {movie_id} and genre {genre_name} exist.")
+                raise DuplicateDataEntry(f"Movie id {movie_id} and genre {genre_name} exist.")
             movie_genre = MovieGenre(movie_id=movie_id, genre_name=genre_name)
             self.db.add(movie_genre)
             self.db.commit()
@@ -39,7 +39,7 @@ class MovieGenreRepository:
             movie = self.db.query(MovieGenre).filter\
                 (and_(MovieGenre.movie_id == movie_id, MovieGenre.genre_name == genre_name)).first()
             if movie is None:
-                raise NotFoundException(f"There is no movie with id {movie_id} and genre {genre_name}")
+                raise MovieNotFound(f"There is no movie with id {movie_id} and genre {genre_name}")
             self.db.delete(movie)
             self.db.commit()
             return True

@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 
-actor_router = APIRouter(prefix="/api/actors", tags=["Actors"])
+actor_router = APIRouter(prefix="/api/actors", tags=["Movies - Actors"])
 
 
 @actor_router.get("/get-all", response_model=list[ActorSchema])

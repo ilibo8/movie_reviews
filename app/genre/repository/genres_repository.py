@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.genre.exceptions import GenreNotFoundException
+from app.genre.exceptions import GenreNotFound
 from app.genre.model import Genre
 
 
@@ -24,7 +24,7 @@ class GenreRepository:
         try:
             genre = self.db.query(Genre).filter(Genre.name == name).first()
             if genre is None:
-                raise GenreNotFoundException(f"There is no {name} entry.")
+                raise GenreNotFound(f"There is no {name} entry.")
             self.db.delete(genre)
             self.db.commit()
             return True

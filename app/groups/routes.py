@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.groups.controller import GroupController
-from app.groups.schema import GroupSchema, GroupSchemaIn
+from app.groups.schema import GroupSchema
 
 group_router = APIRouter(prefix="/api/groups", tags=["Groups"])
 

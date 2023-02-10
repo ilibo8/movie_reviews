@@ -1,6 +1,5 @@
-from datetime import date
-from pydantic import BaseModel, StrictStr, validator
-from pydantic.schema import datetime
+from pydantic import BaseModel, validator
+from pydantic.validators import date
 
 
 class GroupSchema(BaseModel):
@@ -8,14 +7,14 @@ class GroupSchema(BaseModel):
     name : str
     owner_user_name : str
     description : str
-    date_created : date
+    date_created : str
 
-    @validator("date_created", pre=True)
-    def parse_date_created(cls, value):
-        return datetime.strptime(
-            value,
-            "%d-%m-%Y"
-        ).date()
+    # @validator("date_created", pre=True)
+    # def parse_date(cls, value):
+    #     return date.strptime(
+    #         value,
+    #         "%Y-%m-%d"
+    #     ).date()
 
     class Config:
         orm_mode : True

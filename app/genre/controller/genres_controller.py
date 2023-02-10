@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Response
-from app.genre.exceptions import GenreNotFoundException, NoEntryForGenreException, GenreAlreadyExistsException
+from app.genre.exceptions import GenreAlreadyExists, NoEntryForGenre, GenreNotFound
 from app.genre.service import GenreService
 
 
@@ -10,7 +10,7 @@ class GenreController:
         try:
             genre = GenreService.add_genre(name)
             return genre
-        except GenreAlreadyExistsException as e:
+        except GenreAlreadyExists as e:
             raise HTTPException(status_code=400, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
@@ -23,7 +23,7 @@ class GenreController:
             for genre in genres:
                 genre_names.append(genre.name)
             return genre_names
-        except NoEntryForGenreException as e:
+        except NoEntryForGenre as e:
             raise HTTPException(status_code=400, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
@@ -33,7 +33,7 @@ class GenreController:
         try:
             if GenreService.delete(name):
                 return Response(content=f"Genre {name} is deleted", status_code=200)
-        except GenreNotFoundException as e:
+        except GenreNotFound as e:
             raise HTTPException(status_code=400, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

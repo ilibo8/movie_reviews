@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_NAME: str
 
+    USER_SECRET: str
+    # SUPER_USER_SECRET: str
+    # CLASSIC_USER_SECRET: str
+    ALGORITHM: str
+
     class Config:
         env_file = './.env'
 

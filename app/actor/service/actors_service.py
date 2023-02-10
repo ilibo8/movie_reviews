@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError
-from app.actor.exceptions import ActorNotFoundException
+from app.actor.exceptions import ActorNotFound
 from app.actor.repository import ActorRepository
 from app.db import SessionLocal
 
@@ -75,9 +75,9 @@ class ActorService:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
                 if actor_repository.delete_actor_by_id(actor_id) is None:
-                    raise ActorNotFoundException(f'There is no actor with id {actor_id} in database.')
+                    raise ActorNotFound(f'There is no actor with id {actor_id} in database.')
                 return True
-        except ActorNotFoundException as e:
-            raise ActorNotFoundException(e.message)
+        except ActorNotFound as e:
+            raise ActorNotFound(e.message)
         except Exception as e:
             raise e

@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.actor.exceptions import ActorNotFoundException
+from app.actor.exceptions import ActorNotFound
 from app.actor.model import Actor
 
 
@@ -40,7 +40,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.full_name == full_name).all()
             if actor is None:
-                raise ActorNotFoundException(f'That actor is not in database.')
+                raise ActorNotFound(f'That actor is not in database.')
             return actor
         except Exception as e:
             raise e
@@ -49,7 +49,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.id == id).first()
             if actor is None:
-                raise ActorNotFoundException(f"There is no actor with id {id}.")
+                raise ActorNotFound(f"There is no actor with id {id}.")
             return actor
         except Exception as e:
             raise e
@@ -58,7 +58,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.id == id).first()
             if actor is None:
-                raise ActorNotFoundException(f"There is no actor with id {id}.")
+                raise ActorNotFound(f"There is no actor with id {id}.")
             return actor
         except Exception as e:
             raise e
@@ -67,7 +67,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor.full_name).filter(Actor.id == id).first()
             if actor is None:
-                raise ActorNotFoundException(f"There is no actor with id {id}.")
+                raise ActorNotFound(f"There is no actor with id {id}.")
             return actor
         except Exception as e:
             raise e
@@ -76,7 +76,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
             if actor is None:
-                raise ActorNotFoundException(f'There is no actor with id {actor_id} in database.')
+                raise ActorNotFound(f'There is no actor with id {actor_id} in database.')
             actor.full_name = full_name
             self.db.add(actor)
             self.db.commit()
@@ -89,7 +89,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
             if actor is None:
-                raise ActorNotFoundException(f'There is no actor with id {actor_id} in database.')
+                raise ActorNotFound(f'There is no actor with id {actor_id} in database.')
             actor.nationality = nationality
             self.db.add(actor)
             self.db.commit()
@@ -102,7 +102,7 @@ class ActorRepository:
         try:
             actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
             if actor is None:
-                raise ActorNotFoundException(f"No actor with id {actor_id}.")
+                raise ActorNotFound(f"No actor with id {actor_id}.")
             self.db.delete(actor)
             self.db.commit()
             return True

@@ -14,6 +14,7 @@ class Movie(Base):
 
     movie_cast = relationship("MovieCast", back_populates="movie", lazy="joined")
     movie_genre = relationship("MovieGenre", back_populates="movie", lazy="joined")
+    review = relationship("Review", back_populates="movie", lazy="joined")
 
     def __init__(self, title: str, director: str, release_year: int, country_of_origin: str):
         self.title = title

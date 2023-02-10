@@ -3,17 +3,22 @@ from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 from app.db.database import engine, Base
 
+from app.users import users_router
 from app.actor import actor_router
 from app.groups import group_router
 from app.movie import movie_router, movie_superuser_router
 from app.genre import genre_router
+from app.reviews import reviews_router
+
 
 Base.metadata.create_all(bind=engine)
 
 
 def init_app():
-    app = FastAPI()
+    app = FastAPI(title="Movie reviews")
     app.include_router(movie_router)
+    app.include_router(reviews_router)
+    app.include_router(users_router)
     app.include_router(movie_superuser_router)
     app.include_router(actor_router)
     app.include_router(genre_router)
