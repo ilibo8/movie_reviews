@@ -5,3 +5,4 @@ on *.* TO 'movieuser'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
 CREATE DATABASE IF NOT EXISTS movie_reviews;
+CREATE DATABASE IF NOT EXISTS movie_reviews_test;

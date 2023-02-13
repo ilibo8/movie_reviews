@@ -8,7 +8,6 @@ class Actor(Base):
     id = Column(Integer, primary_key=True)
     full_name = Column(String(50))
     nationality = Column(String(50))
-    __table_args__ = ({"mysql_engine": "InnoDB"})
 
     movie_cast = relationship("MovieCast", back_populates="actor")
 

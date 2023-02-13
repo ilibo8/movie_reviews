@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 
-actor_router = APIRouter(prefix="/api/actors", tags=["Movies - Actors"])
+actor_router = APIRouter(prefix="/api/users/movies/actors", tags=["Movies - Actors"])
 
 
 @actor_router.get("/get-all", response_model=list[ActorSchema])
@@ -17,7 +17,7 @@ def get_all_actors_only_full_names():
 
 @actor_router.get("/get-actors-by-id/{id}", response_model=ActorSchema)
 def get_actor_by_id(id: int):
-    return ActorController.find_actor_by_id(id)
+    return ActorController.get_actor_by_id(id)
 
 
 @actor_router.get("/get-actors-by/name", response_model=list[ActorSchema])

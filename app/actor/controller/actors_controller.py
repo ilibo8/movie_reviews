@@ -56,9 +56,9 @@ class ActorController:
             raise HTTPException(status_code=400, detail=str(e))
 
     @staticmethod
-    def find_actor_by_id(id: int):
+    def get_actor_by_id(id: int):
         try:
-            return ActorService.find_actor_by_id(id)
+            return ActorService.get_actor_by_id(id)
         except ActorNotFound as e:
             raise HTTPException(status_code=400, detail=str(e.message))
         except Exception as e:

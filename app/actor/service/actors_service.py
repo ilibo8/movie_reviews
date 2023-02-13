@@ -25,6 +25,15 @@ class ActorService:
             raise e
 
     @staticmethod
+    def get_actor_by_id(id: int):
+        try:
+            with SessionLocal() as db:
+                actor_repository = ActorRepository(db)
+                return actor_repository.get_actor_by_id(id)
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def find_actor_by_name(name: str):
         try:
             with SessionLocal() as db:
@@ -39,15 +48,6 @@ class ActorService:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
                 return actor_repository.find_actor_by_last_name(last_name)
-        except Exception as e:
-            raise e
-
-    @staticmethod
-    def find_actor_by_id(id: int):
-        try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
-                return actor_repository.find_actor_by_id(id)
         except Exception as e:
             raise e
 
