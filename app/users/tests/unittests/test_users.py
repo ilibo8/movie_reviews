@@ -57,7 +57,7 @@ class TestUserRepo(TestClass):
             user_repository = UserRepository(db)
             user = user_repository.create_user("rob", "rob123", "r@gmail.com")
             user2 = user_repository.get_user_by_id(user.id)
-            assert user == user2
+            assert user == user2 ###!!!!!!
 
     def test_get_user_by_user_name(self):
         with TestingSessionLocal() as db:
@@ -65,6 +65,7 @@ class TestUserRepo(TestClass):
             user = user_repository.create_user("rob", "rob123", "r@gmail.com")
             user2 = user_repository.get_user_by_user_name(user.user_name)
             assert user == user2
+
 
     def test_get_user_by_user_name_error(self):
         with TestingSessionLocal() as db:
@@ -112,5 +113,5 @@ class TestUserRepo(TestClass):
     def test_delete_user_by_id_error(self):
         with TestingSessionLocal() as db:
             user_repository = UserRepository(db)
-            assert user_repository.delete_user_by_id(3) is not True
+            assert user_repository.delete_user_by_id("something") is not True
 

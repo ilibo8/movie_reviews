@@ -3,7 +3,7 @@ from app.movie.controller import MovieController
 from app.movie.schema import MovieSchema, MovieGenreSchema, MovieSchemaIn, MovieSchemaJoined, MovieCastSchema
 
 movie_router = APIRouter(prefix="/api/movies", tags=["Movies"])
-movie_superuser_router = APIRouter(prefix="/api/superuser/movies", tags=["Movies CRUD"])
+movie_superuser_router = APIRouter(prefix="/api/movies-crud", tags=["Movies CRUD"])
 
 
 @movie_router.get("/get-all-movies", response_model=list[MovieSchemaJoined])

@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from app.genre.controller import GenreController
 from app.genre.schema import GenreSchema
 
-genre_router = APIRouter(prefix="/api/users/movies/genres", tags=["Movies - Genre"])
+genre_router = APIRouter(prefix="/api/movies/genres", tags=["Movies - Genre"])
 
 
 @genre_router.get("/get-all", response_model=list[str])
