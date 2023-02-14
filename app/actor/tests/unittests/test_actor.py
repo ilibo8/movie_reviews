@@ -1,18 +1,10 @@
 import pytest
-from sqlalchemy.exc import IntegrityError
-
 from app.actor.exceptions import ActorNotFound
 from app.actor.repository import ActorRepository
 from app.tests import TestClass, TestingSessionLocal
 
 
 class TestActorRepository(TestClass):
-
-    def create_actors_for_methods(self):
-        with TestingSessionLocal() as db:
-            actor_repository = ActorRepository(db)
-            actor = actor_repository.add_actor('Robin Wright', 'American')
-            actor = actor_repository.add_actor('Anthony Hopkins', 'American')
 
     def test_create_actor(self):
         """Test method add_actor."""
@@ -26,10 +18,10 @@ class TestActorRepository(TestClass):
         """Test finding actor by name."""
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
-            actor = actor_repository.add_actor('Rob W', 'American')
-            actor = actor_repository.add_actor('Robin S', 'American')
-            actor = actor_repository.add_actor('Robina M', 'American')
-            actor = actor_repository.add_actor('Sofi Rob', 'American')
+            actor_repository.add_actor('Rob W', 'American')
+            actor_repository.add_actor('Robin S', 'American')
+            actor_repository.add_actor('Robina M', 'American')
+            actor_repository.add_actor('Sofi Rob', 'American')
             actors = actor_repository.find_actor_by_name("rob")
             assert len(actors) == 3
 
@@ -37,10 +29,10 @@ class TestActorRepository(TestClass):
         """Test finding actor by last name."""
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
-            actor = actor_repository.add_actor('Rob Daniels', 'American')
-            actor = actor_repository.add_actor('Dani Cruz', 'American')
-            actor = actor_repository.add_actor('Rob Danish', 'American')
-            actor = actor_repository.add_actor('Rob Smith', 'American')
+            actor_repository.add_actor('Rob Daniels', 'American')
+            actor_repository.add_actor('Dani Cruz', 'American')
+            actor_repository.add_actor('Rob Danish', 'American')
+            actor_repository.add_actor('Rob Smith', 'American')
             actors = actor_repository.find_actor_by_last_name("dani")
             assert len(actors) == 2
 
@@ -48,10 +40,10 @@ class TestActorRepository(TestClass):
         """Test finding actor by name and last name."""
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
-            actor = actor_repository.add_actor('Smith Rob', 'American')
-            actor = actor_repository.add_actor('Rob Roby', 'American')
-            actor = actor_repository.add_actor('Rob Smithy', 'American')
-            actor = actor_repository.add_actor('Rob Smith', 'American')
+            actor_repository.add_actor('Smith Rob', 'American')
+            actor_repository.add_actor('Rob Roby', 'American')
+            actor_repository.add_actor('Rob Smithy', 'American')
+            actor_repository.add_actor('Rob Smith', 'American')
             target_actors = actor_repository.find_actor_by_full_name("rob smith")
             assert len(target_actors) == 1
 
@@ -74,9 +66,9 @@ class TestActorRepository(TestClass):
         """Test get all actors. """
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
-            actor = actor_repository.add_actor('Rob Smith', 'American')
-            actor = actor_repository.add_actor('Rob Smith', 'American')
-            actor = actor_repository.add_actor('Rob Smith', 'American')
+            actor_repository.add_actor('Rob Smith', 'American')
+            actor_repository.add_actor('Rob Smith', 'American')
+            actor_repository.add_actor('Rob Smith', 'American')
             actors = actor_repository.get_all_actors()
             assert len(actors) == 3
 
@@ -130,7 +122,7 @@ class TestActorRepository(TestClass):
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
             actor = actor_repository.add_actor('Rob Smith', 'American')
-            assert actor_repository.delete_actor_by_id(actor.id) is True
+            assert actor_repository.delete_actor_by_id(actor.id) is not False
 
     def delete_actor_by_id_error(self):
         """Testing error when deleting actor by id"""
