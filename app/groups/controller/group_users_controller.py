@@ -2,18 +2,20 @@
 from fastapi import HTTPException
 from fastapi.openapi.models import Response
 from sqlalchemy.exc import IntegrityError
-from app.groups.exceptions import DuplicateEntry
+from app.groups.exceptions import DuplicateEntry, GroupNotFound
 from app.groups.service import GroupUserService
 
 
 class GroupUserController:
     """Class for GroupUser controller"""
     @staticmethod
-    def add_group_user(group_id: int, user_id: int):
+    def add_group_user(group_name: str, user_id: int):
         """Method for adding new group user"""
         try:
-            group_user = GroupUserService.add_group_user(group_id, user_id)
+            group_user = GroupUserService.add_group_user(group_name, user_id)
             return group_user
+        except GroupNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
         except DuplicateEntry as err:
             raise HTTPException(status_code=err.code, detail=err.message)
         except IntegrityError as err:
@@ -22,10 +24,10 @@ class GroupUserController:
             raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
-    def get_all():
+    def get_all_joined():
         """Method for getting all groups and their users"""
         try:
-            return GroupUserService.get_all()
+            return GroupUserService.get_all_joined()
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err))
 

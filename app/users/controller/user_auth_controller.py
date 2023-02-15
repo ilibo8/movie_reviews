@@ -4,6 +4,15 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from app.users.service import decodeJWT
 
 
+def extract_user_id_from_token(request: Request) -> int:
+    """Function for extracting user id from authorised request."""
+    bearer = request.headers["authorization"]
+    token = bearer.split()[1]
+    decoded = decodeJWT(token)
+    user_id = decoded["user_id"]
+    return user_id
+
+
 class JWTBearer(HTTPBearer):
     """Class for checking credentials."""
     def __init__(self, role: str, auto_error: bool = True):
@@ -38,3 +47,4 @@ class JWTBearer(HTTPBearer):
         if payload:
             is_token_valid = True
         return {"valid": is_token_valid, "role": payload["role"]}
+

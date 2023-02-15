@@ -10,7 +10,7 @@ class Genre(Base):
     name = Column(String(20), unique=True, primary_key=True)
     __table_args__ = ({"mysql_engine": "InnoDB"})
 
-    movie_genre = relationship("MovieGenre", back_populates="genre")
+    movie_genre = relationship("MovieGenre", cascade="all, delete-orphan", back_populates="genre")
 
     def __init__(self, name: str):
         self.name = name

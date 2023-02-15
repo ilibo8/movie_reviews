@@ -7,7 +7,6 @@ class UserSchema(BaseModel):
     password: str
     email: str
     is_superuser: bool
-    is_group_owner : bool
 
     class Config:
         orm_mode = True

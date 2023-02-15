@@ -1,1 +1,1 @@
-from .unittests import TestUserRepo
+from .unittests import TestUserRepository

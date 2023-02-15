@@ -7,14 +7,14 @@ from sqlalchemy import Column, Integer, String, Date
 
 
 class Group(Base):
-    __tablename__ = "groups"
+    __tablename__ = "movie_groups"
     id = Column(Integer, primary_key=True)
     group_name = Column(String(30), unique=True)
     owner_id = Column(Integer)
     description = Column(String(100))
     date_created = Column(Date, nullable=False)
 
-    group_user = relationship("GroupUser", back_populates="group", lazy="subquery")
+    group_user = relationship("GroupUser", cascade="all, delete-orphan", back_populates="movie_group", lazy="subquery")
 
     def __init__(self, group_name: str, owner_id: int, description: str, date_created: str = date.today()):
         self.group_name = group_name

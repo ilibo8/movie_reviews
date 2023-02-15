@@ -1,8 +1,9 @@
 """Module for Group controller"""
 from fastapi import HTTPException
-from fastapi.openapi.models import Response
-from app.groups.exceptions import GroupNotFound, DuplicateEntry
-from app.groups.service import GroupService
+from starlette.responses import Response
+
+from app.groups.exceptions import GroupNotFound, DuplicateEntry, Unauthorized
+from app.groups.service import GroupService, GroupUserService
 
 
 class GroupController:
@@ -11,7 +12,9 @@ class GroupController:
     def add_group(group_name: str, group_owner_id: int, description: str):
         """Method for adding new group"""
         try:
+
             group = GroupService.add_group(group_name, group_owner_id, description)
+            GroupUserService.add_group_user(group_name=group_name, user_id=group_owner_id)
             return group
         except DuplicateEntry as err:
             raise HTTPException(status_code=err.code, detail=err.message)
@@ -28,12 +31,26 @@ class GroupController:
             raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
-    def delete_group_by_id(group_id: int):
-        """Method for deleting group by id"""
+    def change_group_name(group_name: str, new_name: str, user_id: int):
+        """Method for changing group name"""
         try:
-            if GroupService.delete_by_id(group_id):
-                return Response(content=f"Group with id {group_id} deleted .", status_code=200)
+            GroupService.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)
+        except Unauthorized as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
         except GroupNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message)
+        except DuplicateEntry as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
+    def delete_group_by_name(group_name: str):
+        """Method for deleting group by id"""
+        try:
+            if GroupService.delete_by_id(group_name):
+                return Response(content=f"Group {group_name} deleted.", status_code=200)
+        except GroupNotFound as err:
+            raise HTTPException(status_code=400, detail=str(err))
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err))

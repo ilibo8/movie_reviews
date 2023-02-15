@@ -1,6 +1,4 @@
 from typing import Type
-
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.actor.exceptions import ActorNotFound
 from app.actor.model import Actor

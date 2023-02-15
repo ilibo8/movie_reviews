@@ -15,8 +15,8 @@ class TestGroupUserRepository(TestClass):
         with TestingSessionLocal() as db:
             user_repository = UserRepository(db)
             group_repository = GroupRepository(db)
-            group_repository.add_group("g1", "desc")
-            group_repository.add_group("g2", "desc")
+            group_repository.add_group("g1", 1, "desc")
+            group_repository.add_group("g2", 1, "desc")
             user_repository.create_user("user1", "pass", "user1@gmail.com")
             user_repository.create_user("user2", "pass", "user2@gmail.com")
             user_repository.create_user("user3", "pass", "user3@gmail.com")
@@ -47,6 +47,16 @@ class TestGroupUserRepository(TestClass):
             with pytest.raises(IntegrityError):
                 group_user_repository.add_group_user(group_id=3, user_id=4)
 
+    def test_get_all_group_ids(self):
+        """Test for method getting all group ids"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            group_user_repository.add_group_user(group_id=1, user_id=1)
+            group_user_repository.add_group_user(group_id=2, user_id=1)
+            group_user_repository.add_group_user(group_id=1, user_id=2)
+            assert group_user_repository.get_all_group_ids() == [1, 2]
+
     def test_get_all_group_users(self):
         """Method for testing getting all groups and their users."""
         with TestingSessionLocal() as db:
@@ -65,8 +75,7 @@ class TestGroupUserRepository(TestClass):
             group_user_repository.add_group_user(group_id=1, user_id=1)
             group_user_repository.add_group_user(group_id=2, user_id=1)
             group_user_repository.add_group_user(group_id=1, user_id=2)
-            members = group_user_repository.get_all_group_members(group_id=1)
-            assert len(members) == 2
+            assert group_user_repository.get_all_group_members_ids(group_id=1) == [1, 2]
 
     def test_delete_group_user(self):
         """Testing deleting group user"""

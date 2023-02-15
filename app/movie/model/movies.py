@@ -12,9 +12,9 @@ class Movie(Base):
     country_of_origin = Column(String(50))
     __table_args__ = (UniqueConstraint("title", "director", "release_year", "country_of_origin", name="movie_uc"),)
 
-    movie_cast = relationship("MovieCast", back_populates="movie", lazy="subquery")
-    movie_genre = relationship("MovieGenre", back_populates="movie", lazy="subquery")
-    review = relationship("Review", back_populates="movie", lazy="subquery")
+    movie_cast = relationship("MovieCast", cascade="all, delete-orphan", back_populates="movie", lazy="subquery")
+    movie_genre = relationship("MovieGenre", cascade="all, delete-orphan", back_populates="movie", lazy="subquery")
+    review = relationship("Review", cascade="all, delete-orphan", back_populates="movie", lazy="subquery")
 
     def __init__(self, title: str, director: str, release_year: int, country_of_origin: str):
         self.title = title

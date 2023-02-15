@@ -7,11 +7,11 @@ from app.db import Base
 class GroupUser(Base):
     """Model for GroupUser table"""
     __tablename__ = "groups_users"
-    group_id = Column(Integer, ForeignKey("groups.id", ondelete="CASCADE"), primary_key=True)
+    group_id = Column(Integer, ForeignKey("movie_groups.id", ondelete="CASCADE"), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     __table_args__ = (UniqueConstraint("group_id", "user_id", name="group_user_uc"),)
 
-    group = relationship("Group", back_populates="group_user")
+    movie_group = relationship("Group", back_populates="group_user")
     user = relationship("User", back_populates="group_user")
 
     def __init__(self, group_id: int, user_id: int):

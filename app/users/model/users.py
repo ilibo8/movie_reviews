@@ -12,14 +12,12 @@ class User(Base):
     password = Column(String(100), nullable=False)
     email = Column(String(50), unique=True)
     is_superuser = Column(Boolean, default=False)
-    is_group_owner = Column(Boolean, default=False)
 
     review = relationship("Review", back_populates="user", lazy="subquery")
     group_user = relationship("GroupUser", back_populates="user", lazy="subquery")
 
-    def __init__(self, user_name: str, password: str, email: str, is_superuser=False, is_group_owner=False):
+    def __init__(self, user_name: str, password: str, email: str, is_superuser=False):
         self.user_name = user_name
         self.password = password
         self.email = email
         self.is_superuser = is_superuser
-        self.is_group_owner = is_group_owner

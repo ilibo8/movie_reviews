@@ -8,7 +8,7 @@ JWT_ALGORITHM = settings.ALGORITHM
 
 
 def signJWT(user_id: str, role: str) -> Dict[str, str]:
-    payload = {"user_id": user_id, "role": role, "expires": time.time() + 1200}
+    payload = {"user_id": user_id, "role": role, "expires": time.time() + 2000}
     token = jwt.encode(payload, USER_SECRET, algorithm=JWT_ALGORITHM)
 
     return {"access_token": token}

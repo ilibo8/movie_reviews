@@ -9,7 +9,7 @@ from app.tests import TestClass, TestingSessionLocal
 
 class TestGroupRepository(TestClass):
     """Class for testing methods for GroupRepository"""
-
+#####################################################
     def test_create_group(self):
         """Test method add_group."""
         with TestingSessionLocal() as db:
