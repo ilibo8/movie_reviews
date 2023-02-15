@@ -1,12 +1,12 @@
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel
 
 
 class ReviewSchema(BaseModel):
     id : int
     movie_id : int
-    user_id : UUID4
+    user_id : int
     rating_number : int
-    rating_description : str
+    review : str
 
     class Config:
         orm_mode = True
@@ -14,9 +14,9 @@ class ReviewSchema(BaseModel):
 
 class ReviewSchemaIn(BaseModel):
     movie_id : int
-    user_id : UUID4
+    user_id : int
     rating_number : int
-    rating_description : str
+    review : str
 
     # @validator("rating_number")
     # def rating_number_validator(cls, value):

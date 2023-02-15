@@ -36,8 +36,6 @@ class UserController:
             user = UserService.login_user(user_name, password)
             if user.is_superuser:
                 return signJWT(user.id, "super_user")
-            if user.is_group_owner:
-                return signJWT(user.id, "group_owner")
             return signJWT(user.id, "classic_user")
         except UserInvalidPassword as e:
             raise HTTPException(status_code=e.code, detail=e.message)
@@ -45,7 +43,7 @@ class UserController:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
-    def get_user_by_id(user_id: str):
+    def get_user_by_id(user_id: int):
         user = UserService.get_user_by_id(user_id)
         if user is None:
             raise HTTPException(status_code=400, detail=f"User with provided id {user_id} does not exist.")
@@ -58,7 +56,7 @@ class UserController:
         return users
 
     @staticmethod
-    def delete_user_by_id(user_id: str):
+    def delete_user_by_id(user_id: int):
         try:
             deleted = UserService.delete_user_by_id(user_id)
             if deleted:

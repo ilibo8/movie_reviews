@@ -1,1 +1,1 @@
-from .test_users import TestUserRepo
+from .test_users import TestUserRepository

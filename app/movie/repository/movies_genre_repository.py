@@ -1,16 +1,17 @@
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
-
 from sqlalchemy.orm import Session
 from app.movie.exceptions import MovieNotFound, DuplicateDataEntry
 from app.movie.model import MovieGenre
 
 
 class MovieGenreRepository:
+    """Repository for movie genre."""
     def __init__(self, db: Session):
         self.db = db
 
     def add_movie_genre(self, movie_id, genre_name: str) -> MovieGenre:
+        """"""
         try:
             if self.db.query(MovieGenre).filter(and_(MovieGenre.movie_id == movie_id,
                                                      MovieGenre.genre_name == genre_name)).first() is not None:

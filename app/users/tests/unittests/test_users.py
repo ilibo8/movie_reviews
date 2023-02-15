@@ -4,7 +4,7 @@ from app.users.exceptions import AlreadyExist, UserNotFound
 from app.users.repository import UserRepository
 
 
-class TestUserRepo(TestClass):
+class TestUserRepository(TestClass):
 
     def test_create_user(self):
         with TestingSessionLocal() as db:

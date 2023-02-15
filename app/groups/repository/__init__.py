@@ -1,1 +1,2 @@
 from .groups_repository import GroupRepository
+from .group_users_repository import GroupUserRepository

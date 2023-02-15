@@ -1,3 +1,4 @@
+""""""
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, Integer
 from app.db import Base

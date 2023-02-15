@@ -29,7 +29,7 @@ class UserService:
             raise e
 
     @staticmethod
-    def get_user_by_id(user_id: str):
+    def get_user_by_id(user_id: int):
         with SessionLocal() as db:
             user_repository = UserRepository(db)
             return user_repository.get_user_by_id(user_id)
@@ -41,7 +41,7 @@ class UserService:
             return user_repository.get_all_users()
 
     @staticmethod
-    def delete_user_by_id(user_id: str):
+    def delete_user_by_id(user_id: int):
         try:
             with SessionLocal() as db:
                 user_repository = UserRepository(db)

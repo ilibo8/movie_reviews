@@ -109,7 +109,7 @@ class TestActorRepository(TestClass):
             with pytest.raises(ActorNotFound):
                 actor_repository.change_actor_full_name("Rob Smith", 3)
 
-    def delete_actor_by_id(self):
+    def test_delete_actor_by_id(self):
         """Testing deleting actor by id"""
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
@@ -117,14 +117,14 @@ class TestActorRepository(TestClass):
             actor_repository.delete_actor_by_id(actor.id)
             assert actor_repository.get_actor_by_id(actor.id) is None
 
-    def delete_actor_by_id_bool(self):
+    def test_delete_actor_by_id_bool(self):
         """Testing deleting actor by id"""
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)
             actor = actor_repository.add_actor('Rob Smith', 'American')
             assert actor_repository.delete_actor_by_id(actor.id) is not False
 
-    def delete_actor_by_id_error(self):
+    def test_delete_actor_by_id_error(self):
         """Testing error when deleting actor by id"""
         with TestingSessionLocal() as db:
             actor_repository = ActorRepository(db)

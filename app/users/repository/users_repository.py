@@ -31,7 +31,7 @@ class UserRepository:
         self.db.refresh(user)
         return user
 
-    def get_user_by_id(self, user_id: str) -> Type[User] | None:
+    def get_user_by_id(self, user_id: int) -> Type[User] | None:
         user = self.db.query(User).filter(User.id == user_id).first()
         return user
 
@@ -55,14 +55,10 @@ class UserRepository:
         self.db.refresh(user)
         return user
 
-    def delete_user_by_id(self, user_id: str) -> bool:
+    def delete_user_by_id(self, user_id: int) -> bool:
         user = self.db.query(User).filter(User.id == user_id).first()
         if user is None:
             return False
         self.db.delete(user)
         self.db.commit()
         return True
-
-
-
-

@@ -1,29 +1,21 @@
-from pydantic import BaseModel, validator
-from pydantic.validators import date
+from pydantic import BaseModel
+from pydantic.types import date
 
 
 class GroupSchema(BaseModel):
-    id : int
-    name : str
-    owner_user_name : str
-    description : str
-    date_created : str
-
-    # @validator("date_created", pre=True)
-    # def parse_date(cls, value):
-    #     return date.strptime(
-    #         value,
-    #         "%Y-%m-%d"
-    #     ).date()
+    id: int
+    group_name: str
+    owner_id : int
+    description: str
+    date_created: date
 
     class Config:
-        orm_mode : True
+        orm_mode = True
 
 
 class GroupSchemaIn(BaseModel):
-    name: str
-    owner_user_name: str
+    group_name: str
     description: str
 
     class Config:
-        orm_mode: True
+        orm_mode = True

@@ -1,14 +1,17 @@
+"""Module for JWTBearer"""
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from app.users.service import decodeJWT
 
 
 class JWTBearer(HTTPBearer):
+    """Class for checking credentials."""
     def __init__(self, role: str, auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
         self.role = role
 
     async def __call__(self, request: Request):
+        """Method for checking credentials."""
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
@@ -26,6 +29,7 @@ class JWTBearer(HTTPBearer):
             raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtoken: str) -> dict:
+        """Method for verifying jwt."""
         is_token_valid: bool = False
         try:
             payload = decodeJWT(jwtoken)

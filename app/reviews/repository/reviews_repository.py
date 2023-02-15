@@ -1,3 +1,5 @@
+from typing import Type
+
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -19,19 +21,19 @@ class ReviewRepository:
         except IntegrityError as e:
             raise e
 
-    def get_all_reviews(self) -> list[Review]:
+    def get_all_reviews(self) -> list[Type[Review]]:
         reviews = self.db.query(Review).all()
         return reviews
 
-    def get_reviews_by_movie_id(self, movie_id: int) -> list[Review]:
+    def get_reviews_by_movie_id(self, movie_id: int) -> list[Type[Review]]:
         reviews = self.db.query(Review).filter(Review.movie_id == movie_id).all()
         return reviews
 
-    def get_reviews_by_user_id(self, user_id: str) -> list[Review]:
+    def get_reviews_by_user_id(self, user_id: str) -> list[Type[Review]]:
         reviews = self.db.query(Review).filter(Review.user_id == user_id).all()
         return reviews
 
-    def change_movie_rating_number(self, movie_id: int, user_id: str, new_rating: int) -> Review:
+    def change_movie_rating_number(self, movie_id: int, user_id: str, new_rating: int) -> Type[Review]:
         review = self.db.query(Review).filter(and_(Review.movie_id == movie_id, Review.user_id == user_id)).first()
         if review is None:
             raise ReviewNotFound(f"There is no review for movie_id {movie_id} for this user.")
@@ -41,7 +43,7 @@ class ReviewRepository:
         self.db.refresh(review)
         return review
 
-    def change_movie_rating_description(self, movie_id: int, user_id: str, new_description: str) -> Review:
+    def change_movie_rating_description(self, movie_id: int, user_id: str, new_description: str) -> Type[Review]:
         review = self.db.query(Review).filter(and_(Review.movie_id == movie_id, Review.user_id == user_id)).first()
         if review is None:
             raise ReviewNotFound(f"There is no review for movie_id {movie_id} for this user.")
@@ -52,12 +54,10 @@ class ReviewRepository:
         return review
 
     def delete_review_by_id(self, review_id: int) -> bool:
-        try:
-            review = self.db.query(Review).filter(Review.id == review_id).first()
-            if review is None:
-                return False
-            self.db.delete(review)
-            self.db.commit()
-            return True
-        except Exception as e:
-            raise e
+        review = self.db.query(Review).filter(Review.id == review_id).first()
+        if review is None:
+            return False
+        self.db.delete(review)
+        self.db.commit()
+        return True
+

@@ -1,8 +1,8 @@
-from pydantic import BaseModel, EmailStr, UUID4
+from pydantic import BaseModel, EmailStr
 
 
 class UserSchema(BaseModel):
-    id: UUID4
+    id: int
     user_name: str
     password: str
     email: str
@@ -28,4 +28,3 @@ class UserLoginSchema(BaseModel):
 
     class Config:
         orm_mode = True
-

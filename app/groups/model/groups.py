@@ -1,21 +1,23 @@
-from datetime import datetime
-from sqlalchemy import Column, Integer, String, UniqueConstraint
+from datetime import date
+
+from sqlalchemy.orm import relationship
 
 from app.db import Base
+from sqlalchemy import Column, Integer, String, Date
 
 
 class Group(Base):
     __tablename__ = "groups"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50))
-    owner_user_name = Column(String(50))
+    group_name = Column(String(30), unique=True)
+    owner_id = Column(Integer)
     description = Column(String(100))
-    date_created = Column(String(10))
-    __table_args__ = (UniqueConstraint("name", name="group_name_uc"), {"mysql_engine": "InnoDB"})
+    date_created = Column(Date, nullable=False)
 
-    def __init__(self, name: str, owner_user_name: str, description: str):
-        date = datetime.now().strftime('%Y-%m-%d')
-        self.name = name
-        self.owner_user_name = owner_user_name
+    group_user = relationship("GroupUser", back_populates="group", lazy="subquery")
+
+    def __init__(self, group_name: str, owner_id: int, description: str, date_created: str = date.today()):
+        self.group_name = group_name
+        self.owner_id = owner_id
         self.description = description
-        self.date_created = date
+        self.date_created = date_created
