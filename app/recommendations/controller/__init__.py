@@ -1,0 +1,1 @@
+from .recommendations_controller import RecommendationController

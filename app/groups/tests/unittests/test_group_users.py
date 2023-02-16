@@ -2,7 +2,7 @@
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from app.groups.exceptions import DuplicateEntry
+from app.groups.exceptions import DuplicateEntry, GroupNotFound
 from app.groups.repository import GroupUserRepository, GroupRepository
 from app.tests import TestClass, TestingSessionLocal
 from app.users.repository import UserRepository
@@ -15,11 +15,14 @@ class TestGroupUserRepository(TestClass):
         with TestingSessionLocal() as db:
             user_repository = UserRepository(db)
             group_repository = GroupRepository(db)
-            group_repository.add_group("g1", 1, "desc")
-            group_repository.add_group("g2", 1, "desc")
+            user_repository.create_user("emma", "pass", "emma@gmail.com")
+            user_repository.create_user("nick", "pass", "nick@gmail.com")
             user_repository.create_user("user1", "pass", "user1@gmail.com")
             user_repository.create_user("user2", "pass", "user2@gmail.com")
             user_repository.create_user("user3", "pass", "user3@gmail.com")
+            group_repository.add_group("g1", 1, "desc")
+            group_repository.add_group("g2", 1, "desc")
+            group_repository.add_group("g3", 3, "desc")
 
     def test_add_group_user(self):
         """Test method add_group_user"""
@@ -45,7 +48,24 @@ class TestGroupUserRepository(TestClass):
             self.create_foreign_keys()
             group_user_repository = GroupUserRepository(db)
             with pytest.raises(IntegrityError):
-                group_user_repository.add_group_user(group_id=3, user_id=4)
+                group_user_repository.add_group_user(group_id=3, user_id=7)
+
+    def test_add_group_user_integrity_error2(self):
+        """Test method add_group_user integrity error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            with pytest.raises(IntegrityError):
+                group_user_repository.add_group_user(group_id=4, user_id=3)
+
+    def test_get_all(self):
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            group_user_repository.add_group_user(group_id=1, user_id=1)
+            group_user_repository.add_group_user(group_id=2, user_id=1)
+            group_users = group_user_repository.get_all()
+            assert len(group_users) == 2
 
     def test_get_all_group_ids(self):
         """Test for method getting all group ids"""
@@ -54,28 +74,72 @@ class TestGroupUserRepository(TestClass):
             group_user_repository = GroupUserRepository(db)
             group_user_repository.add_group_user(group_id=1, user_id=1)
             group_user_repository.add_group_user(group_id=2, user_id=1)
-            group_user_repository.add_group_user(group_id=1, user_id=2)
+            group_user_repository.add_group_user(group_id=1, user_id=3)
             assert group_user_repository.get_all_group_ids() == [1, 2]
 
-    def test_get_all_group_users(self):
-        """Method for testing getting all groups and their users."""
+    def test_get_all_group_members_ids(self):
+        """Testing getting all group members ids"""
         with TestingSessionLocal() as db:
             self.create_foreign_keys()
             group_user_repository = GroupUserRepository(db)
             group_user_repository.add_group_user(group_id=1, user_id=1)
             group_user_repository.add_group_user(group_id=2, user_id=1)
-            group_user_repository.add_group_user(group_id=1, user_id=2)
-            assert len(group_user_repository.get_all()) == 3
+            group_user_repository.add_group_user(group_id=1, user_id=3)
+            assert group_user_repository.get_all_group_members_ids(group_id=1) == [1, 3]
 
-    def test_get_all_group_members(self):
-        """Testing getting all group members"""
+    def test_get_id_by_user_and_group_id(self):
+        """Testing method get_id_by_user_and_group_id"""
         with TestingSessionLocal() as db:
             self.create_foreign_keys()
             group_user_repository = GroupUserRepository(db)
-            group_user_repository.add_group_user(group_id=1, user_id=1)
-            group_user_repository.add_group_user(group_id=2, user_id=1)
-            group_user_repository.add_group_user(group_id=1, user_id=2)
-            assert group_user_repository.get_all_group_members_ids(group_id=1) == [1, 2]
+            group_user_repository.add_group_user(1, 1)
+            group_user_repository.add_group_user(2, 1)
+            group_user_repository.add_group_user(3, 2)
+            assert group_user_repository.get_id_by_user_and_group_id(1, 1) == 1
+            assert group_user_repository.get_id_by_user_and_group_id(2, 1) == 2
+            assert group_user_repository.get_id_by_user_and_group_id(3, 2) == 3
+
+    def test_get_id_by_user_and_group_id_error(self):
+        """Testing method get_id_by_user_and_group_id"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            with pytest.raises(GroupNotFound):
+                group_user_repository.get_id_by_user_and_group_id(1, 1)
+
+    def test_get_user_name_by_group_user_id(self):
+        """Testing method get_user_name_by_group_user_id"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            group_user_repository.add_group_user(1, 1)
+            group_user_repository.add_group_user(2, 1)
+            group_user_repository.add_group_user(3, 3)
+            assert group_user_repository.get_user_name_by_group_user_id(1) == "emma"
+            assert group_user_repository.get_user_name_by_group_user_id(2) == "emma"
+            assert group_user_repository.get_user_name_by_group_user_id(3) == "user1"
+
+    def test_get_user_name_by_group_user_id_error(self):
+        """Testing method get_user_name_by_group_user_id error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            with pytest.raises(GroupNotFound):
+                group_user_repository.get_user_name_by_group_user_id(1)
+
+    def test_check_if_user_is_part_of_group(self):
+        """Testing method check_if_user_is_part_of_group"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            group_user_repository.add_group_user(1, 1)
+            group_user_repository.add_group_user(2, 1)
+            group_user_repository.add_group_user(3, 3)
+            assert group_user_repository.check_if_user_is_part_of_group("g1", 1) is True
+            assert group_user_repository.check_if_user_is_part_of_group("g2", 1) is True
+            assert group_user_repository.check_if_user_is_part_of_group("g3", 3) is True
+            assert group_user_repository.check_if_user_is_part_of_group("g2", 3) is False
+            assert group_user_repository.check_if_user_is_part_of_group("g3", 1) is False
 
     def test_delete_group_user(self):
         """Testing deleting group user"""

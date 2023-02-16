@@ -7,7 +7,7 @@ user_router = APIRouter(prefix="/api/users", tags=["Users"])
 login_router = APIRouter(prefix="/api/login", tags=["Login"])
 
 
-@login_router.post("/login")
+@login_router.post("/")
 def login_for_access_token(user: UserLoginSchema):
     return UserController.login_user(user.user_name, user.password)
 
