@@ -23,7 +23,7 @@ def get_reviews_by_user_name(user_name: str):
     return ReviewController.get_reviews_by_user_name(user_name)
 
 
-@reviews_router.post("/add-rating-and-review", response_model=ReviewSchema,
+@reviews_router.post("/add-rating-and-review", response_model=ReviewSchemaOut,
                      dependencies=[Depends(JWTBearer("classic_user"))])
 def add_rating_and_review(review : ReviewSchemaIn, request : Request):
     user_id = extract_user_id_from_token(request)
@@ -32,7 +32,7 @@ def add_rating_and_review(review : ReviewSchemaIn, request : Request):
                                        review=review.review)
 
 
-@reviews_router.put("change-movie/rating-number", response_model=ReviewSchema,
+@reviews_router.put("change-movie/rating-number", response_model=ReviewSchemaOut,
                     dependencies=[Depends(JWTBearer("classic_user"))])
 def change_movie_rating_number(movie: ReviewSchemaChangeRating, request : Request):
     user_id = extract_user_id_from_token(request)
@@ -40,7 +40,7 @@ def change_movie_rating_number(movie: ReviewSchemaChangeRating, request : Reques
                                                        new_rating=movie.rating_number)
 
 
-@reviews_router.put("change-movie/review", response_model=ReviewSchema,
+@reviews_router.put("change-movie/review", response_model=ReviewSchemaOut,
                     dependencies=[Depends(JWTBearer("classic_user"))])
 def change_movie_review(movie_name: str, new_review: str, request : Request):
     user_id = extract_user_id_from_token(request)
@@ -50,4 +50,3 @@ def change_movie_review(movie_name: str, new_review: str, request : Request):
 @reviews_router.delete("/delete-review")
 def delete_review_by_id(review_id: int):
     return ReviewController.delete_review_by_id(review_id)
-

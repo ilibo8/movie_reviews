@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, PositiveInt, Field
+from pydantic import BaseModel, Field
 
 
 class ReviewSchema(BaseModel):

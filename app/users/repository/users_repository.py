@@ -1,7 +1,7 @@
 from typing import Type
 from sqlalchemy.orm import Session
 
-from app.users.exceptions import AlreadyExist
+from app.users.exceptions import AlreadyExist, UserNotFound
 from app.users.model import User
 
 
@@ -41,6 +41,8 @@ class UserRepository:
 
     def get_user_by_user_name(self, user_name: str) -> Type[User] | None:
         user = self.db.query(User).filter(User.user_name == user_name).first()
+        if user is None:
+            raise UserNotFound(f"User with name {user_name} not found.")
         return user
 
     def get_all_users(self) -> list[Type[User]]:

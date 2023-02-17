@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from app.movie.exceptions import MovieNotFound
 from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry
 from app.reviews.service import ReviewService
+from app.users.exceptions import UserNotFound
 
 
 class ReviewController:
@@ -43,10 +44,12 @@ class ReviewController:
     def get_reviews_by_user_name(user_name: str):
         try:
             return ReviewService.get_reviews_by_user_name(user_name)
-        except ReviewNotFound as e:
-            raise HTTPException(status_code=e.code, detail=e.message)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except UserNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except ReviewNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
     def change_movie_rating_number(movie_name: str, user_id: int, new_rating: int):
