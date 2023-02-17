@@ -10,7 +10,7 @@ class Review(Base):
     id = Column(Integer, primary_key=True)
     movie_id = Column(Integer, ForeignKey("movies.id", ondelete="CASCADE",))
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
-    rating_number = Column(Integer)
+    rating_number = Column(Integer, CheckConstraint("0 < rating_number <= 10"))
     review = Column(String(2000))
     __table_args__ = (CheckConstraint("0 < rating_number <= 10"),
                       UniqueConstraint("movie_id", "user_id", name="review_uc"),)

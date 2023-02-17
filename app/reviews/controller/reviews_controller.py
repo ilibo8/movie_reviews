@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Response
-from pymysql import IntegrityError
+from sqlalchemy.exc import IntegrityError
 
 from app.movie.exceptions import MovieNotFound
 from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry
@@ -9,10 +9,12 @@ from app.reviews.service import ReviewService
 class ReviewController:
 
     @staticmethod
-    def add_review(movie_id: int, user_id: int, rating_number: int, review: str):
+    def add_review(movie_name: str, user_id: int, rating_number: int, review: str):
         try:
-            return ReviewService.add_review(movie_id, user_id, rating_number, review)
+            return ReviewService.add_review(movie_name, user_id, rating_number, review)
         except ReviewDuplicateEntry as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except MovieNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message)
         except IntegrityError as err:
             raise HTTPException(status_code=400, detail=str(err))
@@ -47,18 +49,22 @@ class ReviewController:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
-    def change_movie_rating_number(movie_id: int, user_id: int, new_rating: int):
+    def change_movie_rating_number(movie_name: str, user_id: int, new_rating: int):
         try:
-            return ReviewService.change_movie_rating_number(movie_id, user_id, new_rating)
+            return ReviewService.change_movie_rating_number(movie_name, user_id, new_rating)
+        except MovieNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
         except ReviewNotFound as e:
             raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
-    def change_movie_review(movie_id: int, user_id: int, new_review: str):
+    def change_movie_review(movie_name: str, user_id: int, new_review: str):
         try:
-            return ReviewService.change_movie_review(movie_id, user_id, new_review)
+            return ReviewService.change_movie_review(movie_name, user_id, new_review)
+        except MovieNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
         except ReviewNotFound as e:
             raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
@@ -69,6 +75,7 @@ class ReviewController:
         try:
             if ReviewService.delete_review_by_id(review_id):
                 return Response(content=f"Review with id {review_id} is deleted", status_code=200)
-            return Response(content=f"Review with id {review_id} doesn't exist.", status_code=400)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except ReviewNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))

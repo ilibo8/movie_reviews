@@ -13,15 +13,13 @@ class ReviewRepository:
 
     def add_review(self, movie_id: int, user_id: int, rating_number: int, review: str) -> Review:
         try:
-            if self.db.query(Review).filter(and_(Review.movie_id == movie_id, Review.user_id == user_id)) is not None:
-                raise ReviewDuplicateEntry(f"Review for movie id {movie_id} already exist.")
             review = Review(movie_id, user_id, rating_number, review)
             self.db.add(review)
             self.db.commit()
             self.db.refresh(review)
             return review
-        except IntegrityError as e:
-            raise e
+        except IntegrityError:
+            raise ReviewDuplicateEntry("Rating and review already exist for this movie.")
 
     def get_all_reviews(self) -> list[Type[Review]]:
         reviews = self.db.query(Review).all()
@@ -58,7 +56,7 @@ class ReviewRepository:
     def delete_review_by_id(self, review_id: int) -> bool:
         review = self.db.query(Review).filter(Review.id == review_id).first()
         if review is None:
-            return False
+            raise ReviewNotFound(f"There is no review with id {review_id}.")
         self.db.delete(review)
         self.db.commit()
         return True
