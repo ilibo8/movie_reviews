@@ -110,7 +110,7 @@ class MovieService:
                 movie_repository = MovieRepository(db)
                 movie_names = []
                 for id in movie_ids:
-                    movie_names.append(movie_repository.get_title_by_id(id[0])[0])
+                    movie_names.append(movie_repository.get_title_by_id(id[0]))
                 movie_names.sort()
             return movie_names
         except Exception as e:
@@ -152,7 +152,7 @@ class MovieService:
                     raise MovieNotFound(f"No movies in database for actor id {actor_id}")
                 movies_names = []
                 for id in movie_ids:
-                    movie = movie_repo.get_title_by_id(id[0])[0]
+                    movie = movie_repo.get_title_by_id(id[0])
                     movies_names.append(movie)
                 return movies_names
         except Exception as e:

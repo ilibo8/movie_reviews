@@ -1,6 +1,6 @@
 import hashlib
 from app.db.database import SessionLocal
-from app.users.exceptions import UserInvalidPassword
+from app.users.exceptions import UserInvalidPassword, UserNotFound
 from app.users.repository import UserRepository
 
 
@@ -52,6 +52,8 @@ class UserService:
             with SessionLocal() as db:
                 user_repository = UserRepository(db)
                 user = user_repository.get_user_by_user_name(user_name=user_name)
+                if user is None:
+                    raise UserNotFound(f"User name {user_name} not found.")
                 if hashlib.sha256(bytes(password, "utf-8")).hexdigest() != user.password:
                     raise UserInvalidPassword(message="Invalid password for user.")
             return user

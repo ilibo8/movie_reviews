@@ -28,7 +28,7 @@ class MovieSchemaJoined(BaseModel):
 
 
 class MovieSchemaIn(BaseModel):
-    title: StrictStr
+    title: str
     director: StrictStr
     release_year: StrictInt
     country_of_origin: StrictStr

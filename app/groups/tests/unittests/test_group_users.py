@@ -2,7 +2,7 @@
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from app.groups.exceptions import DuplicateEntry, GroupNotFound
+from app.groups.exceptions import DuplicateEntry, GroupUserNotFound
 from app.groups.repository import GroupUserRepository, GroupRepository
 from app.tests import TestClass, TestingSessionLocal
 from app.users.repository import UserRepository
@@ -104,7 +104,7 @@ class TestGroupUserRepository(TestClass):
         with TestingSessionLocal() as db:
             self.create_foreign_keys()
             group_user_repository = GroupUserRepository(db)
-            with pytest.raises(GroupNotFound):
+            with pytest.raises(GroupUserNotFound):
                 group_user_repository.get_id_by_user_and_group_id(1, 1)
 
     def test_get_user_name_by_group_user_id(self):
@@ -124,10 +124,18 @@ class TestGroupUserRepository(TestClass):
         with TestingSessionLocal() as db:
             self.create_foreign_keys()
             group_user_repository = GroupUserRepository(db)
-            with pytest.raises(GroupNotFound):
+            with pytest.raises(GroupUserNotFound):
                 group_user_repository.get_user_name_by_group_user_id(1)
 
     def test_check_if_user_is_part_of_group(self):
+        """Testing method check_if_user_is_part_of_group"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            group_user_repository = GroupUserRepository(db)
+            with pytest.raises(GroupUserNotFound):
+                group_user_repository.check_if_user_is_part_of_group("some name", 2)
+
+    def test_check_if_user_is_part_of_group_error(self):
         """Testing method check_if_user_is_part_of_group"""
         with TestingSessionLocal() as db:
             self.create_foreign_keys()

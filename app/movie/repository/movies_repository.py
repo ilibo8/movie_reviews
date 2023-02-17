@@ -1,5 +1,6 @@
 from typing import Type
 
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.movie.exceptions import MovieNotFound
@@ -31,9 +32,16 @@ class MovieRepository:
         movie = self.db.query(Movie).get(movie_id)
         return movie
 
-    def get_title_by_id(self, movie_id: int) -> tuple:
+    def get_title_by_id(self, movie_id: int) -> str:
         """Get title for movie by id."""
-        return self.db.query(Movie.title).filter(Movie.id == movie_id).first()
+        title = self.db.query(Movie.title).filter(Movie.id == movie_id).first()
+        return title[0]
+
+    def get_movie_id_by_title(self, title: str) -> int:
+        movie = self.db.query(Movie).filter(func.lower(Movie.title) == title.lower()).first()
+        if movie is None:
+            raise MovieNotFound(f"There is no movie with title {title}")
+        return movie.id
 
     def get_movies_by_word_in_title(self, word: str) -> list[Type[Movie]]:
         """Get list of movies with chosen word in title."""

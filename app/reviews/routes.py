@@ -1,41 +1,49 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from starlette.requests import Request
 
 from app.reviews.controller import ReviewController
-from app.reviews.schema import ReviewSchema, ReviewSchemaIn
+from app.reviews.schema import ReviewSchema, ReviewSchemaIn, ReviewSchemaOut
+from app.users.controller import JWTBearer, extract_user_id_from_token
 
-reviews_router = APIRouter(prefix="/api/reviews", tags=["Reviews"])
+reviews_router = APIRouter(prefix="/api/reviews", tags=["Reviews & Ratings"])
 
 
-@reviews_router.get("get-all-reviews", response_model=list[ReviewSchema])
+@reviews_router.get("get-all-ratings-and-reviews", response_model=list[ReviewSchema]) #super
 def get_all_reviews():
     return ReviewController.get_all_reviews()
 
 
-@reviews_router.get("get-reviews-by/movie-id/{movie_id}", response_model=list[ReviewSchema])
-def get_reviews_by_movie_id(movie_id: int):
-    return ReviewController.get_reviews_by_movie_id(movie_id)
+@reviews_router.get("get-ratings-and-reviews-by/movie-title/{movie_title}", response_model=list[ReviewSchema])
+def get_reviews_by_movie_title(movie_title: str):
+    return ReviewController.get_reviews_by_movie_title(movie_title)
 
 
-@reviews_router.get("get-reviews-by/user-id/{user_id}", response_model=list[ReviewSchema])
-def get_reviews_by_user_id(user_id: str):
-    return ReviewController.get_reviews_by_user_id(user_id)
+@reviews_router.get("get-ratings-and-reviews-by/user-name/{user_name}", response_model=list[ReviewSchemaOut])
+def get_reviews_by_user_name(user_name: str):
+    return ReviewController.get_reviews_by_user_name(user_name)
 
 
-@reviews_router.post("/add-review", response_model=ReviewSchema)
-def add_review(review : ReviewSchemaIn):
-    return ReviewController.add_review(movie_id=review.movie_id, user_id=review.user_id,
+@reviews_router.post("/add-rating-and-review", response_model=ReviewSchema,
+                     dependencies=[Depends(JWTBearer("classic_user"))])
+def add_rating_and_review(review : ReviewSchemaIn, request : Request):
+    user_id = extract_user_id_from_token(request)
+    return ReviewController.add_review(movie_id=review.movie_id, user_id=user_id,
                                        rating_number=review.rating_number,
-                                       rating_description=review.rating_description)
+                                       review=review.review)
 
 
-@reviews_router.put("change-movie/rating-number", response_model=ReviewSchema)
-def change_movie_rating_number(movie_id: int, user_id: str, new_rating: int):
+@reviews_router.put("change-movie/rating-number", response_model=ReviewSchema,
+                    dependencies=[Depends(JWTBearer("classic_user"))])
+def change_movie_rating_number(movie_id: int, new_rating: int, request : Request):
+    user_id = extract_user_id_from_token(request)
     return ReviewController.change_movie_rating_number(movie_id, user_id, new_rating)
 
 
-@reviews_router.put("change-movie/rating-description", response_model=ReviewSchema)
-def change_movie_rating_description(movie_id: int, user_id: str, new_description: str):
-    return ReviewController.change_movie_rating_description(movie_id, user_id, new_description)
+@reviews_router.put("change-movie/review", response_model=ReviewSchema,
+                    dependencies=[Depends(JWTBearer("classic_user"))])
+def change_movie_review(movie_id: int, new_review: str, request : Request):
+    user_id = extract_user_id_from_token(request)
+    return ReviewController.change_movie_review(movie_id=movie_id, user_id=user_id, new_review=new_review)
 
 
 @reviews_router.delete("/delete-review")

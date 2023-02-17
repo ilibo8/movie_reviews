@@ -37,3 +37,13 @@ class TestMovieRepository(TestClass):
 
     ### get movie by id
 
+    def test_get_movie_id_by_title(self):
+        """Test method for getting movie id from movie title"""
+        with TestingSessionLocal() as db:
+            movie_repository = MovieRepository(db)
+            movie_repository.add_movie("title1", "director", 1999, "country")
+            movie_repository.add_movie("title2", "director", 1999, "country")
+            movie_repository.add_movie("title3", "director", 1999, "country")
+            assert movie_repository.get_movie_id_by_title("TITLE3") == 3
+            assert movie_repository.get_movie_id_by_title("titLe2") == 2
+
