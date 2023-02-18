@@ -60,12 +60,22 @@ class RecommendationController:
             raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
-    def delete_post_by_id(recommendation_id: int, user_id: int):
+    def delete_post_by_user(recommendation_id: int, user_id: int):
         try:
-            if RecommendationService.delete_post_by_id(recommendation_id, user_id):
+            if RecommendationService.delete_post_id_by_user(recommendation_id, user_id):
                 return Response(content=f"Recommendation with id {recommendation_id} is deleted", status_code=200)
         except Unauthorized as err:
             raise HTTPException(status_code=err.code, detail=err.message)
+        except RecommendationNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
+    def delete_post_by_id(recommendation_id: int):
+        try:
+            if RecommendationService.delete_post_by_id(recommendation_id):
+                return Response(content=f"Recommendation with id {recommendation_id} is deleted", status_code=200)
         except RecommendationNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message)
         except Exception as err:

@@ -40,7 +40,7 @@ def get_all_directors():
 def get_all_movies_by_director(director_name: str):
     return MovieController.get_all_movies_by_director(director_name)
 
-movie_superuser_router = APIRouter(prefix="/api/movies-crud", tags=["Movies CRUD"])
+movie_superuser_router = APIRouter(prefix="/api/superuser/movies", tags=["SuperUser - Movies"])
 
 
 @movie_superuser_router.get("/get-all-movies", response_model=list[MovieSchemaAll])

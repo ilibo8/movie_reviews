@@ -9,14 +9,12 @@ from app.users.service import decodeJWT
 
 def extract_user_id_from_token(request: Request) -> Union[int, Response]:
     """Function for extracting user id from authorised request."""
-    try:
-        bearer = request.headers["authorization"]
-        token = bearer.split()[1]
-        decoded = decodeJWT(token)
-        user_id = decoded["user_id"]
-        return user_id
-    except Exception:
-        return Response(content=f"Token has expired, login again.", status_code=400)
+    bearer = request.headers["authorization"]
+    token = bearer.split()[1]
+    decoded = decodeJWT(token)
+    user_id = decoded["user_id"]
+    return user_id
+
 
 
 class JWTBearer(HTTPBearer):

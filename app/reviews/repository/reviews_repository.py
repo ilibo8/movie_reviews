@@ -3,7 +3,7 @@ from typing import Type
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry
+from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry, Unauthorized
 from app.reviews.model import Review
 
 
@@ -46,14 +46,24 @@ class ReviewRepository:
     def change_movie_review(self, movie_id: int, user_id: int, new_review: str) -> Type[Review]:
         review = self.db.query(Review).filter(and_(Review.movie_id == movie_id, Review.user_id == user_id)).first()
         if review is None:
-            raise ReviewNotFound(f"There is no review for movie_id {movie_id} for this user.")
+            raise ReviewNotFound("There is no review for this user.")
         review.review = new_review
         self.db.add(review)
         self.db.commit()
         self.db.refresh(review)
         return review
 
-    def delete_review_by_id(self, review_id: int) -> bool:
+    def delete_review_id_by_user(self, review_id: int, user_id: int):
+        review = self.db.query(Review).filter(Review.id == review_id).first()
+        if review is None:
+            raise ReviewNotFound(f"There is no review with id {review_id}.")
+        if review.user_id != user_id:
+            raise Unauthorized("Can't delete other user's review.")
+        self.db.delete(review)
+        self.db.commit()
+        return True
+
+    def delete_review_by_id(self, review_id: int):
         review = self.db.query(Review).filter(Review.id == review_id).first()
         if review is None:
             raise ReviewNotFound(f"There is no review with id {review_id}.")

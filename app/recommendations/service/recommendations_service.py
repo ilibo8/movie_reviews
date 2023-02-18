@@ -100,16 +100,27 @@ class RecommendationService:
             raise err
 
     @staticmethod
-    def delete_post_by_id(recommendation_id: int, user_id: int):
+    def delete_post_id_by_user(recommendation_id: int, user_id: int):
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)
-                all_user_posts = recommendation_repo.get_all_posts_by_user_id(user_id)
-                all_user_posts_ids = [post.id for post in all_user_posts]
-                if recommendation_id not in all_user_posts_ids:
-                    raise Unauthorized("Access denied to other user's posts.")
-                if recommendation_repo.delete_post_by_id(recommendation_id) is None:
-                    raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
-                return True
+                if recommendation_repo.delete_post_id_by_user(recommendation_id=recommendation_id, user_id=user_id):
+                    return True
+        except RecommendationNotFound as err:
+            raise err
+        except Unauthorized as err:
+            raise err
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def delete_post_by_id(recommendation_id: int):
+        try:
+            with SessionLocal() as db:
+                recommendation_repo = RecommendationRepository(db)
+                if recommendation_repo.delete_post_by_id(recommendation_id):
+                    return True
+        except RecommendationNotFound as err:
+            raise err
         except Exception as err:
             raise err

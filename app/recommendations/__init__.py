@@ -1,1 +1,1 @@
-from .routes import recommendations_router
+from .routes import recommendations_router, recommendations_superuser_router

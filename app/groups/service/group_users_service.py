@@ -19,6 +19,8 @@ class GroupUserService:
                 group_repository = GroupRepository(db)
                 user_repository = UserRepository(db)
                 group = group_repository.get_group_by_name(group_name)
+                if group is None:
+                    raise GroupNotFound(f"There is no group with name {group_name}")
                 group_user_repository.add_group_user(group.id, user_id)
                 members_ids = group_user_repository.get_all_group_members_ids(group.id)
                 owner_user_name = user_repository.get_user_name_by_user_id(group.owner_id)

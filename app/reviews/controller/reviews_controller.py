@@ -2,7 +2,7 @@ from fastapi import HTTPException, Response
 from sqlalchemy.exc import IntegrityError
 
 from app.movie.exceptions import MovieNotFound
-from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry
+from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry, Unauthorized
 from app.reviews.service import ReviewService
 from app.users.exceptions import UserNotFound
 
@@ -52,6 +52,17 @@ class ReviewController:
             raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
+    def get_personal_reviews(user_id: int):
+        try:
+            return ReviewService.get_personal_reviews(user_id)
+        except UserNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except ReviewNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
     def change_movie_rating_number(movie_name: str, user_id: int, new_rating: int):
         try:
             return ReviewService.change_movie_rating_number(movie_name, user_id, new_rating)
@@ -72,6 +83,18 @@ class ReviewController:
             raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    def delete_review_id_by_user(review_id: int, user_id):
+        try:
+            if ReviewService.delete_review_id_by_user(review_id, user_id):
+                return Response(content=f"Review with id {review_id} is deleted", status_code=200)
+        except ReviewNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Unauthorized as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
     def delete_review_by_id(review_id: int):

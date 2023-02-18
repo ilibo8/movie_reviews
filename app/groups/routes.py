@@ -6,6 +6,7 @@ from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchem
 from app.users.controller import JWTBearer, extract_user_id_from_token
 
 group_router = APIRouter(prefix="/api/groups", tags=["Groups"])
+group_superuser_router = APIRouter(prefix="/api/superuser/groups", tags=["SuperUser - Groups"])
 
 
 @group_router.get("/get-all-groups", response_model=list[GroupSchemaOut])
@@ -38,6 +39,6 @@ def change_group_name(request: Request, group_name: str, new_name: str):
     return GroupController.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)
 
 
-@group_router.delete("/delete-group-by-name/{group_name}", dependencies=[Depends(JWTBearer("super_user"))])
+@group_superuser_router.delete("/delete-group-by-name/{group_name}", dependencies=[Depends(JWTBearer("super_user"))])
 def delete_group_by_name(group_name: str):
     return GroupController.delete_group_by_name(group_name=group_name)

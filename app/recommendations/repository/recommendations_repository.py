@@ -1,10 +1,12 @@
 """Module for Recommendation repository"""
 from typing import Type
+
+from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.groups.model import GroupUser
-from app.recommendations.exceptions import RecommendationNotFound
+from app.recommendations.exceptions import RecommendationNotFound, Unauthorized
 from app.recommendations.model import Recommendation
 
 
@@ -38,15 +40,6 @@ class RecommendationRepository:
 
     def get_all_posts_by_group_id(self, group_id: int) -> list[Type[Recommendation]]:
         """Method for getting all posts for one group."""
-        # group_users = self.db.query(GroupUser).filter(GroupUser.group_id == group_id).all()
-        # if group_users is None:
-        #     raise GroupUserNotFound(f"Group user for group id {group_id} not found")
-        # group_users_ids = [x.id for x in group_users]
-        # recommendations = []
-        # for id in group_users_ids:
-        #     recommendation = self.db.query(Recommendation).filter(Recommendation.group_user_id == id).all()
-        #     for item in recommendation:
-        #         recommendations.append(item)
         recommendations = self.db.query(Recommendation). \
             join(GroupUser).filter(GroupUser.group_id == group_id).all()
         return recommendations
@@ -67,6 +60,19 @@ class RecommendationRepository:
         self.db.commit()
         self.db.refresh(recommendation)
         return recommendation
+
+    def delete_post_id_by_user(self, recommendation_id: int, user_id: int) -> bool:
+        """Method for deleting post with checkin for user authorization"""
+        recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
+        if recommendation is None:
+            raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
+        group_user = self.db.query(GroupUser).join(Recommendation).filter(
+            Recommendation.id == recommendation_id).first()
+        if group_user.user_id != user_id:
+            raise Unauthorized("Cannot delete other user's post.")
+        self.db.delete(recommendation)
+        self.db.commit()
+        return True
 
     def delete_post_by_id(self, recommendation_id: int) -> bool:
         """Method for deleting post"""

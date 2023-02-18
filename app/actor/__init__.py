@@ -1,1 +1,1 @@
-from .routes import actor_router
+from .routes import actor_superuser_router

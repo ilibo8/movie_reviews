@@ -1,1 +1,1 @@
-from .routes import genre_router
+from .routes import genre_superuser_router

@@ -28,3 +28,14 @@ class ReviewSchemaOut(BaseModel):
     user_name: str
     rating_number: int
     review: str
+
+
+class ReviewWithIdSchemaOut(BaseModel):
+    id : int
+    movie_title: str
+    user_name: str
+    rating_number: int
+    review: str
+
+    # class Config:
+    #     orm_mode = True
