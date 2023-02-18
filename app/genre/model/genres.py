@@ -1,7 +1,6 @@
+"""Module for Genre Model"""
 from sqlalchemy.orm import relationship
-
 from sqlalchemy import Column, String
-
 from app.db import Base
 
 

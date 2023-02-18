@@ -29,6 +29,3 @@ class TestClass:
         call.
         """
         Base.metadata.drop_all(bind=engine)
-
-
-

@@ -35,6 +35,3 @@ def get_all_users():
 @user_router.delete("/{user_id}", dependencies=[Depends(JWTBearer("super_user"))])
 def delete_user_by_id(user_id: int):
     return UserController.delete_user_by_id(user_id)
-
-
-

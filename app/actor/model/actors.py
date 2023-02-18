@@ -1,10 +1,11 @@
-""""""
+"""Module for Actor table"""
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, Integer
 from app.db import Base
 
 
 class Actor(Base):
+    """Class for table actors"""
     __tablename__ = "actors"
     id = Column(Integer, primary_key=True)
     full_name = Column(String(50), unique=True)

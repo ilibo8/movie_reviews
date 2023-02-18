@@ -11,4 +11,3 @@ class DuplicateEntry(Exception):
     """Exception when trying to add actor's name that already exist."""
     def __init__(self, message: str):
         self.message = message
-

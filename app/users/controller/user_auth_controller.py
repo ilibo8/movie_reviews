@@ -1,13 +1,10 @@
 """Module for JWTBearer"""
-from typing import Union
-
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from fastapi.openapi.models import Response
 from app.users.service import decodeJWT
 
 
-def extract_user_id_from_token(request: Request) -> Union[int, Response]:
+def extract_user_id_from_token(request: Request) -> int:
     """Function for extracting user id from authorised request."""
     bearer = request.headers["authorization"]
     token = bearer.split()[1]
@@ -51,4 +48,3 @@ class JWTBearer(HTTPBearer):
         if payload:
             is_token_valid = True
         return {"valid": is_token_valid, "role": payload["role"]}
-

@@ -22,8 +22,8 @@ class MovieCastRepository:
             self.db.commit()
             self.db.refresh(movie_cast)
             return movie_cast
-        except Exception as e:
-            raise e
+        except Exception as err:
+            raise err
 
     def get_all(self) -> list[Type[MovieCast]]:
         movies_cast = self.db.query(MovieCast).order_by(MovieCast.movie_id).all()
@@ -51,4 +51,3 @@ class MovieCastRepository:
         self.db.delete(movie)
         self.db.commit()
         return True
-

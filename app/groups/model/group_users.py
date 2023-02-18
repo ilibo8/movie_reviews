@@ -19,4 +19,3 @@ class GroupUser(Base):
     def __init__(self, group_id: int, user_id: int):
         self.group_id = group_id
         self.user_id = user_id
-

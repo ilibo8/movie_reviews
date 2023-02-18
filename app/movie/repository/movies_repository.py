@@ -19,8 +19,8 @@ class MovieRepository:
             self.db.commit()
             self.db.refresh(movie)
             return movie
-        except IntegrityError as e:
-            raise e
+        except IntegrityError as err:
+            raise err
 
     def get_all_movies(self) -> list[Type[Movie]]:
         """Get list of all movies."""
@@ -101,8 +101,8 @@ class MovieRepository:
             self.db.commit()
             self.db.refresh(movie)
             return movie
-        except IntegrityError as e:
-            raise e
+        except IntegrityError as err:
+            raise err
 
     def change_movie_director(self, movie_id: int, director: str) -> (Movie, None):
         """Method for changing movie director."""
@@ -115,8 +115,8 @@ class MovieRepository:
             self.db.commit()
             self.db.refresh(movie)
             return movie
-        except IntegrityError as e:
-            raise e
+        except IntegrityError as err:
+            raise err
 
     def change_movie_release_year(self, movie_id: int, release_year: int) -> (Movie, None):
         """Method for changing movie release year"""
@@ -129,8 +129,8 @@ class MovieRepository:
             self.db.commit()
             self.db.refresh(movie)
             return movie
-        except IntegrityError as e:
-            raise e
+        except IntegrityError as err:
+            raise err
 
     def change_movie_country_of_origin(self, movie_id: int, country_of_origin: str) -> (Movie, None):
         """Method for changing country of origin for movie."""
@@ -143,8 +143,8 @@ class MovieRepository:
             self.db.commit()
             self.db.refresh(movie)
             return movie
-        except IntegrityError as e:
-            raise e
+        except IntegrityError as err:
+            raise err
 
     def delete_movie_by_id(self, movie_id: int) -> bool:
         """Delete movie by id."""

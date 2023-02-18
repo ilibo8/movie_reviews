@@ -25,8 +25,8 @@ class RecommendationController:
     def get_all_posts():
         try:
             return RecommendationService.get_all_posts()
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
     def get_all_posts_by_group_name(group_name: str, user_id: int):
@@ -36,8 +36,8 @@ class RecommendationController:
             raise HTTPException(status_code=err.code, detail=err.message)
         except GroupUserNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
     def get_all_posts_by_user_id(user_id: int):

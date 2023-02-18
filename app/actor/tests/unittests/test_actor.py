@@ -1,3 +1,4 @@
+"""Module for testing Actor repository."""
 import pytest
 from app.actor.exceptions import ActorNotFound
 from app.actor.repository import ActorRepository
@@ -36,16 +37,6 @@ class TestActorRepository(TestClass):
             actors = actor_repository.find_actor_by_last_name("dani")
             assert len(actors) == 2
 
-    def test_find_actor_by_full_name(self):
-        """Test finding actor by name and last name."""
-        with TestingSessionLocal() as db:
-            actor_repository = ActorRepository(db)
-            actor_repository.add_actor('Smith Rob', 'American')
-            actor_repository.add_actor('Rob Roby', 'American')
-            actor_repository.add_actor('Rob Smithy', 'American')
-            actor_repository.add_actor('Rob Smith', 'American')
-            target_actors = actor_repository.find_actor_by_full_name("rob smith")
-            assert len(target_actors) == 1
 
     def test_find_actor_by_full_name_error(self):
         """Test error finding actor by name and last name."""

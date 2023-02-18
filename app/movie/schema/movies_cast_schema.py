@@ -1,5 +1,4 @@
 from pydantic import BaseModel, PositiveInt
-
 from app.actor.schema import ActorSchemaOut
 
 

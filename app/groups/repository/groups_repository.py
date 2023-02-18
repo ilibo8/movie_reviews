@@ -60,7 +60,7 @@ class GroupRepository:
         """Method for deleting group by id."""
         group = self.db.query(Group).filter(Group.id == group_id).first()
         if group is None:
-            raise GroupNotFound(f"There is no group with that id")
+            raise GroupNotFound("There is no group with that id")
         self.db.delete(group)
         self.db.commit()
         return True

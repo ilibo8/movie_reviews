@@ -2,7 +2,7 @@
 from sqlalchemy.exc import IntegrityError
 
 from app.db import SessionLocal
-from app.groups.exceptions import GroupNotFound, GroupUserNotFound
+from app.groups.exceptions import GroupUserNotFound
 from app.groups.repository import GroupRepository, GroupUserRepository
 from app.recommendations.exceptions import RecommendationNotFound, Unauthorized
 from app.recommendations.repository import RecommendationRepository

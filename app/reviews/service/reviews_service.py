@@ -1,10 +1,10 @@
 from typing import Type, Union
 
 from app.db import SessionLocal
+from app.movie.repository import MovieRepository
 from app.reviews.model import Review
 from app.reviews.repository import ReviewRepository
-from app.movie.repository import MovieRepository
-from app.reviews.exceptions import ReviewNotFound, Unauthorized
+from app.reviews.exceptions import ReviewNotFound, Unauthorized, ReviewDuplicateEntry
 from app.users.repository import UserRepository
 
 
@@ -68,6 +68,8 @@ class ReviewService:
                 review = review_repository.add_review(movie_id=movie_id, user_id=user_id, rating_number=rating_number,
                                                       review=review)
                 return reformat_output(review)
+        except ReviewDuplicateEntry as err:
+            raise err
         except Exception as err:
             raise err
 
@@ -77,6 +79,27 @@ class ReviewService:
             with SessionLocal() as db:
                 review_repository = ReviewRepository(db)
                 return review_repository.get_all_reviews()
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_ratings_table():
+        try:
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                return review_repository.get_ratings_table()
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_average_rating_for_movie(movie_title: str):
+        try:
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
+                movie_id = movie_repository.get_movie_id_by_title(movie_title)
+                rating_and_count = review_repository.get_average_rating_and_count_by_movie_id(movie_id)
+                return {"movie title": movie_title, "rating": rating_and_count[0], "users rated": rating_and_count[1]}
         except Exception as err:
             raise err
 

@@ -1,3 +1,4 @@
+"""Module for schemas for actors table"""
 from pydantic import BaseModel, StrictStr
 
 

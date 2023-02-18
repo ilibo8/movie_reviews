@@ -65,8 +65,7 @@ class GroupService:
                     owner_name = user_repository.get_user_name_by_user_id(group2.owner_id)
                     return {"group_name": group2.group_name, "owner_user_name": owner_name,
                             "description": group2.description, "date_created": group2.date_created}
-                else:
-                    raise Unauthorized("Access error. Only group owner can make changes.")
+                raise Unauthorized("Access error. Only group owner can make changes.")
         except GroupNotFound as err:
             raise GroupNotFound(err.message)
 
@@ -81,6 +80,6 @@ class GroupService:
                     raise GroupNotFound(f"There is no group with name {group_name}")
                 if group_repository.delete_group_by_id(group.id):
                     return True
-                raise GroupNotFound(f"There is no group with that id")
+                raise GroupNotFound("There is no group with that id")
         except Exception as err:
             raise err

@@ -14,6 +14,16 @@ def get_all_reviews():
     return ReviewController.get_all_reviews()
 
 
+@reviews_router.get("/get-average-ratings-for-all-movies")
+def get_average_ratings_for_all_movies():
+    return ReviewController.get_ratings_table()
+
+
+@reviews_router.get("/get-rating-for-movie-by-name")
+def get_average_rating_for_movie(movie_title: str):
+    return ReviewController.get_average_rating_for_movie(movie_title)
+
+
 @reviews_router.get("/get-ratings-and-reviews-by/movie-title/{movie_title}", response_model=list[ReviewSchemaOut])
 def get_reviews_by_movie_title(movie_title: str):
     return ReviewController.get_reviews_by_movie_title(movie_title)

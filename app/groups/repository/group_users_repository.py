@@ -3,7 +3,7 @@ from typing import Type
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.groups.exceptions import DuplicateEntry, GroupNotFound, GroupUserNotFound
+from app.groups.exceptions import DuplicateEntry, GroupUserNotFound
 from app.groups.model import GroupUser, Group
 from app.users.model import User
 
@@ -19,7 +19,7 @@ class GroupUserRepository:
         try:
             if self.db.query(GroupUser).filter(and_(GroupUser.group_id == group_id,
                                                     GroupUser.user_id == user_id)).first() is not None:
-                raise DuplicateEntry(f"Group already has that user.")
+                raise DuplicateEntry("Group already has that user.")
             group_user = GroupUser(group_id, user_id)
             self.db.add(group_user)
             self.db.commit()

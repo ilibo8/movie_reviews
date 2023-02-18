@@ -7,10 +7,6 @@ MYSQL_URL = f"{settings.DB_HOST}://{settings.DB_USER}:{settings.DB_PASSWORD}@{se
 
 engine = create_engine(MYSQL_URL, echo=True)
 
-# existing_databases = engine.execute("SHOW DATABASES;")
-# existing_databases = [d[0] for d in existing_databases]
-# print(existing_databases)
-
 SessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)
 
 Base = declarative_base()

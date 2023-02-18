@@ -95,5 +95,4 @@ def delete_movie_cast_member(movie_cast: MovieCastSchema):
 
 @movie_superuser_router.delete("/delete-movie-by-id/{movie_id}")#, dependencies=[Depends(JWTBearer("super_user"))])
 def delete_movie_by_id(movie_id: int):
-    return MovieController.delete_movie_by_id(movie_id
-                                              )
+    return MovieController.delete_movie_by_id(movie_id)

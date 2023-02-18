@@ -37,5 +37,7 @@ class ReviewWithIdSchemaOut(BaseModel):
     rating_number: int
     review: str
 
-    # class Config:
-    #     orm_mode = True
+
+class RatingsSchema(BaseModel):
+    title: str
+    avg_number: float

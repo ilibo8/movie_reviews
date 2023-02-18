@@ -46,4 +46,3 @@ class TestMovieRepository(TestClass):
             movie_repository.add_movie("title3", "director", 1999, "country")
             assert movie_repository.get_movie_id_by_title("TITLE3") == 3
             assert movie_repository.get_movie_id_by_title("titLe2") == 2
-

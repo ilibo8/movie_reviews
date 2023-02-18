@@ -11,24 +11,24 @@ class UserController:
         try:
             user = UserService.create_user(user_name, password, email)
             return user
-        except AlreadyExist as e:
-            raise HTTPException(status_code=e.code, detail=e.message)
-        except IntegrityError as e:
-            raise HTTPException(status_code=400, detail=str(e))
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except AlreadyExist as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
     def create_super_user(user_name: str, password: str, email: str):
         try:
             user = UserService.create_super_user(user_name, password, email)
             return user
-        except AlreadyExist as e:
-            raise HTTPException(status_code=e.code, detail=e.message)
-        except IntegrityError as e:
-            raise HTTPException(status_code=400, detail=str(e))
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except AlreadyExist as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
     def login_user(user_name: str, password: str):
@@ -49,8 +49,7 @@ class UserController:
         user = UserService.get_user_by_id(user_id)
         if user is None:
             raise HTTPException(status_code=400, detail=f"User with provided id {user_id} does not exist.")
-        else:
-            return user
+        return user
 
     @staticmethod
     def get_all_users():
@@ -65,5 +64,5 @@ class UserController:
                 return Response(content=f"User with id - {user_id} is deleted.")
             else:
                 return Response(content=f"User with id - {user_id} doesn't exist.")
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        except Exception as err:
+            raise HTTPException(status_code=400, detail=str(err))

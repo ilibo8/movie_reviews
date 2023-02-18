@@ -16,4 +16,3 @@ class Recommendation(Base):
     def __init__(self, group_user_id: int, post: str):
         self.group_user_id = group_user_id
         self.post = post
-

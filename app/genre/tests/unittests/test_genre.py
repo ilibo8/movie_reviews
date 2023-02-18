@@ -1,6 +1,6 @@
+"""Module for testing genre repository"""
 import pytest
 from sqlalchemy.exc import IntegrityError
-
 from app.genre.exceptions import GenreNotFound
 from app.genre.repository import GenreRepository
 from app.tests import TestClass, TestingSessionLocal

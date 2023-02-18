@@ -12,8 +12,8 @@ class UserService:
                 user_repository = UserRepository(db)
                 hashed_password = hashlib.sha256(bytes(password, "utf-8")).hexdigest()
                 return user_repository.create_user(user_name, hashed_password, email)
-        except Exception as e:
-            raise e
+        except Exception as err:
+            raise err
 
     @staticmethod
     def create_super_user(user_name: str, password: str, email: str):
@@ -22,8 +22,8 @@ class UserService:
                 user_repository = UserRepository(db)
                 hashed_password = hashlib.sha256(bytes(password, "utf-8")).hexdigest()
                 return user_repository.create_super_user(user_name, hashed_password, email)
-        except Exception as e:
-            raise e
+        except Exception as err:
+            raise err
 
     @staticmethod
     def get_user_by_id(user_id: int):
@@ -43,8 +43,8 @@ class UserService:
             with SessionLocal() as db:
                 user_repository = UserRepository(db)
                 return user_repository.delete_user_by_id(user_id)
-        except Exception as e:
-            raise e
+        except Exception as err:
+            raise err
 
     @staticmethod
     def login_user(user_name: str, password: str):

@@ -1,9 +1,8 @@
-from typing import List, Type
+from typing import Type
 
 from sqlalchemy import and_
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.movie.exceptions import MovieNotFound, DuplicateDataEntry, MovieGenreNotFound
+from app.movie.exceptions import DuplicateDataEntry, MovieGenreNotFound
 from app.movie.model import MovieGenre
 
 
@@ -13,7 +12,6 @@ class MovieGenreRepository:
         self.db = db
 
     def add_movie_genre(self, movie_id, genre_name: str) -> MovieGenre:
-        """"""
         try:
             if self.db.query(MovieGenre).filter(and_(MovieGenre.movie_id == movie_id,
                                                      MovieGenre.genre_name == genre_name)).first() is not None:
@@ -23,8 +21,8 @@ class MovieGenreRepository:
             self.db.commit()
             self.db.refresh(movie_genre)
             return movie_genre
-        except Exception as e:
-            raise e
+        except Exception as err:
+            raise err
 
     def get_all(self) -> list[Type[MovieGenre]]:
         movie_genre = self.db.query(MovieGenre).all()
@@ -43,4 +41,3 @@ class MovieGenreRepository:
         self.db.delete(movie)
         self.db.commit()
         return True
-
