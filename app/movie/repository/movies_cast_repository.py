@@ -26,7 +26,7 @@ class MovieCastRepository:
             raise e
 
     def get_all(self) -> list[Type[MovieCast]]:
-        movies_cast = self.db.query(MovieCast).all()
+        movies_cast = self.db.query(MovieCast).order_by(MovieCast.movie_id).all()
         return movies_cast
 
     def get_cast_ids_by_movie_id(self, movie_id: int) -> list[int]:

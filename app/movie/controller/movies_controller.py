@@ -120,6 +120,46 @@ class MovieController:
             raise HTTPException(status_code=500, detail=str(err))
 
     @staticmethod
+    def get_all_movie_cast():
+        try:
+            return MovieService.get_all_movie_cast()
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
+    def change_movie_title(movie_id: int, new_movie_title: str):
+        try:
+            return MovieService.change_movie_title(movie_id, new_movie_title)
+        except MovieNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except IntegrityError:
+            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.")
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
+    def change_movie_director(movie_id: int, director: str):
+        try:
+            return MovieService.change_movie_director(movie_id, director)
+        except MovieNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except IntegrityError:
+            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.")
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
+    def change_movie_release_year(movie_id: int, release_year: int):
+        try:
+            return MovieService.change_movie_release_year(movie_id, release_year)
+        except MovieNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message)
+        except IntegrityError:
+            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.")
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+    @staticmethod
     def delete_movie_genre(movie_id: int, genre_name: str):
         try:
             if MovieService.delete_movie_genre(movie_id, genre_name):

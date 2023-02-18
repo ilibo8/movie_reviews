@@ -1,5 +1,7 @@
 from typing import Type
 
+from sqlalchemy.exc import IntegrityError
+
 from app.actor.exceptions import ActorNotFound
 from app.actor.repository import ActorRepository
 from app.db import SessionLocal
@@ -206,6 +208,59 @@ class MovieService:
                 return movies
         except Exception as e:
             raise e
+
+    @staticmethod
+    def get_all_movie_cast():
+        try:
+            with SessionLocal() as db:
+                movie_cast_repository = MovieCastRepository(db)
+                movie_cast = movie_cast_repository.get_all()
+                return movie_cast
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def change_movie_title(movie_id: int, new_movie_title: str):
+        try:
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
+                movies = movie_repository.change_movie_title(movie_id, new_movie_title)
+                return movies
+        except MovieNotFound as err:
+            raise err
+        except IntegrityError as err:
+            raise err
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def change_movie_director(movie_id: int, director: str):
+        try:
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
+                movies = movie_repository.change_movie_director(movie_id, director)
+                return movies
+        except MovieNotFound as err:
+            raise err
+        except IntegrityError as err:
+            raise err
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def change_movie_release_year(movie_id: int, release_year: int):
+        try:
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
+                movies = movie_repository.change_movie_release_year(movie_id, release_year)
+                return movies
+        except MovieNotFound as err:
+            raise err
+        except IntegrityError as err:
+            raise err
+        except Exception as err:
+            raise err
+
 
     @staticmethod
     def delete_movie_genre(movie_id: int, genre_name: str):

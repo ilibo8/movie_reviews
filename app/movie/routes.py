@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from app.movie.controller import MovieController
-from app.movie.schema import MovieSchema, MovieGenreSchema, MovieSchemaIn, MovieSchemaJoined, MovieCastSchema, \
-    MovieSchemaAll
+from app.movie.schema import *
 from app.users.controller import JWTBearer
 
 movie_router = APIRouter(prefix="/api/movies", tags=["Movies"])
@@ -49,6 +48,11 @@ def get_all_movies_with_cast_and_genre():
     return MovieController.get_all()
 
 
+@movie_superuser_router.get("/get-all-movie_cast", response_model=list[MovieCastSchema])
+def get_all_movies_cast():
+    return MovieController.get_all_movie_cast()
+
+
 @movie_superuser_router.post("/add-movie", response_model=MovieSchema)
 def add_movie(movie: MovieSchemaIn):
     return MovieController.add_movie(movie.title, movie.director, movie.release_year, movie.country_of_origin)
@@ -62,6 +66,21 @@ def add_movie_genre(movie_genre: MovieGenreSchema):
 @movie_superuser_router.post("/add-movie-cast", response_model=MovieCastSchema)
 def add_movie_cast(movie_cast: MovieCastSchema):
     return MovieController.add_movie_cast(movie_cast.movie_id, movie_cast.actor_id)
+
+
+@movie_superuser_router.put("/change-movie-title", response_model=MovieSchema)
+def change_movie_title(movie : MovieSchemaUpdateTitle):
+    return MovieController.change_movie_title(movie_id=movie.id, new_movie_title=movie.title)
+
+
+@movie_superuser_router.put("/change-movie-director", response_model=MovieSchema)
+def change_movie_director(movie : MovieSchemaUpdateDirector):
+    return MovieController.change_movie_director(movie_id=movie.id, director=movie.director)
+
+
+@movie_superuser_router.put("/change-movie-release-year", response_model=MovieSchema)
+def change_movie_release_year(movie : MovieSchemaUpdateReleaseYear):
+    return MovieController.change_movie_release_year(movie_id=movie.id, release_year=movie.release_year)
 
 
 @movie_superuser_router.delete("/delete-movie-genre/")#, dependencies=[Depends(JWTBearer("super_user"))])

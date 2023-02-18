@@ -92,47 +92,59 @@ class MovieRepository:
 
     def change_movie_title(self, movie_id: int, title: str) -> (Movie, None):
         """Method for changing movie title"""
-        movie = self.db.query(Movie.id == movie_id).first()
-        if movie is None:
-            raise MovieNotFound(f"There is no movie with id {movie_id}")
-        movie.title = title
-        self.db.add(movie)
-        self.db.commit()
-        self.db.refresh(movie)
-        return movie
+        try:
+            movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
+            if movie is None:
+                raise MovieNotFound(f"There is no movie with id {movie_id}")
+            movie.title = title
+            self.db.add(movie)
+            self.db.commit()
+            self.db.refresh(movie)
+            return movie
+        except IntegrityError as e:
+            raise e
 
     def change_movie_director(self, movie_id: int, director: str) -> (Movie, None):
         """Method for changing movie director."""
-        movie = self.db.query(Movie.id == movie_id).first()
-        if movie is None:
-            raise MovieNotFound(f"There is no movie with id {movie_id}")
-        movie.director = director
-        self.db.add(movie)
-        self.db.commit()
-        self.db.refresh(movie)
-        return movie
+        try:
+            movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
+            if movie is None:
+                raise MovieNotFound(f"There is no movie with id {movie_id}")
+            movie.director = director
+            self.db.add(movie)
+            self.db.commit()
+            self.db.refresh(movie)
+            return movie
+        except IntegrityError as e:
+            raise e
 
     def change_movie_release_year(self, movie_id: int, release_year: int) -> (Movie, None):
         """Method for changing movie release year"""
-        movie = self.db.query(Movie.id == movie_id).first()
-        if movie is None:
-            raise MovieNotFound(f"There is no movie with id {movie_id}")
-        movie.release_year = release_year
-        self.db.add(movie)
-        self.db.commit()
-        self.db.refresh(movie)
-        return movie
+        try:
+            movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
+            if movie is None:
+                raise MovieNotFound(f"There is no movie with id {movie_id}")
+            movie.release_year = release_year
+            self.db.add(movie)
+            self.db.commit()
+            self.db.refresh(movie)
+            return movie
+        except IntegrityError as e:
+            raise e
 
     def change_movie_country_of_origin(self, movie_id: int, country_of_origin: str) -> (Movie, None):
         """Method for changing country of origin for movie."""
-        movie = self.db.query(Movie.id == movie_id).first()
-        if movie is None:
-            raise MovieNotFound(f"There is no movie with id {movie_id}")
-        movie.country_of_origin = country_of_origin
-        self.db.add(movie)
-        self.db.commit()
-        self.db.refresh(movie)
-        return movie
+        try:
+            movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
+            if movie is None:
+                raise MovieNotFound(f"There is no movie with id {movie_id}")
+            movie.country_of_origin = country_of_origin
+            self.db.add(movie)
+            self.db.commit()
+            self.db.refresh(movie)
+            return movie
+        except IntegrityError as e:
+            raise e
 
     def delete_movie_by_id(self, movie_id: int) -> bool:
         """Delete movie by id."""
