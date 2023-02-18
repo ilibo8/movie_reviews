@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from starlette.responses import Response
 
 from app.groups.exceptions import GroupNotFound, DuplicateEntry, Unauthorized
-from app.groups.service import GroupService, GroupUserService
+from app.groups.service import GroupService
 
 
 class GroupController:
@@ -12,10 +12,7 @@ class GroupController:
     def add_group(group_name: str, group_owner_id: int, description: str):
         """Method for adding new group"""
         try:
-
-            group = GroupService.add_group(group_name, group_owner_id, description)
-            GroupUserService.add_group_user(group_name=group_name, user_id=group_owner_id)
-            return group
+            return GroupService.add_group(group_name, group_owner_id, description)
         except DuplicateEntry as err:
             raise HTTPException(status_code=err.code, detail=err.message)
         except Exception as err:
@@ -34,7 +31,7 @@ class GroupController:
     def change_group_name(group_name: str, new_name: str, user_id: int):
         """Method for changing group name"""
         try:
-            GroupService.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)
+            return GroupService.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)
         except Unauthorized as err:
             raise HTTPException(status_code=err.code, detail=err.message)
         except GroupNotFound as err:

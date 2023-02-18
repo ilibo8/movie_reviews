@@ -17,8 +17,16 @@ class GroupUserService:
             with SessionLocal() as db:
                 group_user_repository = GroupUserRepository(db)
                 group_repository = GroupRepository(db)
-                group_id = group_repository.get_group_id_by_name(group_name)
-                return group_user_repository.add_group_user(group_id, user_id)
+                user_repository = UserRepository(db)
+                group = group_repository.get_group_by_name(group_name)
+                group_user_repository.add_group_user(group.id, user_id)
+                members_ids = group_user_repository.get_all_group_members_ids(group.id)
+                owner_user_name = user_repository.get_user_name_by_user_id(group.owner_id)
+                members_names = [user_repository.get_user_name_by_user_id(id) for id in members_ids]
+                members_names.sort()
+                return {"group_name": group_name, "owner_user_name": owner_user_name,
+                        "description": group.description, "date_created": group.date_created,
+                        "group_users": members_names}
         except GroupNotFound as err:
             raise GroupNotFound(err.message)
         except DuplicateEntry as err:
@@ -27,18 +35,23 @@ class GroupUserService:
             raise err
 
     @staticmethod
-    def get_all_joined() -> dict:
+    def get_all_joined() -> list[dict]:
         """Method for getting all groups and their users"""
         with SessionLocal() as db:
             group_user_repository = GroupUserRepository(db)
-            group_ids = group_user_repository.get_all_group_ids()
-            user_repo = UserRepository(db)
-            group_repo = GroupRepository(db)
-            all_groups_and_members = {}
-            for group_id in group_ids:
-                members_ids = group_user_repository.get_all_group_members_ids(group_id)
-                members_names = [user_repo.get_user_name_by_user_id(id) for id in members_ids]
-                all_groups_and_members[group_repo.get_group_name_by_id(group_id)] = members_names
+            user_repository = UserRepository(db)
+            group_repository = GroupRepository(db)
+            all_groups = group_repository.get_all()
+            all_groups_and_members = []
+            for group in all_groups:
+                group_name = group_repository.get_group_name_by_id(group.id)
+                owner_user_name = user_repository.get_user_name_by_user_id(group.owner_id)
+                members_ids = group_user_repository.get_all_group_members_ids(group.id)
+                members_names = [user_repository.get_user_name_by_user_id(id) for id in members_ids]
+                members_names.sort()
+                all_groups_and_members.append({"group_name": group_name, "owner_user_name": owner_user_name,
+                                               "description": group.description, "date_created": group.date_created,
+                                               "group_users": members_names})
             return all_groups_and_members
 
     @staticmethod
@@ -47,7 +60,6 @@ class GroupUserService:
         with SessionLocal() as db:
             group_user_repository = GroupUserRepository(db)
             return group_user_repository.get_all_group_members_ids(group_id)
-
 
     @staticmethod
     def delete_group_user(group_id: int, user_id: int):

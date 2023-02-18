@@ -1,5 +1,4 @@
 from typing import Type
-
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -25,11 +24,20 @@ class MovieRepository:
 
     def get_all_movies(self) -> list[Type[Movie]]:
         """Get list of all movies."""
-        return self.db.query(Movie).all()
+        return self.db.query(Movie).order_by(Movie.id).all()
+
+    def get_all_movies_order_by_name(self) -> list[Type[Movie]]:
+        """Get list of all movies."""
+        return self.db.query(Movie).order_by(Movie.title).all()
 
     def get_movie_by_id(self, movie_id: int) -> Movie:
         """Get movie by id."""
         movie = self.db.query(Movie).get(movie_id)
+        return movie
+
+    def get_movie_by_title(self, movie_title: str) -> Type[Movie] | None:
+        """Get movie by id."""
+        movie = self.db.query(Movie).filter(Movie.title == movie_title).first()
         return movie
 
     def get_title_by_id(self, movie_id: int) -> str:
@@ -128,12 +136,9 @@ class MovieRepository:
 
     def delete_movie_by_id(self, movie_id: int) -> bool:
         """Delete movie by id."""
-        try:
-            movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
-            if movie is None:
-                return False
-            self.db.delete(movie)
-            self.db.commit()
-            return True
-        except Exception as e:
-            raise e
+        movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
+        if movie is None:
+            raise MovieNotFound(f"There is no movie with id {movie_id}.")
+        self.db.delete(movie)
+        self.db.commit()
+        return True

@@ -1,8 +1,12 @@
+from typing import Type
+
+from app.actor.exceptions import ActorNotFound
 from app.actor.repository import ActorRepository
 from app.db import SessionLocal
 from app.genre.exceptions import GenreNotFound
 from app.genre.repository import GenreRepository
-from app.movie.exceptions import MovieNotFound
+from app.movie.exceptions import MovieNotFound, MovieGenreNotFound, MovieCastNotFound
+from app.movie.model import Movie
 from app.movie.repository import MovieRepository, MovieGenreRepository, MovieCastRepository
 
 
@@ -41,10 +45,20 @@ class MovieService:
                 actor_repository = ActorRepository(db)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise MovieNotFound(f"No movie with id {movie_id}, first add movie then movie cast.")
-                if actor_repository.find_actor_by_id(actor_id) is None:
+                if actor_repository.get_actor_by_id(actor_id) is None:
                     raise MovieNotFound(f"Actor id {actor_id} doesn't exist.")
                 movie_cast = movie_cast_repository.add(movie_id, actor_id)
                 return movie_cast
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def get_all() -> list[Type[Movie]]:
+        try:
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
+                movies = movie_repository.get_all_movies()
+                return movies
         except Exception as e:
             raise e
 
@@ -53,14 +67,14 @@ class MovieService:
         try:
             with SessionLocal() as db:
                 movie_repository = MovieRepository(db)
-                movies = movie_repository.get_all_movies()
+                movies = movie_repository.get_all_movies_order_by_name()
                 for movie in movies:
                     movie_cast_pair = movie.movie_cast
                     full_names = []
                     for item in movie_cast_pair:
                         id = item.actor_id
                         actor_repo = ActorRepository(db)
-                        full_names.append(actor_repo.get_actor_full_name_by_id(id)[0])
+                        full_names.append(actor_repo.get_actor_full_name_by_id(id))
                     genres = movie.movie_genre
                     genres_names = []
                     for movie_genre in genres:
@@ -73,18 +87,18 @@ class MovieService:
             raise e
 
     @staticmethod
-    def get_movie_by_id(movie_id: int):
+    def get_movie_by_title(movie_title: str):
         try:
             with SessionLocal() as db:
                 movie_repository = MovieRepository(db)
-                movie = movie_repository.get_movie_by_id(movie_id)
+                movie = movie_repository.get_movie_by_title(movie_title)
                 if movie is None:
-                    raise MovieNotFound(f"No movie with id {movie_id} in database.")
+                    raise MovieNotFound(f"No movie with title {movie_title} in database.")
                 full_names = []
                 for item in movie.movie_cast:
                     id = item.actor_id
                     actor_repo = ActorRepository(db)
-                    full_names.append(actor_repo.get_actor_full_name_by_id(id)[0])
+                    full_names.append(actor_repo.get_actor_full_name_by_id(id))
                 genres = movie.movie_genre
                 genres_names = []
                 for movie_genre in genres:
@@ -110,7 +124,7 @@ class MovieService:
                 movie_repository = MovieRepository(db)
                 movie_names = []
                 for id in movie_ids:
-                    movie_names.append(movie_repository.get_title_by_id(id[0]))
+                    movie_names.append(movie_repository.get_title_by_id(id))
                 movie_names.sort()
             return movie_names
         except Exception as e:
@@ -129,7 +143,7 @@ class MovieService:
                     for item in movie.movie_cast:
                         id = item.actor_id
                         actor_repo = ActorRepository(db)
-                        full_names.append(actor_repo.get_actor_full_name_by_id(id)[0])
+                        full_names.append(actor_repo.get_actor_full_name_by_id(id))
                     genres = movie.movie_genre
                     genres_names = []
                     for movie_genre in genres:
@@ -142,19 +156,31 @@ class MovieService:
             raise e
 
     @staticmethod
-    def get_movies_by_actor_id(actor_id: int):
+    def get_movies_by_actor_full_name(actor_full_name: str):
         try:
             with SessionLocal() as db:
                 movie_repo = MovieRepository(db)
+                actor_repo = ActorRepository(db)
                 movie_cast_repo = MovieCastRepository(db)
-                movie_ids = movie_cast_repo.get_movie_ids_by_actor_id(actor_id)
+                actor = actor_repo.get_actor_by_full_name(actor_full_name)
+                movie_ids = movie_cast_repo.get_movie_ids_by_actor_id(actor.id)
                 if len(movie_ids) == 0:
-                    raise MovieNotFound(f"No movies in database for actor id {actor_id}")
-                movies_names = []
-                for id in movie_ids:
-                    movie = movie_repo.get_title_by_id(id[0])
-                    movies_names.append(movie)
-                return movies_names
+                    raise MovieNotFound(f"No movies in database for actor id {actor.id}")
+                all_movies = [movie_repo.get_movie_by_id(id) for id in movie_ids]
+                for movie in all_movies:
+                    full_names = []
+                    for item in movie.movie_cast:
+                        id = item.actor_id
+                        actor_repo = ActorRepository(db)
+                        full_names.append(actor_repo.get_actor_full_name_by_id(id))
+                    genres = movie.movie_genre
+                    genres_names = []
+                    for movie_genre in genres:
+                        genres_names.append(movie_genre.genre_name)
+                    full_names.sort()
+                    movie.genre = genres_names
+                    movie.actors = full_names
+                return all_movies
         except Exception as e:
             raise e
 
@@ -186,10 +212,48 @@ class MovieService:
         try:
             with SessionLocal() as db:
                 movie_genre_repository = MovieGenreRepository(db)
-                if movie_genre_repository.delete_movie_genre(movie_id, genre_name):
-                    return True
-                raise MovieNotFound(f"There is no movie with id {movie_id} and genre {genre_name}")
-        except MovieNotFound as e:
-            raise MovieNotFound(e.message)
-        except Exception as e:
-            raise e
+                movie_repository = MovieRepository(db)
+                genre_repository = GenreRepository(db)
+                if movie_repository.get_movie_by_id(movie_id) is None:
+                    raise MovieNotFound(f"There is no movie with id {movie_id}")
+                if genre_repository.check_is_there(genre_name) is False:
+                    raise GenreNotFound(f"There is no genre name {genre_name}")
+                if movie_genre_repository.delete_movie_genre(movie_id, genre_name) is None:
+                    raise MovieGenreNotFound
+                return True
+        except MovieGenreNotFound as err:
+            raise err
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def delete_movie_cast_member(movie_id: int, actor_id: int):
+        try:
+            with SessionLocal() as db:
+                movie_cast_repository = MovieCastRepository(db)
+                movie_repository = MovieRepository(db)
+                actor_repository = ActorRepository(db)
+                if movie_repository.get_movie_by_id(movie_id) is None:
+                    raise MovieNotFound(f"There is no movie with id {movie_id}")
+                if actor_repository.get_actor_by_id(actor_id) is None:
+                    raise ActorNotFound(f"There is no actor with id {actor_id}")
+                if movie_cast_repository.delete_movie_cast(movie_id, actor_id) is None:
+                    raise MovieCastNotFound
+                return True
+        except MovieCastNotFound as err:
+            raise err
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def delete_movie_by_id(movie_id: int):
+        try:
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
+                if movie_repository.delete_movie_by_id(movie_id) is None:
+                    raise MovieNotFound(f"There is no movie with id {movie_id}.")
+                return True
+        except MovieNotFound as err:
+            raise err
+        except Exception as err:
+            raise err

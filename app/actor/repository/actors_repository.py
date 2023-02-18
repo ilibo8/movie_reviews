@@ -1,6 +1,6 @@
 from typing import Type
 from sqlalchemy.orm import Session
-from app.actor.exceptions import ActorNotFound
+from app.actor.exceptions import ActorNotFound, DuplicateEntry
 from app.actor.model import Actor
 
 
@@ -9,6 +9,8 @@ class ActorRepository:
         self.db = db
 
     def add_actor(self, full_name, nationality) -> Actor:
+        if self.db.query(Actor).filter(Actor.full_name == full_name).first() is not None:
+            raise DuplicateEntry(f"{full_name} already in database.")
         actor = Actor(full_name, nationality)
         self.db.add(actor)
         self.db.commit()
@@ -28,11 +30,11 @@ class ActorRepository:
         actor = self.db.query(Actor).filter(Actor.full_name.ilike(f'% {last_name}%')).all()
         return actor
 
-    def find_actor_by_full_name(self, full_name) -> list[Actor]:
-        actors = self.db.query(Actor).filter(Actor.full_name == full_name).all()
-        if len(actors) == 0:
+    def get_actor_by_full_name(self, full_name) -> Actor:
+        actor = self.db.query(Actor).filter(Actor.full_name == full_name).first()
+        if actor is None:
             raise ActorNotFound(f'There is no actor with that name and last name.')
-        return actors
+        return actor
 
     def get_actor_by_id(self, id) -> Actor:
 
@@ -41,11 +43,11 @@ class ActorRepository:
             raise ActorNotFound(f"There is no actor with id {id}.")
         return actor
 
-    def get_actor_full_name_by_id(self, id) -> tuple:
+    def get_actor_full_name_by_id(self, id) -> str:
         actor = self.db.query(Actor.full_name).filter(Actor.id == id).first()
         if actor is None:
             raise ActorNotFound(f"There is no actor with id {id}.")
-        return actor
+        return actor[0]
 
     def change_actor_full_name(self, actor_id, full_name) -> Actor:
         actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
@@ -64,4 +66,3 @@ class ActorRepository:
         self.db.delete(actor)
         self.db.commit()
         return True
-

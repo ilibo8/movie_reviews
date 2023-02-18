@@ -1,7 +1,7 @@
 """Module for Actor Controller."""
 from fastapi import HTTPException, Response
 from sqlalchemy.exc import IntegrityError
-from app.actor.exceptions import ActorNotFound
+from app.actor.exceptions import ActorNotFound, DuplicateEntry
 from app.actor.service import ActorService
 
 
@@ -14,7 +14,7 @@ class ActorController:
         """Method for adding actor to database."""
         try:
             return ActorService.add_actor(full_name, nationality)
-        except IntegrityError as err:
+        except DuplicateEntry as err:
             raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
@@ -56,13 +56,6 @@ class ActorController:
         except Exception as err:
             raise HTTPException(status_code=400, detail=str(err)) from err
 
-    @staticmethod
-    def find_actor_by_full_name(full_name: str):
-        """Method for finding actor by name and last name."""
-        try:
-            return ActorService.find_actor_by_full_name(full_name)
-        except Exception as err:
-            raise HTTPException(status_code=400, detail=str(err)) from err
 
     @staticmethod
     def get_actor_by_id(actor_id: int):

@@ -1,4 +1,3 @@
-from sqlalchemy.exc import IntegrityError
 from app.actor.exceptions import ActorNotFound
 from app.actor.repository import ActorRepository
 from app.db import SessionLocal
@@ -12,7 +11,7 @@ class ActorService:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
                 return actor_repository.add_actor(full_name, nationality)
-        except IntegrityError as e:
+        except Exception as e:
             raise e
 
     @staticmethod
@@ -48,15 +47,6 @@ class ActorService:
             with SessionLocal() as db:
                 actor_repository = ActorRepository(db)
                 return actor_repository.find_actor_by_last_name(last_name)
-        except Exception as e:
-            raise e
-
-    @staticmethod
-    def find_actor_by_full_name(full_name: str):
-        try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
-                return actor_repository.find_actor_by_full_name(full_name)
         except Exception as e:
             raise e
 

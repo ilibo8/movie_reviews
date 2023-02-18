@@ -65,13 +65,6 @@ class GroupUserRepository:
             raise GroupUserNotFound(f"No group user id {group_user_id}")
         return group_id[0]
 
-    def get_all_group_users_ids_by_group_id(self, group_id: int) -> list[int]:
-        group_users = self.db.query(GroupUser).filter(GroupUser.group_id == group_id).all()
-        if group_users is None:
-            raise GroupUserNotFound("Group user not found.")
-        group_users_ids = [x.id for x in group_users]
-        return group_users_ids
-
     def check_if_user_is_part_of_group(self, group_name: str, user_id: int) -> bool:
         """Method for checking if user is part of group named in input."""
         if self.db.query(Group).filter(Group.group_name == group_name).first() is None:

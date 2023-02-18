@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-
 from app.genre.controller import GenreController
 from app.genre.schema import GenreSchema
 

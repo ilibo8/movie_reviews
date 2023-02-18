@@ -11,7 +11,7 @@ def get_all_actors():
 
 
 @actor_router.get("/get-all/names", response_model=list[str])
-def get_all_actors_only_full_names():
+def get_all_actors_list():
     return ActorController.get_all_actors_names()
 
 

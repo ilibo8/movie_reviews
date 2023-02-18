@@ -2,7 +2,7 @@
 from typing import Type
 from sqlalchemy.orm import Session
 from app.groups.exceptions import DuplicateEntry, GroupNotFound
-from app.groups.model import Group
+from app.groups.model import Group, GroupUser
 
 
 class GroupRepository:
@@ -19,6 +19,10 @@ class GroupRepository:
         self.db.add(group)
         self.db.commit()
         self.db.refresh(group)
+        group_user = GroupUser(group.id, owner_id)
+        self.db.add(group_user)
+        self.db.commit()
+        self.db.refresh(group_user)
         return group
 
     def get_all(self) -> list[Type[Group]]:
@@ -44,8 +48,6 @@ class GroupRepository:
 
     def change_group_name(self, group_name: str, new_name: str):
         group = self.db.query(Group).filter(Group.group_name == group_name).first()
-        if group is None:
-            raise GroupNotFound(f"There is no group with name {group_name}.")
         if self.db.query(Group).filter(Group.group_name == new_name).first() is not None:
             raise DuplicateEntry("Group name already used, try another one.")
         group.group_name = new_name

@@ -34,8 +34,6 @@ def reformat_output(review: Union[Type[Review], Review]) -> dict:
             user_name = user_repository.get_user_name_by_user_id(review.user_id)
             reformatted = {"movie_title": movie_title, "user_name": user_name,
                            "rating_number": review.rating_number, "review": review.review}
-            print("@@@@@@@@@@2")
-            print(reformatted)
             return reformatted
     except Exception as err:
         raise err
@@ -52,8 +50,6 @@ class ReviewService:
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.add_review(movie_id=movie_id, user_id=user_id, rating_number=rating_number,
                                                       review=review)
-                print("@@@@@@@@@@1")
-                print(review.user_id, review.movie_id)
                 return reformat_output(review)
         except Exception as err:
             raise err

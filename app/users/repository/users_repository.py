@@ -35,7 +35,7 @@ class UserRepository:
         user = self.db.query(User).filter(User.id == user_id).first()
         return user
 
-    def get_user_name_by_user_id(self, user_id: int):
+    def get_user_name_by_user_id(self, user_id: int) -> str:
         user = self.db.query(User.user_name).filter(User.id == user_id).first()
         return user[0]
 

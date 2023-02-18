@@ -15,7 +15,7 @@ class RecommendationController:
         except Unauthorized as err:
             raise HTTPException(status_code=err.code, detail=err.message)
         except GroupUserNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=f"Error. You are not a member of group {group_name}.")
         except IntegrityError as err:
             raise HTTPException(status_code=400, detail=str(err))
         except Exception as err:

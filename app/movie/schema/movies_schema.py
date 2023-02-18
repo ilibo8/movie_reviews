@@ -1,6 +1,8 @@
 from pydantic import BaseModel, StrictInt, StrictStr, validator
 from pydantic.types import date
 
+from app.movie.schema import MovieCastSchemaOut, MovieGenreSchemaOut
+
 
 class MovieSchema(BaseModel):
     id : int
@@ -14,7 +16,6 @@ class MovieSchema(BaseModel):
 
 
 class MovieSchemaJoined(BaseModel):
-    id : int
     title : str
     director : str
     release_year : int
@@ -40,6 +41,20 @@ class MovieSchemaIn(BaseModel):
         if value > date.today().year:
             raise ValueError("Year cannot be greater than current.")
         return value
+
+    class Config:
+        orm_mode = True
+
+
+class MovieSchemaAll(BaseModel):
+    id : int
+    title: str
+    director: StrictStr
+    release_year: StrictInt
+    country_of_origin: StrictStr
+
+    movie_cast : list[MovieCastSchemaOut]
+    movie_genre : list[MovieGenreSchemaOut]
 
     class Config:
         orm_mode = True

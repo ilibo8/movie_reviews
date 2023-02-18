@@ -1,16 +1,22 @@
 """Module for JWTBearer"""
+from typing import Union
+
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.openapi.models import Response
 from app.users.service import decodeJWT
 
 
-def extract_user_id_from_token(request: Request) -> int:
+def extract_user_id_from_token(request: Request) -> Union[int, Response]:
     """Function for extracting user id from authorised request."""
-    bearer = request.headers["authorization"]
-    token = bearer.split()[1]
-    decoded = decodeJWT(token)
-    user_id = decoded["user_id"]
-    return user_id
+    try:
+        bearer = request.headers["authorization"]
+        token = bearer.split()[1]
+        decoded = decodeJWT(token)
+        user_id = decoded["user_id"]
+        return user_id
+    except Exception:
+        return Response(content=f"Token has expired, login again.", status_code=400)
 
 
 class JWTBearer(HTTPBearer):

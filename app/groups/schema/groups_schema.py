@@ -19,3 +19,19 @@ class GroupSchemaIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class GroupSchemaOut(BaseModel):
+    group_name: str
+    owner_user_name: str
+    description: str
+    date_created: date
+
+
+class GroupWithUsersSchemaOut(BaseModel):
+    group_name: str
+    owner_user_name: str
+    description: str
+    date_created: date
+    group_users : list[str]
+
