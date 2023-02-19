@@ -1,7 +1,0 @@
-.idea/
-**/__pycache__/
-.gitattributes
-.pytest_cache/
-venv/
-.coverage
-.gitignore
