@@ -7,8 +7,8 @@ from app.actor.model import Actor
 
 class ActorRepository:
     """Class for Actor repository layer."""
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self, dbs: Session):
+        self.dbs = dbs
 
     def add_actor(self, full_name, nationality) -> Actor:
         """
@@ -16,19 +16,19 @@ class ActorRepository:
         It takes two parameters, full_name and nationality.
         If an actor with that name already exists in the database, it raises a DuplicateEntry exception.
         """
-        if self.db.query(Actor).filter(Actor.full_name == full_name).first() is not None:
+        if self.dbs.query(Actor).filter(Actor.full_name == full_name).first() is not None:
             raise DuplicateEntry(f"{full_name} already in database.")
         actor = Actor(full_name, nationality)
-        self.db.add(actor)
-        self.db.commit()
-        self.db.refresh(actor)
+        self.dbs.add(actor)
+        self.dbs.commit()
+        self.dbs.refresh(actor)
         return actor
 
     def get_all_actors(self) -> list[Type[Actor]]:
         """
         The get_all_actors function returns a list of all the actors in the database.
         """
-        actors = self.db.query(Actor).all()
+        actors = self.dbs.query(Actor).all()
         return actors
 
     def find_actor_by_name(self, name) -> list[Type[Actor]]:
@@ -36,7 +36,7 @@ class ActorRepository:
         The find_actor_by_name function takes in a string and returns a list of actors whose name contains
         the inputted string.
         """
-        actor = self.db.query(Actor).filter(Actor.full_name.ilike(f'{name}%')).all()
+        actor = self.dbs.query(Actor).filter(Actor.full_name.ilike(f'{name}%')).all()
         return actor
 
     def find_actor_by_last_name(self, last_name) -> list[Type[Actor]]:
@@ -44,7 +44,7 @@ class ActorRepository:
         The find_actor_by_last_name function takes a last name as an argument and returns a list of actors whose
         last names contain the string provided by the user.
         """
-        actor = self.db.query(Actor).filter(Actor.full_name.ilike(f'% {last_name}%')).all()
+        actor = self.dbs.query(Actor).filter(Actor.full_name.ilike(f'% {last_name}%')).all()
         return actor
 
     def get_actor_by_full_name(self, full_name) -> Actor:
@@ -52,7 +52,7 @@ class ActorRepository:
         The get_actor_by_full_name function takes a full name and returns an actor object.
         If the actor is not found, it raises an ActorNotFound exception.
         """
-        actor = self.db.query(Actor).filter(Actor.full_name == full_name).first()
+        actor = self.dbs.query(Actor).filter(Actor.full_name == full_name).first()
         if actor is None:
             raise ActorNotFound("There is no actor with that name and last name.")
         return actor
@@ -62,19 +62,19 @@ class ActorRepository:
         The get_actor_by_id function takes an id as a parameter and returns the actor with that id.
         If no actor is found with that id, it raises an ActorNotFound exception.
         """
-        actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
+        actor = self.dbs.query(Actor).filter(Actor.id == actor_id).first()
         if actor is None:
             raise ActorNotFound(f"There is no actor with id {actor_id}.")
         return actor
 
-    def get_actor_full_name_by_id(self, id) -> str:
+    def get_actor_full_name_by_id(self, actor_id) -> str:
         """
         The get_actor_full_name_by_id function takes an actor id as a parameter and returns the full name of the actor.
         If there is no actor with that id, it raises an ActorNotFound exception.
         """
-        actor = self.db.query(Actor.full_name).filter(Actor.id == id).first()
+        actor = self.dbs.query(Actor.full_name).filter(Actor.id == actor_id).first()
         if actor is None:
-            raise ActorNotFound(f"There is no actor with id {id}.")
+            raise ActorNotFound(f"There is no actor with id {actor_id}.")
         return actor[0]
 
     def change_actor_full_name(self, actor_id, full_name) -> Actor:
@@ -82,13 +82,13 @@ class ActorRepository:
         The change_actor_full_name function changes the full name of an actor.
         It takes two arguments: actor_id and full_name. It returns an Actor object with the updated information.
         """
-        actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
+        actor = self.dbs.query(Actor).filter(Actor.id == actor_id).first()
         if actor is None:
             raise ActorNotFound(f'There is no actor with id {actor_id} in database.')
         actor.full_name = full_name
-        self.db.add(actor)
-        self.db.commit()
-        self.db.refresh(actor)
+        self.dbs.add(actor)
+        self.dbs.commit()
+        self.dbs.refresh(actor)
         return actor
 
     def delete_actor_by_id(self, actor_id: int) -> bool:
@@ -97,9 +97,9 @@ class ActorRepository:
         It takes in a single parameter, actor_id, which is the id of the actor to be deleted.
         If no such actor exists in the database, it raises an exception.
         """
-        actor = self.db.query(Actor).filter(Actor.id == actor_id).first()
+        actor = self.dbs.query(Actor).filter(Actor.id == actor_id).first()
         if actor is None:
             raise ActorNotFound(f"No actor with id {actor_id}.")
-        self.db.delete(actor)
-        self.db.commit()
+        self.dbs.delete(actor)
+        self.dbs.commit()
         return True

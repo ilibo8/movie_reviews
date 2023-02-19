@@ -90,7 +90,6 @@ class UserController:
             deleted = UserService.delete_user_by_id(user_id)
             if deleted:
                 return Response(content=f"User with id - {user_id} is deleted.")
-            else:
-                return Response(content=f"User with id - {user_id} doesn't exist.")
+            return Response(content=f"User with id - {user_id} doesn't exist.")
         except Exception as err:
             raise HTTPException(status_code=400, detail=str(err))

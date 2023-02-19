@@ -6,8 +6,8 @@ from app.genre.model import Genre
 
 class GenreRepository:
     """Class for Genre repository layer."""
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self, dbs: Session):
+        self.dbs = dbs
 
     def add_genre(self, name: str):
         """
@@ -15,23 +15,23 @@ class GenreRepository:
         It then returns the newly created genre.
         """
         genre = Genre(name)
-        self.db.add(genre)
-        self.db.commit()
-        self.db.refresh(genre)
+        self.dbs.add(genre)
+        self.dbs.commit()
+        self.dbs.refresh(genre)
         return genre
 
     def get_all_genres(self):
         """
         The get_all_genres function returns a list of all the genres in the database.
         """
-        return self.db.query(Genre).all()
+        return self.dbs.query(Genre).all()
 
     def check_is_there(self, name) -> bool:
         """
         The check_is_there function checks if the genre name is already in the database.
         If it is, then it returns True. If not, then it returns False.
         """
-        if self.db.query(Genre).filter(Genre.name == name).first() is None:
+        if self.dbs.query(Genre).filter(Genre.name == name).first() is None:
             return False
         return True
 
@@ -40,9 +40,9 @@ class GenreRepository:
         The delete function takes a name as an argument and deletes the genre with that name from the database.
         If no such genre exists, it raises a GenreNotFound exception.
         """
-        genre = self.db.query(Genre).filter(Genre.name == name).first()
+        genre = self.dbs.query(Genre).filter(Genre.name == name).first()
         if genre is None:
             raise GenreNotFound(f"There is no {name} entry.")
-        self.db.delete(genre)
-        self.db.commit()
+        self.dbs.delete(genre)
+        self.dbs.commit()
         return True

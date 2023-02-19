@@ -37,8 +37,3 @@ class ReviewWithIdSchemaOut(BaseModel):
     user_name: str
     rating_number: int
     review: str
-
-
-class RatingsSchema(BaseModel):
-    title: str
-    avg_number: float

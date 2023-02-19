@@ -8,13 +8,3 @@ class RecommendationSchema(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-class RecommendationSchemaIn(BaseModel):
-    group_user_id : int
-    post : str
-
-
-class UsersPostsSchema(BaseModel):
-    post_id : int
-    post : str

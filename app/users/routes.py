@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.users.controller import UserController
 from app.users.controller.user_auth_controller import JWTBearer
-from app.users.schema import *
+from app.users.schema import UserLoginSchema, UserSchema, UserSchemaIn
 
 user_router = APIRouter(prefix="/api/users", tags=["Users"])
 login_router = APIRouter(prefix="/api/login", tags=["Login"])
@@ -22,7 +22,7 @@ def create_super_user(user: UserSchemaIn):
     return UserController.create_super_user(user.user_name, user.password, user.email)
 
 
-@user_router.get("/id/{user_id}", response_model=UserSchema)
+@user_router.get("/id/{user_id}", response_model=UserSchema, dependencies=[Depends(JWTBearer("super_user"))])
 def get_user_by_id(user_id: int):
     return UserController.get_user_by_id(user_id)
 

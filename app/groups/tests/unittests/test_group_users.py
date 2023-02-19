@@ -55,6 +55,7 @@ class TestGroupUserRepository(TestClass):
                 group_user_repository.add_group_user(group_id=4, user_id=3)
 
     def test_get_all(self):
+        """Test method get all group users"""
         with TestingSessionLocal() as db:
             self.create_foreign_keys()
             group_user_repository = GroupUserRepository(db)

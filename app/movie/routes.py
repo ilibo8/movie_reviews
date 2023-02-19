@@ -1,7 +1,8 @@
 """Module for Movie routes"""
 from fastapi import APIRouter, Depends
 from app.movie.controller import MovieController
-from app.movie.schema import *
+from app.movie.schema import MovieSchemaJoined, MovieSchemaIn, MovieCastSchema, MovieSchemaAll, MovieSchema, \
+    MovieGenreSchema, MovieSchemaUpdateTitle, MovieSchemaUpdateDirector, MovieSchemaUpdateReleaseYear
 from app.users.controller import JWTBearer
 
 movie_router = APIRouter(prefix="/api/movies", tags=["Movies"])

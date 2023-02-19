@@ -53,7 +53,6 @@ class GroupUserController:
         try:
             if GroupUserService.delete_group_user(group_id, user_id):
                 return Response(content=f"User with id {user_id} is removed from group {group_id}.", status_code=200)
-            else:
-                return Response(content=f"User with id {user_id} and group id {group_id} not found.", status_code=400)
+            return Response(content=f"User with id {user_id} and group id {group_id} not found.", status_code=400)
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err))

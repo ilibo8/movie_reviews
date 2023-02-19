@@ -15,8 +15,8 @@ class GenreService:
         If there is already a genre with that name in the database, it raises GenreAlreadyExists.
         """
         try:
-            with SessionLocal() as db:
-                genre_repository = GenreRepository(db)
+            with SessionLocal() as dbs:
+                genre_repository = GenreRepository(dbs)
                 if genre_repository.check_is_there(name):
                     raise GenreAlreadyExists
                 return genre_repository.add_genre(name)
@@ -29,8 +29,8 @@ class GenreService:
         The get_all_genres function returns a list of all genres in the database.
         """
         try:
-            with SessionLocal() as db:
-                genre_repository = GenreRepository(db)
+            with SessionLocal() as dbs:
+                genre_repository = GenreRepository(dbs)
                 genres = genre_repository.get_all_genres()
                 if genres is None:
                     raise NoEntryForGenre
@@ -45,8 +45,8 @@ class GenreService:
         If no such genre exists, it raises a GenreNotFound exception.
         """
         try:
-            with SessionLocal() as db:
-                genre_repository = GenreRepository(db)
+            with SessionLocal() as dbs:
+                genre_repository = GenreRepository(dbs)
                 if genre_repository.delete(name):
                     return True
                 raise GenreNotFound(f'There is no genre with name {name} in database.')

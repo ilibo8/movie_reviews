@@ -17,11 +17,11 @@ class RecommendationService:
         Method for adding new post.
         """
         try:
-            with SessionLocal() as db:
-                group_repository = GroupRepository(db)
+            with SessionLocal() as dbs:
+                group_repository = GroupRepository(dbs)
                 group_id = group_repository.get_group_id_by_name(group_name)
-                recommendation_repo = RecommendationRepository(db)
-                group_user_repo = GroupUserRepository(db)
+                recommendation_repo = RecommendationRepository(dbs)
+                group_user_repo = GroupUserRepository(dbs)
                 group_user_id = group_user_repo.get_id_by_user_and_group_id(group_id=group_id, user_id=user_id)
                 if group_user_id is None:
                     raise Unauthorized(f"You are not member of group {group_name}")
@@ -38,8 +38,8 @@ class RecommendationService:
         Method for getting all posts
         """
         try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
+            with SessionLocal() as dbs:
+                recommendation_repo = RecommendationRepository(dbs)
                 return recommendation_repo.get_all_posts()
         except Exception as err:
             raise err
@@ -50,12 +50,12 @@ class RecommendationService:
         Method for getting all posts by group name with checking whether the user is member of group
         """
         try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
-                group_user_repo = GroupUserRepository(db)
+            with SessionLocal() as dbs:
+                recommendation_repo = RecommendationRepository(dbs)
+                group_user_repo = GroupUserRepository(dbs)
                 if group_user_repo.check_if_user_is_part_of_group(group_name=group_name, user_id=user_id) is False:
                     raise Unauthorized(f"You are not part of group {group_name}")
-                group_repo = GroupRepository(db)
+                group_repo = GroupRepository(dbs)
                 group_id = group_repo.get_group_id_by_name(group_name)
                 posts = recommendation_repo.get_all_posts_by_group_id(group_id)
                 all_posts = []
@@ -77,10 +77,10 @@ class RecommendationService:
         Get all posts added by user with provided id
         """
         try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
-                group_user_repository = GroupUserRepository(db)
-                group_repository = GroupRepository(db)
+            with SessionLocal() as dbs:
+                recommendation_repo = RecommendationRepository(dbs)
+                group_user_repository = GroupUserRepository(dbs)
+                group_repository = GroupRepository(dbs)
                 all_posts = recommendation_repo.get_all_posts_by_user_id(user_id)
                 if all_posts is None:
                     raise RecommendationNotFound("No data found")
@@ -100,8 +100,8 @@ class RecommendationService:
         Change post of user by recommendation id
         """
         try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
+            with SessionLocal() as dbs:
+                recommendation_repo = RecommendationRepository(dbs)
                 user_recommendation = recommendation_repo.get_all_posts_by_user_id(user_id)
                 if recommendation_id not in user_recommendation:
                     raise Unauthorized("Access denied to other user's posts.")
@@ -116,18 +116,10 @@ class RecommendationService:
         """
         The delete_post_id_by_user function deletes a post by recommendation id and user id.
         It takes in the following parameters: recommendation_id, user_id. It returns True if it is successful.
-
-        :param recommendation_id:int: Specify the recommendation id
-        :param user_id:int: Identify the user who is deleting the post
-        :return: True if the post was successfully deleted
-        :doc-author: Trelent
-        """
-        """
-        Delete post by recommendation id
         """
         try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
+            with SessionLocal() as dbs:
+                recommendation_repo = RecommendationRepository(dbs)
                 if recommendation_repo.delete_post_id_by_user(recommendation_id=recommendation_id, user_id=user_id):
                     return True
         except RecommendationNotFound as err:
@@ -143,8 +135,8 @@ class RecommendationService:
         Delete post by id
         """
         try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
+            with SessionLocal() as dbs:
+                recommendation_repo = RecommendationRepository(dbs)
                 if recommendation_repo.delete_post_by_id(recommendation_id):
                     return True
         except RecommendationNotFound as err:

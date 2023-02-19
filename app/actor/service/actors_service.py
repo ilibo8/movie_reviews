@@ -15,8 +15,8 @@ class ActorService:
         The function returns the id of the newly added actor.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 return actor_repository.add_actor(full_name, nationality)
         except Exception as err:
             raise err
@@ -27,8 +27,8 @@ class ActorService:
         The get_all_actors function returns all actors in the database.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 return actor_repository.get_all_actors()
         except Exception as err:
             raise err
@@ -40,8 +40,8 @@ class ActorService:
         It takes in an integer as an argument and returns a dictionary containing the actor's information.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 return actor_repository.get_actor_by_id(actor_id)
         except Exception as err:
             raise err
@@ -53,8 +53,8 @@ class ActorService:
         If no actor is found, it raises an exception.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 return actor_repository.find_actor_by_name(name)
         except Exception as err:
             raise err
@@ -66,8 +66,8 @@ class ActorService:
         It takes a string as the parameter and returns an Actor object.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 return actor_repository.find_actor_by_last_name(last_name)
         except Exception as err:
             raise err
@@ -80,8 +80,8 @@ class ActorService:
         with a key of 'success' and value of True or False depending on whether it was successful.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 return actor_repository.change_actor_full_name(actor_id, full_name)
         except Exception as err:
             raise err
@@ -94,8 +94,8 @@ class ActorService:
         If there is no actor with that id in the database, it raises an ActorNotFound exception.
         """
         try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                actor_repository = ActorRepository(dbs)
                 if actor_repository.delete_actor_by_id(actor_id) is None:
                     raise ActorNotFound(f'There is no actor with id {actor_id} in database.')
                 return True

@@ -2,9 +2,9 @@
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
 from app.reviews.controller import ReviewController
-from app.reviews.schema import *
+from app.reviews.schema import ReviewSchema, ReviewSchemaOut, ReviewWithIdSchemaOut, ReviewSchemaIn, \
+    ReviewSchemaChangeRating
 from app.users.controller import JWTBearer, extract_user_id_from_token
-
 reviews_router = APIRouter(prefix="/api/reviews", tags=["Reviews & Ratings"])
 reviews_superuser_router = APIRouter(prefix="/api/superuser/reviews", tags=["SuperUser - Reviews & Ratings"])
 

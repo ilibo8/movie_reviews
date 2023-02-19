@@ -21,8 +21,8 @@ class MovieService:
         The function returns the id of the newly added movie.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 return movie_repository.add_movie(title, director, release_year, country_of_origin)
         except Exception as err:
             raise err
@@ -34,10 +34,10 @@ class MovieService:
         If there is no such movie or if there is no such genre it will raise an error.
         """
         try:
-            with SessionLocal() as db:
-                movie_genre_repository = MovieGenreRepository(db)
-                movie_repository = MovieRepository(db)
-                genre_repository = GenreRepository(db)
+            with SessionLocal() as dbs:
+                movie_genre_repository = MovieGenreRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                genre_repository = GenreRepository(dbs)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise MovieNotFound(f"No movie with id {movie_id}, first add movie then genre.")
                 if not genre_repository.check_is_there(genre_name):
@@ -53,10 +53,10 @@ class MovieService:
         If either one doesn't exist it raises MovieNotFound exception.
         """
         try:
-            with SessionLocal() as db:
-                movie_cast_repository = MovieCastRepository(db)
-                movie_repository = MovieRepository(db)
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                movie_cast_repository = MovieCastRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                actor_repository = ActorRepository(dbs)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise MovieNotFound(f"No movie with id {movie_id}, first add movie then movie cast.")
                 if actor_repository.get_actor_by_id(actor_id) is None:
@@ -72,8 +72,8 @@ class MovieService:
         The get_all function returns all movies in the database.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.get_all_movies()
                 return movies
         except Exception as err:
@@ -86,15 +86,15 @@ class MovieService:
         The function will return an empty list if there are no movies in the database.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.get_all_movies_order_by_name()
                 for movie in movies:
                     movie_cast_pair = movie.movie_cast
                     full_names = []
                     for item in movie_cast_pair:
                         actor_id = item.actor_id
-                        actor_repo = ActorRepository(db)
+                        actor_repo = ActorRepository(dbs)
                         full_names.append(actor_repo.get_actor_full_name_by_id(actor_id))
                     genres = movie.movie_genre
                     genres_names = []
@@ -113,15 +113,15 @@ class MovieService:
         The get_movie_by_title function takes a movie title as an argument and returns the full details of that movie.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movie = movie_repository.get_movie_by_title(movie_title)
                 if movie is None:
                     raise MovieNotFound(f"No movie with title {movie_title} in database.")
                 full_names = []
                 for item in movie.movie_cast:
                     actor_id = item.actor_id
-                    actor_repo = ActorRepository(db)
+                    actor_repo = ActorRepository(dbs)
                     full_names.append(actor_repo.get_actor_full_name_by_id(actor_id))
                 genres = movie.movie_genre
                 genres_names = []
@@ -140,15 +140,15 @@ class MovieService:
         The get_all_movies_of_certain_genre function takes in a genre name and returns all the movies with that genre.
         """
         try:
-            with SessionLocal() as db:
-                movie_genre_repository = MovieGenreRepository(db)
-                genre_repository = GenreRepository(db)
+            with SessionLocal() as dbs:
+                movie_genre_repository = MovieGenreRepository(dbs)
+                genre_repository = GenreRepository(dbs)
                 if not genre_repository.check_is_there(genre_name):
                     raise GenreNotFound(f"Wrong input. No genre {genre_name}.")
                 if len(movie_genre_repository.get_all_movie_ids_of_certain_genre(genre_name)) == 0:
                     raise MovieNotFound(f"No movies with genre {genre_name} in database.")
                 movie_ids = movie_genre_repository.get_all_movie_ids_of_certain_genre(genre_name)
-                movie_repository = MovieRepository(db)
+                movie_repository = MovieRepository(dbs)
                 movie_names = []
                 for movie_id in movie_ids:
                     movie_names.append(movie_repository.get_title_by_id(movie_id))
@@ -164,8 +164,8 @@ class MovieService:
         the word in their title.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.get_movies_by_word_in_title(word)
                 if len(movies) == 0:
                     raise MovieNotFound(f"There are no movies with {word} in title.")
@@ -173,7 +173,7 @@ class MovieService:
                     full_names = []
                     for item in movie.movie_cast:
                         actor_id = item.actor_id
-                        actor_repo = ActorRepository(db)
+                        actor_repo = ActorRepository(dbs)
                         full_names.append(actor_repo.get_actor_full_name_by_id(actor_id))
                     genres = movie.movie_genre
                     genres_names = []
@@ -193,10 +193,10 @@ class MovieService:
         the actor has been in.
         """
         try:
-            with SessionLocal() as db:
-                movie_repo = MovieRepository(db)
-                actor_repo = ActorRepository(db)
-                movie_cast_repo = MovieCastRepository(db)
+            with SessionLocal() as dbs:
+                movie_repo = MovieRepository(dbs)
+                actor_repo = ActorRepository(dbs)
+                movie_cast_repo = MovieCastRepository(dbs)
                 actor = actor_repo.get_actor_by_full_name(actor_full_name)
                 movie_ids = movie_cast_repo.get_movie_ids_by_actor_id(actor.id)
                 if len(movie_ids) == 0:
@@ -206,7 +206,7 @@ class MovieService:
                     full_names = []
                     for item in movie.movie_cast:
                         actor_id = item.actor_id
-                        actor_repo = ActorRepository(db)
+                        actor_repo = ActorRepository(dbs)
                         full_names.append(actor_repo.get_actor_full_name_by_id(actor_id))
                     genres = movie.movie_genre
                     genres_names = []
@@ -226,9 +226,9 @@ class MovieService:
         The function takes no arguments and returns a list of strings.
         """
         try:
-            with SessionLocal() as db:
+            with SessionLocal() as dbs:
 
-                movie_repository = MovieRepository(db)
+                movie_repository = MovieRepository(dbs)
                 return movie_repository.get_all_directors()
         except Exception as err:
             raise err
@@ -240,8 +240,8 @@ class MovieService:
         It takes in the name of a director as an argument and returns all movies that match that name.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.get_movies_by_director(director_name)
                 return movies
         except Exception as err:
@@ -254,8 +254,8 @@ class MovieService:
 
         """
         try:
-            with SessionLocal() as db:
-                movie_cast_repository = MovieCastRepository(db)
+            with SessionLocal() as dbs:
+                movie_cast_repository = MovieCastRepository(dbs)
                 movie_cast = movie_cast_repository.get_all()
                 return movie_cast
         except Exception as err:
@@ -267,8 +267,8 @@ class MovieService:
         The change_movie_title function allows the user to change the title of a movie.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.change_movie_title(movie_id, new_movie_title)
                 return movies
         except MovieNotFound as err:
@@ -284,8 +284,8 @@ class MovieService:
         The change_movie_director function allows the user to change the director of a movie.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.change_movie_director(movie_id, director)
                 return movies
         except MovieNotFound as err:
@@ -299,18 +299,10 @@ class MovieService:
     def change_movie_release_year(movie_id: int, release_year: int):
         """
         The change_movie_release_year function is used to change the release year of a movie.
-
-        :param movie_id:int: Specify the movie to be updated
-        :param release_year:int: Change the release year of a movie
-        :return: A list of movies
-        :doc-author: Trelent
-        """
-        """
-        The change_movie_release_year function is used to change the release year of a movie.
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 movies = movie_repository.change_movie_release_year(movie_id, release_year)
                 return movies
         except MovieNotFound as err:
@@ -325,20 +317,12 @@ class MovieService:
         """
         The delete_movie_genre function deletes a movie genre object from the database.
         It takes two arguments, movie_id and genre_name. It returns True if it is successful.
-
-        :param movie_id:int: Specify the movie_id of the movie that will be deleted
-        :param genre_name:str: Check if the genre exists in the database
-        :return: True if the movie genre object is deleted
-        :doc-author: Trelent
-        """
-        """
-        Delete movie genre object by movie_id and genre name.
         """
         try:
-            with SessionLocal() as db:
-                movie_genre_repository = MovieGenreRepository(db)
-                movie_repository = MovieRepository(db)
-                genre_repository = GenreRepository(db)
+            with SessionLocal() as dbs:
+                movie_genre_repository = MovieGenreRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                genre_repository = GenreRepository(dbs)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise MovieNotFound(f"There is no movie with id {movie_id}")
                 if genre_repository.check_is_there(genre_name) is False:
@@ -357,10 +341,10 @@ class MovieService:
         Delete movie cast member by movie_id and actor_id
         """
         try:
-            with SessionLocal() as db:
-                movie_cast_repository = MovieCastRepository(db)
-                movie_repository = MovieRepository(db)
-                actor_repository = ActorRepository(db)
+            with SessionLocal() as dbs:
+                movie_cast_repository = MovieCastRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                actor_repository = ActorRepository(dbs)
                 if movie_repository.get_movie_by_id(movie_id) is None:
                     raise MovieNotFound(f"There is no movie with id {movie_id}")
                 if actor_repository.get_actor_by_id(actor_id) is None:
@@ -379,8 +363,8 @@ class MovieService:
         Delete movie by id, if id not fount raise MovieNotFound exception
         """
         try:
-            with SessionLocal() as db:
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                movie_repository = MovieRepository(dbs)
                 if movie_repository.delete_movie_by_id(movie_id) is None:
                     raise MovieNotFound(f"There is no movie with id {movie_id}.")
                 return True

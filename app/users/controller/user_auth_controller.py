@@ -35,8 +35,7 @@ class JWTBearer(HTTPBearer):
                     detail="User with provided role is not permitted to access this " "route.",
                 )
             return credentials.credentials
-        else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+        raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtoken: str) -> dict:
         """Method for verifying jwt."""

@@ -14,9 +14,9 @@ def reformat_output_list(review_list: list) -> list[dict]:
     list.
     """
     try:
-        with SessionLocal() as db:
-            movie_repository = MovieRepository(db)
-            user_repository = UserRepository(db)
+        with SessionLocal() as dbs:
+            movie_repository = MovieRepository(dbs)
+            user_repository = UserRepository(dbs)
             reviews_reformatted = []
             for review in review_list:
                 movie_title = movie_repository.get_title_by_id(review.movie_id)
@@ -35,9 +35,9 @@ def reformat_output_list_with_id(review_list: list) -> list[dict]:
     title and user_name. It returns a list of dictionaries with id, movie_title, user_name, rating_number and review.
     """
     try:
-        with SessionLocal() as db:
-            movie_repository = MovieRepository(db)
-            user_repository = UserRepository(db)
+        with SessionLocal() as dbs:
+            movie_repository = MovieRepository(dbs)
+            user_repository = UserRepository(dbs)
             reviews_reformatted = []
             for review in review_list:
                 movie_title = movie_repository.get_title_by_id(review.movie_id)
@@ -56,9 +56,9 @@ def reformat_output(review: Review) -> dict:
     It returns the movie title, user_name, rating number and review text as key value pairs.
     """
     try:
-        with SessionLocal() as db:
-            movie_repository = MovieRepository(db)
-            user_repository = UserRepository(db)
+        with SessionLocal() as dbs:
+            movie_repository = MovieRepository(dbs)
+            user_repository = UserRepository(dbs)
             movie_title = movie_repository.get_title_by_id(review.movie_id)
             user_name = user_repository.get_user_name_by_user_id(review.user_id)
             reformatted = {"movie_title": movie_title, "user_name": user_name,
@@ -80,9 +80,9 @@ class ReviewService:
         review is a string containing your opinion about this particular film.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.add_review(movie_id=movie_id, user_id=user_id, rating_number=rating_number,
                                                       review=review)
@@ -98,8 +98,8 @@ class ReviewService:
         The get_all_reviews function returns all reviews in the database.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
                 return review_repository.get_all_reviews()
         except Exception as err:
             raise err
@@ -111,8 +111,8 @@ class ReviewService:
         The table is sorted by review date, with most recent reviews first.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
                 return review_repository.get_ratings_table()
         except Exception as err:
             raise err
@@ -125,9 +125,9 @@ class ReviewService:
         then uses get_average_rating to retrieve the average rating and number of ratings for that movie.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_title)
                 rating_and_count = review_repository.get_average_rating_and_count_by_movie_id(movie_id)
                 return {"movie title": movie_title, "rating": rating_and_count[0], "users rated": rating_and_count[1]}
@@ -141,9 +141,9 @@ class ReviewService:
         that movie. If there are no reviews for that movie, it will return an error message.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_title)
                 reviews = review_repository.get_reviews_by_movie_id(movie_id)
                 if reviews is None:
@@ -159,9 +159,9 @@ class ReviewService:
         written by that user. If no review is found, it raises a ReviewNotFound exception.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
-                user_repository = UserRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                user_repository = UserRepository(dbs)
                 user = user_repository.get_user_by_user_name(user_name)
                 reviews = review_repository.get_reviews_by_user_id(user.id)
                 if reviews is None:
@@ -178,8 +178,8 @@ class ReviewService:
         information about one review.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
                 reviews = review_repository.get_reviews_by_user_id(user_id)
                 if reviews is None:
                     raise ReviewNotFound(f"There are no review.")
@@ -195,9 +195,9 @@ class ReviewService:
         rated.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.change_movie_rating(movie_id, user_id, new_rating)
                 return reformat_output(review)
@@ -210,9 +210,9 @@ class ReviewService:
         The change_movie_review function allows a user to change the review they have written for a movie.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
-                movie_repository = MovieRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.change_movie_review(movie_id, user_id, new_review)
                 return reformat_output(review)
@@ -225,8 +225,8 @@ class ReviewService:
         The delete_review_id_by_user function deletes a review by the user's id.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
                 review = review_repository.delete_review_id_by_user(review_id, user_id)
                 if review:
                     return review
@@ -244,8 +244,8 @@ class ReviewService:
         It takes in an integer as an argument and returns True if it is successful.
         """
         try:
-            with SessionLocal() as db:
-                review_repository = ReviewRepository(db)
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
                 if review_repository.delete_review_by_id(review_id):
                     return True
         except ReviewNotFound as err:
