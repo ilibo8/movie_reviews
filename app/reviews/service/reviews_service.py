@@ -182,7 +182,7 @@ class ReviewService:
                 review_repository = ReviewRepository(dbs)
                 reviews = review_repository.get_reviews_by_user_id(user_id)
                 if reviews is None:
-                    raise ReviewNotFound(f"There are no review.")
+                    raise ReviewNotFound("There are no review.")
                 reformatted_reviews = reformat_output_list_with_id(reviews)
                 return reformatted_reviews
         except Exception as err:

@@ -36,12 +36,13 @@ def delete_post_by_its_id(post_id: int, request: Request):
     return RecommendationController.delete_post_by_user(recommendation_id=post_id, user_id=user_id)
 
 
-@recommendations_superuser_router.get("/get-all-posts", response_model=list[RecommendationSchema])#,
-                                      #dependencies=[Depends(JWTBearer("super_user"))])
+@recommendations_superuser_router.get("/get-all-posts", response_model=list[RecommendationSchema],
+                                      dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_posts():
     return RecommendationController.get_all_posts()
 
 
-@recommendations_superuser_router.delete("/delete-post-by-its-id/{post_id}")#, dependencies=[Depends(JWTBearer("super_user"))])
+@recommendations_superuser_router.delete("/delete-post-by-its-id/{post_id}",
+                                         dependencies=[Depends(JWTBearer("super_user"))])
 def delete_post_by_id(post_id: int):
     return RecommendationController.delete_post_by_id(recommendation_id=post_id)

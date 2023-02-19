@@ -16,10 +16,10 @@ class GroupUserService:
         If there is no such group or if there is no such user, it raises an error.
         """
         try:
-            with SessionLocal() as db:
-                group_user_repository = GroupUserRepository(db)
-                group_repository = GroupRepository(db)
-                user_repository = UserRepository(db)
+            with SessionLocal() as dbs:
+                group_user_repository = GroupUserRepository(dbs)
+                group_repository = GroupRepository(dbs)
+                user_repository = UserRepository(dbs)
                 group = group_repository.get_group_by_name(group_name)
                 if group is None:
                     raise GroupNotFound(f"There is no group with name {group_name}")
@@ -48,10 +48,10 @@ class GroupUserService:
             - date_created: When this particular group was created.
 
         """
-        with SessionLocal() as db:
-            group_user_repository = GroupUserRepository(db)
-            user_repository = UserRepository(db)
-            group_repository = GroupRepository(db)
+        with SessionLocal() as dbs:
+            group_user_repository = GroupUserRepository(dbs)
+            user_repository = UserRepository(dbs)
+            group_repository = GroupRepository(dbs)
             all_groups = group_repository.get_all()
             all_groups_and_members = []
             for group in all_groups:
@@ -71,8 +71,8 @@ class GroupUserService:
         The get_all_group_members function returns a list of all the user ids that are members of a given group.
         The function takes in one parameter, which is the id of the group you want to get all members for.
         """
-        with SessionLocal() as db:
-            group_user_repository = GroupUserRepository(db)
+        with SessionLocal() as dbs:
+            group_user_repository = GroupUserRepository(dbs)
             return group_user_repository.get_all_group_members_ids(group_id)
 
     @staticmethod
@@ -80,6 +80,6 @@ class GroupUserService:
         """
         The delete_group_user function deletes a user from a group.
         """
-        with SessionLocal() as db:
-            group_user_repository = GroupUserRepository(db)
+        with SessionLocal() as dbs:
+            group_user_repository = GroupUserRepository(dbs)
             return group_user_repository.delete_group_user(group_id, user_id)

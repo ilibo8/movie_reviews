@@ -12,10 +12,10 @@ class TestRecommendationsRepository(TestClass):
 
     def create_foreign_keys(self):
         """Method for creating data necessary for testing."""
-        with TestingSessionLocal() as db:
-            group_user_repository = GroupUserRepository(db)
-            user_repository = UserRepository(db)
-            group_repository = GroupRepository(db)
+        with TestingSessionLocal() as dbs:
+            group_user_repository = GroupUserRepository(dbs)
+            user_repository = UserRepository(dbs)
+            group_repository = GroupRepository(dbs)
             user_repository.create_user("user1", "pass", "user1@gmail.com")
             user_repository.create_user("user2", "pass", "user2@gmail.com")
             user_repository.create_user("user3", "pass", "user3@gmail.com")
@@ -30,17 +30,17 @@ class TestRecommendationsRepository(TestClass):
 
     def test_add_post(self):
         """Test method add_post."""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendation = recommendations_repo.add_post(1, "post")
             assert recommendation.post == "post"
 
     def test_get_all_posts(self):
         """Test method get_all_posts"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post")
             recommendations_repo.add_post(1, "post")
             recommendations_repo.add_post(2, "post")
@@ -48,9 +48,9 @@ class TestRecommendationsRepository(TestClass):
 
     def test_get_all_posts_by_group_id(self):
         """Test method get_all_posts_by_group_id"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post1")
             recommendations_repo.add_post(5, "post2")
             recommendations_repo.add_post(4, "post3")
@@ -65,9 +65,9 @@ class TestRecommendationsRepository(TestClass):
 
     def test_get_post_by_id(self):
         """Test method get post by id"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post1")
             recommendations_repo.add_post(1, "post")
             recommendations_repo.add_post(2, "post10")
@@ -79,17 +79,17 @@ class TestRecommendationsRepository(TestClass):
 
     def test_get_posts_by_id_error(self):
         """Test get_posts_by_id error"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             with pytest.raises(RecommendationNotFound):
                 recommendations_repo.get_post_by_id(1)
 
     def test_get_all_posts_by_user_id(self):
         """Test method get_all_posts_by_user_id"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post1")
             recommendations_repo.add_post(1, "post2")
             recommendations_repo.add_post(2, "post3")
@@ -103,9 +103,9 @@ class TestRecommendationsRepository(TestClass):
 
     def test_change_post_by_id(self):
         """Test change post by id."""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post")
             recommendations_repo.add_post(1, "post")
             recommendations_repo.change_post_by_id(2, "new post")
@@ -114,49 +114,49 @@ class TestRecommendationsRepository(TestClass):
 
     def test_change_post_error(self):
         """Test change post raising error."""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             with pytest.raises(RecommendationNotFound):
                 recommendations_repo.change_post_by_id(1, "new post")
 
     def test_delete_post_by_id(self):
         """Test delete recommendation by id"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post")
             assert recommendations_repo.delete_post_by_id(1) is True
 
     def test_delete_post_by_id_error(self):
         """Test delete_post_by_id error"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             with pytest.raises(RecommendationNotFound):
                 recommendations_repo.delete_post_by_id(1)
 
     def test_delete_post_id_by_user(self):
         """Test delete recommendation by user authenticated"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post")
             assert recommendations_repo.delete_post_id_by_user(1, 1) is True
 
     def test_delete_post_id_by_user_error(self):
         """Test delete recommendation by user authenticated"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             recommendations_repo.add_post(1, "post")
             with pytest.raises(Unauthorized):
                 recommendations_repo.delete_post_id_by_user(1, 2)
 
     def test_delete_post_id_by_user_error2(self):
         """Test delete recommendation by user authenticated"""
-        with TestingSessionLocal() as db:
+        with TestingSessionLocal() as dbs:
             self.create_foreign_keys()
-            recommendations_repo = RecommendationRepository(db)
+            recommendations_repo = RecommendationRepository(dbs)
             with pytest.raises(RecommendationNotFound):
                 recommendations_repo.delete_post_id_by_user(3, 2)

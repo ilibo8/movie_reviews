@@ -9,8 +9,8 @@ from app.recommendations.model import Recommendation
 class RecommendationRepository:
     """Class for Recommendation repository"""
 
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self, dbs: Session):
+        self.dbs = dbs
 
     def add_post(self, group_user_id: int, post: str) -> Recommendation:
         """
@@ -18,23 +18,23 @@ class RecommendationRepository:
         It takes in a group_user_id and post as arguments, and returns the newly created recommendation.
         """
         recommendation = Recommendation(group_user_id=group_user_id, post=post)
-        self.db.add(recommendation)
-        self.db.commit()
-        self.db.refresh(recommendation)
+        self.dbs.add(recommendation)
+        self.dbs.commit()
+        self.dbs.refresh(recommendation)
         return recommendation
 
     def get_all_posts(self) -> list[Type[Recommendation]]:
         """
         The get_all_posts function returns a list of all the Recommendation objects in the database.
         """
-        return self.db.query(Recommendation).all()
+        return self.dbs.query(Recommendation).all()
 
     def get_post_by_id(self, recommendation_id: int) -> Type[Recommendation] | None:
         """
         The get_post_by_id function takes in a recommendation_id and returns the post with that id.
         If no such post exists, it raises a RecommendationNotFound error.
         """
-        post = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
+        post = self.dbs.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if post is None:
             raise RecommendationNotFound(f"No post with id {recommendation_id}")
         return post
@@ -45,7 +45,7 @@ class RecommendationRepository:
         It does this by joining Recommendation with GroupUser, which has a foreign key relationship to Recommendation.
         The function then filters the results by the given group_id.
         """
-        recommendations = self.db.query(Recommendation). \
+        recommendations = self.dbs.query(Recommendation). \
             join(GroupUser).filter(GroupUser.group_id == group_id).all()
         return recommendations
 
@@ -53,7 +53,7 @@ class RecommendationRepository:
         """
         The get_all_posts_by_user_id function takes in a user_id and returns all the posts that belong to that user.
         """
-        recommendations = self.db.query(Recommendation). \
+        recommendations = self.dbs.query(Recommendation). \
             join(GroupUser).filter(GroupUser.user_id == user_id).all()
         return recommendations
 
@@ -63,13 +63,13 @@ class RecommendationRepository:
         It finds the recommendation with that id, changes its post to the new_post argument,
         and returns it.
         """
-        recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
+        recommendation = self.dbs.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
             raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
         recommendation.post = new_post
-        self.db.add(recommendation)
-        self.db.commit()
-        self.db.refresh(recommendation)
+        self.dbs.add(recommendation)
+        self.dbs.commit()
+        self.dbs.refresh(recommendation)
         return recommendation
 
     def delete_post_id_by_user(self, recommendation_id: int, user_id: int) -> bool:
@@ -78,15 +78,15 @@ class RecommendationRepository:
         It first queries the database for a recommendation with the given id and then checks to see if that post
         was created by the user who is currently logged in. If it is not, then an error message will be raised.
         """
-        recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
+        recommendation = self.dbs.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
             raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
-        group_user = self.db.query(GroupUser).join(Recommendation).filter(
+        group_user = self.dbs.query(GroupUser).join(Recommendation).filter(
             Recommendation.id == recommendation_id).first()
         if group_user.user_id != user_id:
             raise Unauthorized("Cannot delete other user's post.")
-        self.db.delete(recommendation)
-        self.db.commit()
+        self.dbs.delete(recommendation)
+        self.dbs.commit()
         return True
 
     def delete_post_by_id(self, recommendation_id: int) -> bool:
@@ -95,9 +95,9 @@ class RecommendationRepository:
         It takes in an integer representing the id of the recommendation to be deleted, and returns True
         if it is successful.
         """
-        recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
+        recommendation = self.dbs.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
             raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
-        self.db.delete(recommendation)
-        self.db.commit()
+        self.dbs.delete(recommendation)
+        self.dbs.commit()
         return True
