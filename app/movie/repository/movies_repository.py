@@ -34,20 +34,20 @@ class MovieRepository:
         """
         return self.db.query(Movie).order_by(Movie.id).all()
 
+    def get_movie_by_id(self, movie_id: int) -> Type[Movie] | None:
+        """
+        The get_movie_by_id function takes a movie_id as an argument and returns the Movie object with that id.
+        If no such movie is found, it raises a 404 error.
+        """
+        movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
+        return movie
+
     def get_all_movies_order_by_name(self) -> list[Type[Movie]]:
         """
         The get_all_movies_order_by_name function returns a list of all movies in the database, ordered by title.
         It takes no arguments and returns a list of Movie objects.
         """
         return self.db.query(Movie).order_by(Movie.title).all()
-
-    def get_movie_by_id(self, movie_id: int) -> Movie:
-        """
-        The get_movie_by_id function takes a movie_id as an argument and returns the Movie object with that id.
-        If no such movie is found, it raises a 404 error.
-        """
-        movie = self.db.query(Movie).get(movie_id)
-        return movie
 
     def get_movie_by_title(self, movie_title: str) -> Type[Movie] | None:
         """
@@ -88,7 +88,7 @@ class MovieRepository:
         director. If no movies are found, it raises a MovieNotFound exception.
         """
         movies = self.db.query(Movie).filter(Movie.director.contains(director)).all()
-        if movies is None:
+        if len(movies) == 0:
             raise MovieNotFound("No movies by that director found.")
         return movies
 
@@ -98,7 +98,7 @@ class MovieRepository:
         by the user. If no movies are found, it raises an exception.
         """
         movies = self.db.query(Movie).filter(Movie.release_year == release_year).all()
-        if movies is None:
+        if len(movies) == 0:
             raise MovieNotFound(f"No movies with release year {release_year} found.")
         return movies
 
@@ -108,33 +108,29 @@ class MovieRepository:
         If no movies are found, it raises an exception.
         """
         movies = self.db.query(Movie).filter(Movie.country_of_origin == country_of_origin).all()
-        if movies is None:
+        if len(movies) == 0:
             raise MovieNotFound(f"No movies from {country_of_origin} in database.")
         return movies
 
-    def get_all_directors(self):
+    def get_all_directors(self) -> list[str]:
         """
         The get_all_directors function returns a list of all the distinct directors in the database.
         It does this by querying the Movie table and selecting only distinct values from the director column.
         """
-        return self.db.query(Movie.director.distinct()).all()
+        directors_tuple = self.db.query(Movie.director.distinct()).all()
+        directors = [x[0] for x in directors_tuple]
+        directors.sort()
+        return directors
 
-    def get_all_countries_of_origin(self):
-        """
-        The get_all_countries_of_origin function returns a list of all the distinct countries of origin for movies.
-        It does this by querying the Movie table and returning all distinct values from the country_of_origin column.
-
-        :param self: Access the class variables
-        :return: A list of all the distinct countries that have produced a movie
-        """
-        return self.db.query(Movie.country_of_origin.distinct()).all()
-
-    def get_all_titles(self):
+    def get_all_titles(self) -> list[str]:
         """
         The get_all_titles function returns a list of all the movie titles in the database.
         It takes no arguments and returns a list of tuples, where each tuple is (title).
         """
-        return self.db.query(Movie.title).all()
+        titles_tuple = self.db.query(Movie.title).all()
+        titles = [x[0] for x in titles_tuple]
+        titles.sort()
+        return titles
 
     def change_movie_title(self, movie_id: int, title: str) -> (Movie, None):
         """
@@ -184,23 +180,6 @@ class MovieRepository:
             if movie is None:
                 raise MovieNotFound(f"There is no movie with id {movie_id}")
             movie.release_year = release_year
-            self.db.add(movie)
-            self.db.commit()
-            self.db.refresh(movie)
-            return movie
-        except IntegrityError as err:
-            raise err
-
-    def change_movie_country_of_origin(self, movie_id: int, country_of_origin: str) -> (Movie, None):
-        """
-        The change_movie_country_of_origin function takes in a movie id and a country of origin.
-        It then updates the country_of_origin field for that movie to the new value.
-        """
-        try:
-            movie = self.db.query(Movie).filter(Movie.id == movie_id).first()
-            if movie is None:
-                raise MovieNotFound(f"There is no movie with id {movie_id}")
-            movie.country_of_origin = country_of_origin
             self.db.add(movie)
             self.db.commit()
             self.db.refresh(movie)

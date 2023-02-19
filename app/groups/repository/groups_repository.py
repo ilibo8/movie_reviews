@@ -40,6 +40,8 @@ class GroupRepository:
         corresponding to that group name. If no such Group exists, it returns None.
         """
         group = self.db.query(Group).filter(Group.group_name == group_name).first()
+        if group is None:
+            raise GroupNotFound(f"There is no group with name {group_name}")
         return group
 
     def get_group_name_by_id(self, group_id: int) -> str:

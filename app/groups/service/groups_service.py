@@ -43,22 +43,6 @@ class GroupService:
             return all_groups
 
     @staticmethod
-    def get_group_by_name(group_name: str) -> Type[Group]:
-        """
-        The get_group_by_name function takes a group name as an argument and returns the Group object associated with
-        that name. If no such group exists, it raises a GroupNotFound exception.
-        """
-        try:
-            with SessionLocal() as db:
-                group_repository = GroupRepository(db)
-                group = group_repository.get_group_by_name(group_name)
-                if group is None:
-                    raise GroupNotFound(f"There is no group named {group_name}")
-                return group
-        except Exception as err:
-            raise err
-
-    @staticmethod
     def change_group_name(group_name: str, new_name: str, user_id: int):
         """
         The change_group_name function changes the name of a group.

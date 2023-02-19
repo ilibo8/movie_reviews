@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 
-actor_superuser_router = APIRouter(prefix="/api/superuser/movies/actors", tags=["SuperUser - Movies - Actors"])
+actor_superuser_router = APIRouter(prefix="/api/superuser/movies/actors", tags=["SuperUser - Actors"])
 
 
 @actor_superuser_router.get("/get-all", response_model=list[ActorSchema])#

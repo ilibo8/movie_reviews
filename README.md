@@ -17,8 +17,13 @@ visible only to group members.
 pip install -r requirements.txt
 ```
 #### Database
-Start MySQL server and execute all commands in **_init_db/init_db.sql_** and **_init_db/init_data.sql_**
+Start MySQL server and execute all commands in **_init_db/init_db.sql_** 
+After running application execute all commands from **_init_db/init_data.sql_** for initial data
 
 ### Login for super_user
     user_name : superuser
     password : superpass
+
+### Login for classic_user from database
+    user_name : {name}
+    password : {name}123

@@ -7,7 +7,7 @@ from app.db import Base
 class MovieGenre(Base):
     __tablename__ = "movie_genre"
     movie_id = Column(Integer, ForeignKey("movies.id", ondelete="CASCADE"), primary_key=True)
-    genre_name = Column(String(20), ForeignKey("genres.name",ondelete="CASCADE"), primary_key=True)
+    genre_name = Column(String(20), ForeignKey("genres.name", ondelete="CASCADE"), primary_key=True)
     __table_args__ = (UniqueConstraint("movie_id", "genre_name", name="movie_genre_uc"),)
 
     movie = relationship("Movie", back_populates="movie_genre")

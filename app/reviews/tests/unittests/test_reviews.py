@@ -1,10 +1,7 @@
 """Module for Review repository testing"""
-
 import pytest
-
-
 from app.movie.repository import MovieRepository
-from app.reviews.exceptions import ReviewDuplicateEntry
+from app.reviews.exceptions import ReviewDuplicateEntry, ReviewNotFound, Unauthorized
 from app.reviews.repository import ReviewRepository
 from app.tests import TestClass, TestingSessionLocal
 from app.users.repository import UserRepository
@@ -34,12 +31,8 @@ class TestReviewRepository(TestClass):
             review_repository.add_review(1, 2, 7, "something")
             review_repository.add_review(2, 2, 7, "something")
             review_repository.add_review(2, 1, 8, "something")
-            assert review_repository.get_average_rating_by_movie_id(1)[0] == 6.00
-            assert review_repository.get_average_rating_by_movie_id(2)[0] == 7.00
-            assert review_repository.get_average_rating_by_movie_id(1)[1] == 2
-            assert review_repository.get_average_rating_by_movie_id(2)[1] == 3
-
-
+            assert review_repository.get_average_rating_and_count_by_movie_id(1) == (6.00, 2)
+            assert review_repository.get_average_rating_and_count_by_movie_id(2) == (7.00, 3)
 
     def test_add_review(self):
         """Test method add_review."""
@@ -96,3 +89,93 @@ class TestReviewRepository(TestClass):
             review_repository.add_review(2, 2, 9, "something")
             assert len(review_repository.get_reviews_by_user_id(3)) == 2
             assert review_repository.get_reviews_by_user_id(3)[1].rating_number == 6
+
+    def test_get_ratings_table(self):
+        """Testing method get_ratings_table"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            review_repository.add_review(1, 3, 5, "something")
+            review_repository.add_review(2, 3, 6, "something")
+            review_repository.add_review(1, 2, 7, "something")
+            review_repository.add_review(2, 2, 7, "something")
+            review_repository.add_review(2, 1, 8, "something")
+            ratings_list = review_repository.get_ratings_table()
+            assert len(ratings_list) == 2
+
+    def test_change_movie_rating(self):
+        """Testing method change movie rating"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            review_repository.add_review(1, 3, 5, "something")
+            new_rating = review_repository.change_movie_rating(1, 3, 8)
+            assert new_rating.id == 1
+            assert new_rating.rating_number == 8
+
+    def test_change_movie_rating_error2(self):
+        """Testing method change movie rating error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            with pytest.raises(ReviewNotFound):
+                review_repository.change_movie_rating(10, 2, 5)
+
+    def test_change_movie_review(self):
+        """Testing method change movie review"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            review_repository.add_review(1, 3, 5, "something")
+            new_review = review_repository.change_movie_review(1, 3, "new review")
+            assert new_review.id == 1
+            assert new_review.review == "new review"
+
+    def test_change_movie_review_error2(self):
+        """Testing method change movie review error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            with pytest.raises(ReviewNotFound):
+                review_repository.change_movie_review(10, 2, "new review")
+
+    def test_delete_review_id_by_user(self):
+        """Testing method delete review id by user"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            review_repository.add_review(1, 3, 5, "something")
+            assert review_repository.delete_review_id_by_user(1, 3) is True
+
+    def test_delete_review_id_by_user_error(self):
+        """Testing method delete review id by user error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            with pytest.raises(ReviewNotFound):
+                review_repository.delete_review_id_by_user(10, 2)
+
+    def test_delete_review_id_by_user_error2(self):
+        """Testing method delete review id by user error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            review_repository.add_review(1, 3, 5, "something")
+            with pytest.raises(Unauthorized):
+                review_repository.delete_review_id_by_user(1, 4)
+
+    def test_delete_review_id(self):
+        """Testing method delete review id"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            review_repository.add_review(1, 3, 5, "something")
+            assert review_repository.delete_review_by_id(1) is True
+
+    def test_delete_review_id_error(self):
+        """Testing method delete review id error"""
+        with TestingSessionLocal() as db:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(db)
+            with pytest.raises(ReviewNotFound):
+                review_repository.delete_review_by_id(10)

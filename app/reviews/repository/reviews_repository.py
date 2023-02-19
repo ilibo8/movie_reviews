@@ -9,6 +9,7 @@ from app.reviews.model import Review
 
 class ReviewRepository:
     """Class for Review repository methods"""
+
     def __init__(self, db: Session):
         self.db = db
 
@@ -64,7 +65,7 @@ class ReviewRepository:
         count = self.db.query(func.count(Review.rating_number)).filter(Review.movie_id == movie_id).scalar()
         return avg, count
 
-    def get_ratings_table(self):
+    def get_ratings_table(self) -> list:
         """
         The get_ratings_table function returns a list of dictionaries with the movie title and average rating.
         The function uses a sql statement to get the movies and their ratings from the reviews table. The function then
@@ -80,7 +81,7 @@ class ReviewRepository:
         sorted_list = sorted(result_table, key=lambda x: x['rating'], reverse=True)
         return sorted_list
 
-    def change_movie_rating(self, movie_id: int, user_id: int, new_rating: int):
+    def change_movie_rating(self, movie_id: int, user_id: int, new_rating: int) -> Type[Review]:
         """
         The change_movie_rating function takes in a movie_id, user_id and new rating.
         It then checks if the review exists for that movie and user. If it does not exist,
@@ -96,7 +97,7 @@ class ReviewRepository:
         self.db.refresh(review)
         return review
 
-    def change_movie_review(self, movie_id: int, user_id: int, new_review: str):
+    def change_movie_review(self, movie_id: int, user_id: int, new_review: str) -> Type[Review]:
         """
         The change_movie_review function takes in a movie_id, user_id and new review. It then queries the database
         for a review matching both the movie id and user id. If there is no such review, it raises an exception.

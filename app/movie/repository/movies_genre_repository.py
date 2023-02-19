@@ -1,6 +1,7 @@
 """Module for MovieGenre repository"""
 from typing import Type
 from sqlalchemy import and_
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.movie.exceptions import DuplicateDataEntry, MovieGenreNotFound
 from app.movie.model import MovieGenre

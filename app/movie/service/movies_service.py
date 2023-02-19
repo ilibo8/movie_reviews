@@ -229,10 +229,7 @@ class MovieService:
             with SessionLocal() as db:
 
                 movie_repository = MovieRepository(db)
-                directors = movie_repository.get_all_directors()
-                directors_names = [person[0] for person in directors]
-                directors_names.sort()
-                return directors_names
+                return movie_repository.get_all_directors()
         except Exception as err:
             raise err
 

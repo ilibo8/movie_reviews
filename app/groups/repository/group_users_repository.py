@@ -37,14 +37,6 @@ class GroupUserRepository:
         group_user = self.db.query(GroupUser).all()
         return group_user
 
-    def get_all_group_ids(self) -> list[int]:
-        """
-        The get_all_group_ids function returns a list of all the distinct group ids in the database.
-        """
-        ids_list_of_tuples = self.db.query(GroupUser.group_id.distinct()).all()
-        ids = [x[0] for x in ids_list_of_tuples]
-        return ids
-
     def get_all_group_members_ids(self, group_id: int) -> list[int]:
         """
         The get_all_group_members_ids function accepts a group_id as an argument and returns a list of all the user ids

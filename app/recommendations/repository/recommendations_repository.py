@@ -1,8 +1,6 @@
 """Module for Recommendation repository"""
 from typing import Type
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-
 from app.groups.model import GroupUser
 from app.recommendations.exceptions import RecommendationNotFound, Unauthorized
 from app.recommendations.model import Recommendation
@@ -19,20 +17,16 @@ class RecommendationRepository:
         The add_post function adds a new post to the database.
         It takes in a group_user_id and post as arguments, and returns the newly created recommendation.
         """
-        try:
-            recommendation = Recommendation(group_user_id=group_user_id, post=post)
-            self.db.add(recommendation)
-            self.db.commit()
-            self.db.refresh(recommendation)
-            return recommendation
-        except IntegrityError as err:
-            raise err
+        recommendation = Recommendation(group_user_id=group_user_id, post=post)
+        self.db.add(recommendation)
+        self.db.commit()
+        self.db.refresh(recommendation)
+        return recommendation
 
     def get_all_posts(self) -> list[Type[Recommendation]]:
         """
         The get_all_posts function returns a list of all the Recommendation objects in the database.
         """
-
         return self.db.query(Recommendation).all()
 
     def get_post_by_id(self, recommendation_id: int) -> Type[Recommendation] | None:
