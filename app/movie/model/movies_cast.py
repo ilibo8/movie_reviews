@@ -1,3 +1,4 @@
+"""Module for MovieCast model"""
 from sqlalchemy import Integer, Column, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from app.db import Base

@@ -13,7 +13,9 @@ class RecommendationService:
 
     @staticmethod
     def add_post(group_name: str, user_id: int, post: str):
-        """Method for adding new post."""
+        """
+        Method for adding new post.
+        """
         try:
             with SessionLocal() as db:
                 group_repository = GroupRepository(db)
@@ -32,7 +34,9 @@ class RecommendationService:
 
     @staticmethod
     def get_all_posts():
-        """Method for getting all posts"""
+        """
+        Method for getting all posts
+        """
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)
@@ -42,7 +46,9 @@ class RecommendationService:
 
     @staticmethod
     def get_all_posts_by_group_name(group_name: str, user_id: int):
-        """Method for getting all posts by group"""
+        """
+        Method for getting all posts by group name with checking whether the user is member of group
+        """
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)
@@ -67,6 +73,9 @@ class RecommendationService:
 
     @staticmethod
     def get_all_posts_by_user_id(user_id: int):
+        """
+        Get all posts added by user with provided id
+        """
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)
@@ -87,6 +96,9 @@ class RecommendationService:
 
     @staticmethod
     def change_post_by_id(recommendation_id: int, user_id: int, new_post: str):
+        """
+        Change post of user by recommendation id
+        """
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)
@@ -101,6 +113,18 @@ class RecommendationService:
 
     @staticmethod
     def delete_post_id_by_user(recommendation_id: int, user_id: int):
+        """
+        The delete_post_id_by_user function deletes a post by recommendation id and user id.
+        It takes in the following parameters: recommendation_id, user_id. It returns True if it is successful.
+
+        :param recommendation_id:int: Specify the recommendation id
+        :param user_id:int: Identify the user who is deleting the post
+        :return: True if the post was successfully deleted
+        :doc-author: Trelent
+        """
+        """
+        Delete post by recommendation id
+        """
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)
@@ -115,6 +139,9 @@ class RecommendationService:
 
     @staticmethod
     def delete_post_by_id(recommendation_id: int):
+        """
+        Delete post by id
+        """
         try:
             with SessionLocal() as db:
                 recommendation_repo = RecommendationRepository(db)

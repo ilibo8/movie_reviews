@@ -1,3 +1,4 @@
+"""Module for MovieGenreSchema"""
 from pydantic import BaseModel, PositiveInt
 
 

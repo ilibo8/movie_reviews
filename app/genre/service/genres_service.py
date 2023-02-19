@@ -13,9 +13,6 @@ class GenreService:
         The add_genre function adds a new genre to the database.
         It takes one argument, name, which is the name of the genre to be added.
         If there is already a genre with that name in the database, it raises GenreAlreadyExists.
-
-        :param name:str: Define the name of the genre
-        :return: The id of the genre added
         """
         try:
             with SessionLocal() as db:
@@ -30,8 +27,6 @@ class GenreService:
     def get_all_genres():
         """
         The get_all_genres function returns a list of all genres in the database.
-
-        :return: A list of all genres in the database
         """
         try:
             with SessionLocal() as db:
@@ -48,9 +43,6 @@ class GenreService:
         """
         The delete function takes a name as an argument and deletes the genre with that name from the database.
         If no such genre exists, it raises a GenreNotFound exception.
-
-        :param name:str: Get the name of the genre to be deleted
-        :return: True if the genre is deleted from database
         """
         try:
             with SessionLocal() as db:

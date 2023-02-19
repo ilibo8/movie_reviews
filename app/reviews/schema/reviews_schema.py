@@ -1,3 +1,4 @@
+"""Module for Reviews schemas"""
 from pydantic import BaseModel, Field
 
 

@@ -1,3 +1,4 @@
+"""Module for Users schemas"""
 from pydantic import BaseModel, EmailStr
 
 

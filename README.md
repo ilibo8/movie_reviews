@@ -19,11 +19,6 @@ pip install -r requirements.txt
 #### Database
 Start MySQL server and execute all commands in **_init_db/init_db.sql_** and **_init_db/init_data.sql_**
 
-#### Environment variables
-1. Create new file **_.env_**
-2. Copy all consts from **env-template** to **_.env_**
-3. Assign values to const in .env file
-
 ### Login for super_user
     user_name : superuser
     password : superpass

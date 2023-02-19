@@ -1,3 +1,6 @@
+"""Module for Movie custom exceptions"""
+
+
 class MovieNotFound(Exception):
     def __init__(self, message: str, code=400):
         self.message = message

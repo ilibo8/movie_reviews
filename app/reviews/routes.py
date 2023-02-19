@@ -1,6 +1,6 @@
+"""Module for Reviews routes"""
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
-
 from app.reviews.controller import ReviewController
 from app.reviews.schema import *
 from app.users.controller import JWTBearer, extract_user_id_from_token

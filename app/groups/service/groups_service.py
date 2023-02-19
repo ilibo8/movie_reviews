@@ -1,6 +1,5 @@
 """Module for Group services"""
 from typing import Type
-
 from app.db import SessionLocal
 from app.groups.exceptions import GroupNotFound, Unauthorized
 from app.groups.model import Group
@@ -13,7 +12,9 @@ class GroupService:
 
     @staticmethod
     def add_group(group_name: str, group_owner_id, description: str):
-        """Method for adding new group"""
+        """
+        The add_group function creates a new group in the database.
+        """
         try:
             with SessionLocal() as db:
                 group_repository = GroupRepository(db)
@@ -27,7 +28,9 @@ class GroupService:
 
     @staticmethod
     def get_all() -> list:
-        """Method for getting all groups"""
+        """
+        The get_all function returns a list of all the groups in the database.
+        """
         with SessionLocal() as db:
             group_repository = GroupRepository(db)
             user_repository = UserRepository(db)
@@ -41,6 +44,10 @@ class GroupService:
 
     @staticmethod
     def get_group_by_name(group_name: str) -> Type[Group]:
+        """
+        The get_group_by_name function takes a group name as an argument and returns the Group object associated with
+        that name. If no such group exists, it raises a GroupNotFound exception.
+        """
         try:
             with SessionLocal() as db:
                 group_repository = GroupRepository(db)
@@ -53,6 +60,9 @@ class GroupService:
 
     @staticmethod
     def change_group_name(group_name: str, new_name: str, user_id: int):
+        """
+        The change_group_name function changes the name of a group.
+        """
         try:
             with SessionLocal() as db:
                 group_repository = GroupRepository(db)
@@ -71,7 +81,9 @@ class GroupService:
 
     @staticmethod
     def delete_by_id(group_name: str):
-        """Method for deleting group by id"""
+        """
+        The delete_by_id function deletes a group by id.
+        """
         try:
             with SessionLocal() as db:
                 group_repository = GroupRepository(db)

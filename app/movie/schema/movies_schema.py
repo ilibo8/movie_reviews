@@ -1,6 +1,6 @@
+"""Module for Movies schemas"""
 from pydantic import BaseModel, StrictInt, StrictStr, validator
 from pydantic.types import date, PositiveInt
-
 from app.movie.schema import MovieCastSchemaOut, MovieGenreSchemaOut
 
 

@@ -10,7 +10,9 @@ class GroupUserController:
     """Class for GroupUser controller"""
     @staticmethod
     def add_group_user(group_name: str, user_id: int):
-        """Method for adding new group user"""
+        """
+        The add_group_user function adds a user to a group.
+        """
         try:
             group_user = GroupUserService.add_group_user(group_name, user_id)
             return group_user
@@ -25,7 +27,9 @@ class GroupUserController:
 
     @staticmethod
     def get_all_joined():
-        """Method for getting all groups and their users"""
+        """
+        The get_all_joined function returns a list of all the groups that the user is in.
+        """
         try:
             return GroupUserService.get_all_joined()
         except Exception as err:
@@ -33,7 +37,9 @@ class GroupUserController:
 
     @staticmethod
     def get_all_group_members(group_id: int):
-        """Method for getting all group members by group id"""
+        """
+        The get_all_group_members function returns all the members of a group.
+        """
         try:
             return GroupUserService.get_all_group_members(group_id)
         except Exception as err:
@@ -41,7 +47,9 @@ class GroupUserController:
 
     @staticmethod
     def delete_group_use(group_id: int, user_id: int):
-        """Method for deleting group user"""
+        """
+        The delete_group_use function is used to remove a user from a group.
+        """
         try:
             if GroupUserService.delete_group_user(group_id, user_id):
                 return Response(content=f"User with id {user_id} is removed from group {group_id}.", status_code=200)

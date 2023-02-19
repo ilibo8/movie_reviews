@@ -1,3 +1,6 @@
+"""Module for Group and GroupUser's custom exceptions"""
+
+
 class GroupNotFound(Exception):
     def __init__(self, message: str, code=400):
         self.code = code

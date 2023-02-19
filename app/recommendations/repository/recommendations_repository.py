@@ -1,7 +1,5 @@
 """Module for Recommendation repository"""
 from typing import Type
-
-from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -17,7 +15,10 @@ class RecommendationRepository:
         self.db = db
 
     def add_post(self, group_user_id: int, post: str) -> Recommendation:
-        """Method for creating new recommendation"""
+        """
+        The add_post function adds a new post to the database.
+        It takes in a group_user_id and post as arguments, and returns the newly created recommendation.
+        """
         try:
             recommendation = Recommendation(group_user_id=group_user_id, post=post)
             self.db.add(recommendation)
@@ -28,30 +29,46 @@ class RecommendationRepository:
             raise err
 
     def get_all_posts(self) -> list[Type[Recommendation]]:
-        """Method for getting all posts."""
+        """
+        The get_all_posts function returns a list of all the Recommendation objects in the database.
+        """
+
         return self.db.query(Recommendation).all()
 
     def get_post_by_id(self, recommendation_id: int) -> Type[Recommendation] | None:
-        """Method for getting posts by id."""
+        """
+        The get_post_by_id function takes in a recommendation_id and returns the post with that id.
+        If no such post exists, it raises a RecommendationNotFound error.
+        """
         post = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if post is None:
             raise RecommendationNotFound(f"No post with id {recommendation_id}")
         return post
 
     def get_all_posts_by_group_id(self, group_id: int) -> list[Type[Recommendation]]:
-        """Method for getting all posts for one group."""
+        """
+        The get_all_posts_by_group_id function takes in a group_id and returns all the recommendations for that group.
+        It does this by joining Recommendation with GroupUser, which has a foreign key relationship to Recommendation.
+        The function then filters the results by the given group_id.
+        """
         recommendations = self.db.query(Recommendation). \
             join(GroupUser).filter(GroupUser.group_id == group_id).all()
         return recommendations
 
     def get_all_posts_by_user_id(self, user_id: int) -> list[Type[Recommendation]]:
-        """Method for getting all posts for one group."""
+        """
+        The get_all_posts_by_user_id function takes in a user_id and returns all the posts that belong to that user.
+        """
         recommendations = self.db.query(Recommendation). \
             join(GroupUser).filter(GroupUser.user_id == user_id).all()
         return recommendations
 
     def change_post_by_id(self, recommendation_id: int, new_post: str) -> Type[Recommendation]:
-        """Method for changing post of user."""
+        """
+        The change_post_by_id function takes a recommendation id and new post as arguments.
+        It finds the recommendation with that id, changes its post to the new_post argument,
+        and returns it.
+        """
         recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
             raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
@@ -62,7 +79,11 @@ class RecommendationRepository:
         return recommendation
 
     def delete_post_id_by_user(self, recommendation_id: int, user_id: int) -> bool:
-        """Method for deleting post with checkin for user authorization"""
+        """
+        The delete_post_id_by_user function deletes a recommendation from the database.
+        It first queries the database for a recommendation with the given id and then checks to see if that post
+        was created by the user who is currently logged in. If it is not, then an error message will be raised.
+        """
         recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
             raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
@@ -75,7 +96,11 @@ class RecommendationRepository:
         return True
 
     def delete_post_by_id(self, recommendation_id: int) -> bool:
-        """Method for deleting post"""
+        """
+        The delete_post_by_id function deletes a recommendation from the database.
+        It takes in an integer representing the id of the recommendation to be deleted, and returns True
+        if it is successful.
+        """
         recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
             raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")

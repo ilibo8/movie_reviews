@@ -1,3 +1,4 @@
+"""Module for Group schemas"""
 from pydantic import BaseModel
 from pydantic.types import date
 

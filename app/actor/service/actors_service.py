@@ -13,10 +13,6 @@ class ActorService:
         The add_actor function adds a new actor to the database.
         It takes two parameters, full_name and nationality.
         The function returns the id of the newly added actor.
-
-        :param full_name: Store the full name of the actor
-        :param nationality: Set the actor's nationality
-        :return: The actor id of the new actor
         """
         try:
             with SessionLocal() as db:
@@ -29,8 +25,6 @@ class ActorService:
     def get_all_actors():
         """
         The get_all_actors function returns all actors in the database.
-
-        :return: A list of all actors in the database
         """
         try:
             with SessionLocal() as db:
@@ -44,9 +38,6 @@ class ActorService:
         """
         The get_actor_by_id function is used to retrieve a single actor from the database by their ID.
         It takes in an integer as an argument and returns a dictionary containing the actor's information.
-
-        :param actor_id:int: Specify the id of the actor that is to be retrieved
-        :return: An actor object
         """
         try:
             with SessionLocal() as db:
@@ -60,9 +51,6 @@ class ActorService:
         """
         The find_actor_by_name function takes a name as an argument and returns the actor with that name.
         If no actor is found, it raises an exception.
-
-        :param name:str: Find the actor with the given name
-        :return: A list of actors that match the given name
         """
         try:
             with SessionLocal() as db:
@@ -76,9 +64,6 @@ class ActorService:
         """
         The find_actor_by_last_name function finds an actor by their last name.
         It takes a string as the parameter and returns an Actor object.
-
-        :param last_name:str: Specify the last name of the actor to be found
-        :return: The actor with the last name passed in as a parameter
         """
         try:
             with SessionLocal() as db:
@@ -93,10 +78,6 @@ class ActorService:
         The change_actor_full_name function allows the user to change an actor's full name.
         It takes in two arguments, the actor_id and the new full name for that actor. It returns a dictionary
         with a key of 'success' and value of True or False depending on whether it was successful.
-
-        :param actor_id: Identify the actor that needs to be changed
-        :param full_name: Change the full name of an actor
-        :return: The actor's full name if the actor is found and updated
         """
         try:
             with SessionLocal() as db:
@@ -111,9 +92,6 @@ class ActorService:
         The delete_actor_by_id function deletes an actor from the database.
         It takes in a single parameter, which is the id of the actor to be deleted.
         If there is no actor with that id in the database, it raises an ActorNotFound exception.
-
-        :param actor_id:int: Specify the id of the actor to be deleted
-        :return: True if the actor is deleted successfully
         """
         try:
             with SessionLocal() as db:

@@ -1,3 +1,4 @@
+"""Module for GroupUser schemas"""
 from pydantic import BaseModel
 
 

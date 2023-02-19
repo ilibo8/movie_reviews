@@ -1,3 +1,4 @@
+"""Module for Movie model"""
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, Integer, UniqueConstraint
 

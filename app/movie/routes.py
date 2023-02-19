@@ -1,3 +1,4 @@
+"""Module for Movie routes"""
 from fastapi import APIRouter, Depends
 from app.movie.controller import MovieController
 from app.movie.schema import *

@@ -12,7 +12,9 @@ class GroupRepository:
         self.db = db
 
     def add_group(self, group_name: str, owner_id: int, description: str) -> Group:
-        """Method for adding new group."""
+        """
+        The add_group function creates a new group in the database.
+        """
         group = Group(group_name=group_name, owner_id=owner_id, description=description)
         if self.db.query(Group).filter(Group.group_name == group_name).first() is not None:
             raise DuplicateEntry("Group name already used, try another one.")
@@ -26,27 +28,46 @@ class GroupRepository:
         return group
 
     def get_all(self) -> list[Type[Group]]:
-        """Method for getting all groups."""
+        """
+        The get_all function returns a list of all the groups in the database.
+        """
         groups = self.db.query(Group).all()
         return groups
 
     def get_group_by_name(self, group_name: str) -> Type[Group] | None:
+        """
+        The get_group_by_name function takes a group name as an argument and returns the Group object
+        corresponding to that group name. If no such Group exists, it returns None.
+        """
         group = self.db.query(Group).filter(Group.group_name == group_name).first()
         return group
 
     def get_group_name_by_id(self, group_id: int) -> str:
+        """
+        The function takes a group_id as an argument and returns the name of the group with that id.
+        If no such group exists, it raises a GroupNotFound exception.
+        """
         if self.db.query(Group).filter(Group.id == group_id).first() is None:
             raise GroupNotFound(f"There is no group with id {group_id}")
         name = self.db.query(Group.group_name).filter(Group.id == group_id).first()
         return name[0]
 
     def get_group_id_by_name(self, group_name: str) -> int:
+        """
+        The get_group_id_by_name function takes a group name as an argument and returns the id of that group.
+        If there is no such group, it raises a GroupNotFound exception.
+        """
         if self.db.query(Group).filter(Group.group_name == group_name).first() is None:
             raise GroupNotFound(f"There is no group named {group_name}")
         group_id = self.db.query(Group.id).filter(Group.group_name == group_name).first()
         return group_id[0]
 
     def change_group_name(self, group_name: str, new_name: str):
+        """
+        The change_group_name function takes in a group name and a new name for the group.
+        It then checks to see if the new name is already taken, and if it is not, changes the
+        group's name to that of the new_name argument. It returns nothing.
+        """
         group = self.db.query(Group).filter(Group.group_name == group_name).first()
         if self.db.query(Group).filter(Group.group_name == new_name).first() is not None:
             raise DuplicateEntry("Group name already used, try another one.")
@@ -57,7 +78,9 @@ class GroupRepository:
         return group
 
     def delete_group_by_id(self, group_id: int) -> bool:
-        """Method for deleting group by id."""
+        """
+        The delete_group_by_id function deletes a group from the database.
+        """
         group = self.db.query(Group).filter(Group.id == group_id).first()
         if group is None:
             raise GroupNotFound("There is no group with that id")

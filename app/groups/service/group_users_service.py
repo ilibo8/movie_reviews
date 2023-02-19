@@ -1,6 +1,5 @@
 """Module for GroupUser services"""
 from sqlalchemy.exc import IntegrityError
-
 from app.db import SessionLocal
 from app.groups.exceptions import DuplicateEntry, GroupNotFound
 from app.groups.repository import GroupUserRepository, GroupRepository
@@ -12,7 +11,10 @@ class GroupUserService:
 
     @staticmethod
     def add_group_user(group_name: str, user_id: int):
-        """Method for adding new group user"""
+        """
+        The add_group_user function adds a user to a group.
+        If there is no such group or if there is no such user, it raises an error.
+        """
         try:
             with SessionLocal() as db:
                 group_user_repository = GroupUserRepository(db)
@@ -38,7 +40,14 @@ class GroupUserService:
 
     @staticmethod
     def get_all_joined() -> list[dict]:
-        """Method for getting all groups and their users"""
+        """
+        The get_all_joined function returns a list of dictionaries, where each dictionary contains the following:
+            - group_name: The name of the group.
+            - owner_user_name: The name of the user who owns this group.
+            - description: A description for this particular group.
+            - date_created: When this particular group was created.
+
+        """
         with SessionLocal() as db:
             group_user_repository = GroupUserRepository(db)
             user_repository = UserRepository(db)
@@ -58,14 +67,19 @@ class GroupUserService:
 
     @staticmethod
     def get_all_group_members(group_id: int):
-        """Method for getting all group members by group id"""
+        """
+        The get_all_group_members function returns a list of all the user ids that are members of a given group.
+        The function takes in one parameter, which is the id of the group you want to get all members for.
+        """
         with SessionLocal() as db:
             group_user_repository = GroupUserRepository(db)
             return group_user_repository.get_all_group_members_ids(group_id)
 
     @staticmethod
     def delete_group_user(group_id: int, user_id: int):
-        """Method for deleting group user by ids"""
+        """
+        The delete_group_user function deletes a user from a group.
+        """
         with SessionLocal() as db:
             group_user_repository = GroupUserRepository(db)
             return group_user_repository.delete_group_user(group_id, user_id)

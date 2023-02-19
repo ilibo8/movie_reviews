@@ -1,7 +1,6 @@
 """Module for User table"""
 from sqlalchemy import Boolean, Column, String, Integer
 from sqlalchemy.orm import relationship
-
 from app.db.database import Base
 
 
