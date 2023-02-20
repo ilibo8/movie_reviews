@@ -15,7 +15,6 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 client = TestClient(app)
 
 
-
 class TestClass:
 
     def setup_method(self, method):

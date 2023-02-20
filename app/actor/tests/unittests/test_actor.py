@@ -2,10 +2,12 @@
 import pytest
 from app.actor.exceptions import ActorNotFound, DuplicateEntry
 from app.actor.repository import ActorRepository
+from app.actor.service import ActorService
 from app.tests import TestClass, TestingSessionLocal
 
 
 class TestActorRepository(TestClass):
+    """Class for Actor repository methods."""
 
     def test_create_actor(self):
         """Test method add_actor."""
@@ -130,3 +132,13 @@ class TestActorRepository(TestClass):
             actor_repository = ActorRepository(dbs)
             with pytest.raises(ActorNotFound):
                 actor_repository.delete_actor_by_id(3)
+
+
+class TestActorService(TestClass):
+    """Class for testing Actor service methods"""
+
+    @staticmethod
+    def test_add_actor():
+        actor = ActorService.add_actor("Sam Smith", "English")
+        assert actor.full_name == "Sam Smith"
+        assert actor.nationality == "English"

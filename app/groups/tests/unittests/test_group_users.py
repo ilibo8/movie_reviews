@@ -11,9 +11,9 @@ class TestGroupUserRepository(TestClass):
     """Class for testing GroupUser repository"""
 
     def create_foreign_keys(self):
-        with TestingSessionLocal() as db:
-            user_repository = UserRepository(db)
-            group_repository = GroupRepository(db)
+        with TestingSessionLocal() as dbs:
+            user_repository = UserRepository(dbs)
+            group_repository = GroupRepository(dbs)
             user_repository.create_user("user1", "pass", "user1@gmail.com")
             user_repository.create_user("user2", "pass", "user2@gmail.com")
             user_repository.create_user("user3", "pass", "user3@gmail.com")

@@ -1,3 +1,4 @@
+"""Module for Genre schemas"""
 from pydantic import BaseModel, StrictStr
 
 

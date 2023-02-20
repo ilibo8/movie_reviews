@@ -7,6 +7,9 @@ from app.users.service import UserService
 class TestActorRoutes(TestClass):
     """Class for testing Actro routes"""
     def setup_super_user(self):
+        """
+        Create super_user to get token.
+        """
         UserService.create_super_user("user", "password", "user@gmail.com")
         response = client.post(url="/api/login", json={"user_name": "user", "password": "password",
                                                        "email": "user@gmail.com"})

@@ -1,3 +1,4 @@
+"""Module for running app."""
 import uvicorn
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
@@ -17,6 +18,9 @@ Base.metadata.create_all(bind=engine)
 
 
 def init_app():
+    """
+    The init_app function is a helper function that creates the FastAPI app and includes all the routers.
+    """
     app = FastAPI(title="Movie reviews")
     app.include_router(login_router)
     app.include_router(user_router)
@@ -30,8 +34,6 @@ def init_app():
     app.include_router(group_superuser_router)
     app.include_router(recommendations_superuser_router)
     app.include_router(reviews_superuser_router)
-
-
     return app
 
 
@@ -40,6 +42,9 @@ app = init_app()
 
 @app.get("/", include_in_schema=False)
 def redirect():
+    """
+    The redirect function is used to redirect the user to the documentation page.
+    """
     return RedirectResponse('/docs')
 
 

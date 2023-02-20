@@ -4,7 +4,7 @@ from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 from app.users.controller import JWTBearer
 
-actor_superuser_router = APIRouter(prefix="/api/superuser/movies/actors", tags=["SuperUser - Actors"])
+actor_superuser_router = APIRouter(prefix="/api/superuser/movies/actors", tags=["superuser - Actors"])
 
 
 @actor_superuser_router.get("/get-all", response_model=list[ActorSchema],
@@ -29,8 +29,8 @@ def get_actor_by_id(actor_id: int):
                             dependencies=[Depends(JWTBearer("super_user"))])
 def find_actors_by_name(name: str):
     """
-    The find_actors_by_name function takes a string as an argument and returns a list of actors whose name contains the
-    string. The function is called by the find_actors_by_name route.
+    The find_actors_by_name function takes a string as an argument and returns a list of actors whose name contains
+    the string. The function is called by the find_actors_by_name route.
     """
     return ActorController.find_actor_by_name(name)
 

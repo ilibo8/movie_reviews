@@ -1,3 +1,4 @@
+"""Module for Genre custom exceptions"""
 
 class GenreNotFound(Exception):
     def __init__(self, message : str):

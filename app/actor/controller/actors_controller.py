@@ -53,7 +53,6 @@ class ActorController:
         The find_actor_by_name function finds an actor by their name.
         It returns the actor if found, otherwise it returns None.
         """
-
         try:
             return ActorService.find_actor_by_name(name)
         except Exception as err:
@@ -76,7 +75,6 @@ class ActorController:
         The get_actor_by_id function is used to retrieve a single actor from the database by their unique id.
         It takes in an integer as an argument, and returns a dictionary containing the information of that actor.
         """
-
         try:
             return ActorService.get_actor_by_id(actor_id)
         except ActorNotFound as err:
@@ -92,7 +90,6 @@ class ActorController:
         change_actor_full_name function which returns a dictionary with a key of ; and value True or False.
         If it was successful, it returns True otherwise it will return False.
         """
-
         try:
             return ActorService.change_actor_full_name(actor_id, full_name)
         except ActorNotFound as err:
@@ -106,9 +103,7 @@ class ActorController:
         The delete_actor_by_id function deletes an actor from the database by their id.
         It takes in a parameter of type int, which is the id of the actor to be deleted.
         If no such actor exists, it raises an ActorNotFound exception.
-
         """
-
         try:
             if ActorService.delete_actor_by_id(actor_id):
                 return Response(content=f"Actor with id - {actor_id} is deleted", status_code=200)
