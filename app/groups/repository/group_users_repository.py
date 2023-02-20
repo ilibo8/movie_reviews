@@ -21,7 +21,7 @@ class GroupUserRepository:
         try:
             if self.dbs.query(GroupUser).filter(and_(GroupUser.group_id == group_id,
                                                      GroupUser.user_id == user_id)).first() is not None:
-                raise DuplicateEntry("Group already has that user.")
+                raise DuplicateEntry("User already member of this group.")
             group_user = GroupUser(group_id, user_id)
             self.dbs.add(group_user)
             self.dbs.commit()

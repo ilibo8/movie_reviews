@@ -18,9 +18,9 @@ class GenreController:
             genre = GenreService.add_genre(name)
             return genre
         except GenreAlreadyExists as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_genres():
@@ -34,9 +34,9 @@ class GenreController:
                 genre_names.append(genre.name)
             return genre_names
         except NoEntryForGenre as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete(name: str):
@@ -49,6 +49,6 @@ class GenreController:
             if GenreService.delete(name):
                 return Response(content=f"Genre {name} is deleted", status_code=200)
         except GenreNotFound as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err

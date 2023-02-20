@@ -11,6 +11,7 @@ class TestReviewRepository(TestClass):
     """Class for testing methods for ReviewRepository"""
 
     def create_foreign_keys(self):
+        """Create data for foreign keys to use in test methods"""
         with TestingSessionLocal() as dbs:
             user_repository = UserRepository(dbs)
             movie_repository = MovieRepository(dbs)

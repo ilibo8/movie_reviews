@@ -87,7 +87,7 @@ def change_movie_review(movie_name: str, new_review: str, request : Request):
 
 
 @reviews_router.delete("/delete-personal-review", dependencies=[Depends(JWTBearer("classic_user"))])
-def delete_review_by_id(review_id: int, request : Request):
+def delete_personal_review_by_id(review_id: int, request : Request):
     """
     The function is used to delete a review by the user who created it.
     """

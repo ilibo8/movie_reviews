@@ -20,13 +20,13 @@ class ReviewController:
         try:
             return ReviewService.add_review(movie_name, user_id, rating_number, review)
         except ReviewDuplicateEntry as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except IntegrityError as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_reviews():
@@ -36,7 +36,7 @@ class ReviewController:
         try:
             return ReviewService.get_all_reviews()
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_ratings_table():
@@ -48,7 +48,7 @@ class ReviewController:
         try:
             return ReviewService.get_ratings_table()
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_average_rating_for_movie(movie_title: str):
@@ -59,9 +59,9 @@ class ReviewController:
         try:
             return ReviewService.get_average_rating_for_movie(movie_title)
         except MovieNotFound as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_reviews_by_movie_title(movie_title: str):
@@ -73,11 +73,11 @@ class ReviewController:
         try:
             return ReviewService.get_reviews_by_movie_title(movie_title)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_reviews_by_user_name(user_name: str):
@@ -88,11 +88,11 @@ class ReviewController:
         try:
             return ReviewService.get_reviews_by_user_name(user_name)
         except UserNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_personal_reviews(user_id: int):
@@ -104,11 +104,11 @@ class ReviewController:
         try:
             return ReviewService.get_personal_reviews(user_id)
         except UserNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_movie_rating_number(movie_name: str, user_id: int, new_rating: int):
@@ -120,11 +120,11 @@ class ReviewController:
         try:
             return ReviewService.change_movie_rating_number(movie_name, user_id, new_rating)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_movie_review(movie_name: str, user_id: int, new_review: str):
@@ -136,11 +136,11 @@ class ReviewController:
         try:
             return ReviewService.change_movie_review(movie_name, user_id, new_review)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_review_id_by_user(review_id: int, user_id):
@@ -154,11 +154,11 @@ class ReviewController:
             if ReviewService.delete_review_id_by_user(review_id, user_id):
                 return Response(content=f"Review with id {review_id} is deleted", status_code=200)
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Unauthorized as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_review_by_id(review_id: int):
@@ -171,6 +171,6 @@ class ReviewController:
             if ReviewService.delete_review_by_id(review_id):
                 return Response(content=f"Review with id {review_id} is deleted", status_code=200)
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err

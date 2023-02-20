@@ -11,6 +11,7 @@ class TestMovieCastRepository(TestClass):
     """Class for testing MovieCast repository"""
 
     def create_foreign_keys(self):
+        """Create data for foreign keys to use in test methods"""
         with TestingSessionLocal() as dbs:
             movie_repository = MovieRepository(dbs)
             actor_repository = ActorRepository(dbs)

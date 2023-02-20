@@ -28,7 +28,7 @@ class RecommendationService:
                 post = recommendation_repo.add_post(group_user_id, post)
                 return {"post id" : post.id, "group name": group_name, "post" : post.post}
         except GroupUserNotFound as err:
-            raise GroupUserNotFound(err.message)
+            raise GroupUserNotFound(err.message) from err
         except IntegrityError as err:
             raise err
 
@@ -67,7 +67,7 @@ class RecommendationService:
                 return all_posts
 
         except GroupUserNotFound as err:
-            raise GroupUserNotFound(err.message)
+            raise GroupUserNotFound(err.message) from err
         except Exception as err:
             raise err
 
@@ -107,7 +107,7 @@ class RecommendationService:
                     raise Unauthorized("Access denied to other user's posts.")
                 return recommendation_repo.change_post_by_id(recommendation_id, new_post)
         except RecommendationNotFound as err:
-            raise RecommendationNotFound(err.message)
+            raise RecommendationNotFound(err.message) from err
         except Exception as err:
             raise err
 

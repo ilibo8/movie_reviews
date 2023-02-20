@@ -12,7 +12,7 @@ group_superuser_router = APIRouter(prefix="/api/superuser/groups", tags=["superu
 @group_router.get("/get-all-groups", response_model=list[GroupSchemaOut])
 def get_all_groups():
     """
-    The get_all_groups function returns a list of all the groups in the database.
+    The function returns a list of all the groups in the database.
     """
     return GroupController.get_all()
 
@@ -20,7 +20,7 @@ def get_all_groups():
 @group_router.get("/get-all-groups-with-members", response_model=list[GroupWithUsersSchemaOut])
 def get_all_groups_with_members():
     """
-    The get_all_groups_with_members function returns a list of all groups that have at least one member.
+    The function returns a list of all groups that have at least one member.
     """
     return GroupUserController.get_all_joined()
 
@@ -41,7 +41,7 @@ def create_group(request: Request, group: GroupSchemaIn):
                    dependencies=[Depends(JWTBearer("classic_user"))])
 def join_group(request: Request, group_name: str):
     """
-    The join_group function allows a user to join an existing group.
+    The function allows a user to join an existing group.
     """
     user_id = extract_user_id_from_token(request)
     return GroupUserController.add_group_user(group_name=group_name, user_id=user_id)
@@ -62,6 +62,6 @@ def change_group_name(request: Request, group_name: str, new_name: str):
 @group_superuser_router.delete("/delete-group-by-name/{group_name}", dependencies=[Depends(JWTBearer("super_user"))])
 def delete_group_by_name(group_name: str):
     """
-    The delete_group_by_name function deletes a group from the database.
+    The function deletes a group from the database.
     """
     return GroupController.delete_group_by_name(group_name=group_name)

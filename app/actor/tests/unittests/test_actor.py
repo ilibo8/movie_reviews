@@ -139,6 +139,7 @@ class TestActorService(TestClass):
 
     @staticmethod
     def test_add_actor():
+        """Testing method add actor."""
         actor = ActorService.add_actor("Sam Smith", "English")
         assert actor.full_name == "Sam Smith"
         assert actor.nationality == "English"

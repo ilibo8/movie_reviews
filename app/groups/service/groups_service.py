@@ -59,7 +59,7 @@ class GroupService:
                             "description": group2.description, "date_created": group2.date_created}
                 raise Unauthorized("Access error. Only group owner can make changes.")
         except GroupNotFound as err:
-            raise GroupNotFound(err.message)
+            raise GroupNotFound(err.message) from err
 
     @staticmethod
     def delete_by_id(group_name: str):

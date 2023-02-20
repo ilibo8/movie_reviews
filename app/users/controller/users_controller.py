@@ -20,11 +20,11 @@ class UserController:
             user = UserService.create_user(user_name, password, email)
             return user
         except AlreadyExist as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except IntegrityError as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def create_super_user(user_name: str, password: str, email: str):
@@ -36,11 +36,11 @@ class UserController:
             user = UserService.create_super_user(user_name, password, email)
             return user
         except AlreadyExist as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except IntegrityError as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def login_user(user_name: str, password: str):
@@ -55,11 +55,11 @@ class UserController:
                 return signJWT(user.id, "super_user")
             return signJWT(user.id, "classic_user")
         except UserNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except UserInvalidPassword as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_user_by_id(user_id: int):
@@ -92,4 +92,4 @@ class UserController:
                 return Response(content=f"User with id - {user_id} is deleted.")
             return Response(content=f"User with id - {user_id} doesn't exist.")
         except Exception as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err

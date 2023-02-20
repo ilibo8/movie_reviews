@@ -28,8 +28,8 @@ class ReviewRepository:
             self.dbs.commit()
             self.dbs.refresh(review)
             return review
-        except IntegrityError:
-            raise IntegrityError
+        except IntegrityError as err:
+            raise IntegrityError from err
 
     def get_all_reviews(self) -> list[Type[Review]]:
         """
@@ -71,7 +71,6 @@ class ReviewRepository:
         The function uses a sql statement to get the movies and their ratings from the reviews table. The function then
         sorts this list by highest rating first.
         """
-        """Getting table with all movies and their average ratings using sql statement."""
         sql = """select movies.title, avg(reviews.rating_number) as avg_number from movies join reviews on movies.id =
         reviews.movie_id group by movies.id; """
         result = self.dbs.execute(text(sql))

@@ -14,7 +14,7 @@ recommendations_superuser_router = APIRouter(prefix="/api/superuser/recommendati
                             dependencies=[Depends(JWTBearer("classic_user"))])
 def get_all_your_posts(request: Request):
     """
-    The get_all_your_posts function returns a list of all post made by user requesting it.
+    The function returns a list of all post made by user requesting it.
     """
     user_id = extract_user_id_from_token(request)
     return RecommendationController.get_all_posts_by_user_id(user_id)

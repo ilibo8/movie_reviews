@@ -7,6 +7,7 @@ from app.tests import TestClass, TestingSessionLocal
 
 
 class TestGenreRepository(TestClass):
+    """Class for testing genre repository methods."""
 
     def test_add_genre(self):
         """Test method add_genre."""

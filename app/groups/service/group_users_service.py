@@ -32,7 +32,7 @@ class GroupUserService:
                         "description": group.description, "date_created": group.date_created,
                         "group_users": members_names}
         except GroupNotFound as err:
-            raise GroupNotFound(err.message)
+            raise GroupNotFound(err.message) from err
         except DuplicateEntry as err:
             raise err
         except IntegrityError as err:

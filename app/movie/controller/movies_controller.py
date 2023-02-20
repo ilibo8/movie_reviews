@@ -21,10 +21,10 @@ class MovieController:
         try:
             movie = MovieService.add_movie(title, director, release_year, country_of_origin)
             return movie
-        except IntegrityError:
-            raise HTTPException(status_code=400, detail="Duplicate data entry. Cannot add that movie.")
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail="Duplicate data entry. Cannot add that movie.") from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def add_genre_to_movie(movie_id: int, genre_name: str):
@@ -36,11 +36,11 @@ class MovieController:
         try:
             return MovieService.add_genre_to_movie(movie_id, genre_name)
         except DuplicateDataEntry as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def add_movie_cast(movie_id: int, actor_id: int):
@@ -52,11 +52,11 @@ class MovieController:
         try:
             return MovieService.add_actors_id_to_movie_cast(movie_id, actor_id)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except DuplicateDataEntry as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all():
@@ -67,7 +67,7 @@ class MovieController:
             movies = MovieService.get_all()
             return movies
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_movies():
@@ -78,7 +78,7 @@ class MovieController:
             movies = MovieService.get_all_movies()
             return movies
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_movie_by_title(movie_title: str):
@@ -91,9 +91,9 @@ class MovieController:
             movie = MovieService.get_movie_by_title(movie_title)
             return movie
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=str(err))
+            raise HTTPException(status_code=err.code, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_movies_of_certain_genre(genre_name: str):
@@ -105,11 +105,11 @@ class MovieController:
         try:
             return MovieService.get_all_movies_of_certain_genre(genre_name)
         except GenreNotFound as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_movies_by_word_in_title(word: str):
@@ -121,9 +121,9 @@ class MovieController:
             movie = MovieService.get_movies_by_word_in_title(word)
             return movie
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_movies_by_actor_full_name(actor_full_name: str):
@@ -135,11 +135,11 @@ class MovieController:
             movie = MovieService.get_movies_by_actor_full_name(actor_full_name)
             return movie
         except ActorNotFound as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_movies_by_director(director_name: str):
@@ -151,9 +151,9 @@ class MovieController:
             movies = MovieService.get_all_movies_by_director(director_name)
             return movies
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_directors():
@@ -163,7 +163,7 @@ class MovieController:
         try:
             return MovieService.get_all_directors()
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_movie_cast():
@@ -183,11 +183,11 @@ class MovieController:
         try:
             return MovieService.change_movie_title(movie_id, new_movie_title)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
-        except IntegrityError:
-            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.")
+            raise HTTPException(status_code=err.code, detail=err.message) from err
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.") from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_movie_director(movie_id: int, director: str):
@@ -198,11 +198,11 @@ class MovieController:
         try:
             return MovieService.change_movie_director(movie_id, director)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
-        except IntegrityError:
-            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.")
+            raise HTTPException(status_code=err.code, detail=err.message) from err
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.") from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_movie_release_year(movie_id: int, release_year: int):
@@ -212,11 +212,11 @@ class MovieController:
         try:
             return MovieService.change_movie_release_year(movie_id, release_year)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
-        except IntegrityError:
-            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.")
+            raise HTTPException(status_code=err.code, detail=err.message) from err
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail="Integrity error. Duplicate data entry.") from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_movie_genre(movie_id: int, genre_name: str):
@@ -228,13 +228,13 @@ class MovieController:
             if MovieService.delete_movie_genre(movie_id, genre_name):
                 return Response(content=f"Genre {genre_name} deleted for movie with id - {movie_id}.", status_code=200)
         except MovieGenreNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except GenreNotFound as err:
-            raise HTTPException(status_code=400, detail=err.message)
+            raise HTTPException(status_code=400, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_movie_cast(movie_id: int, actor_id: int):
@@ -246,9 +246,9 @@ class MovieController:
                 return Response(content=f"Actor with id {actor_id} removed from movie with id {movie_id}.",
                                 status_code=200)
         except MovieCastNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_movie_by_id(movie_id: int):
@@ -261,6 +261,6 @@ class MovieController:
             if MovieService.delete_movie_by_id(movie_id):
                 return Response(content=f"Movie with id {movie_id} deleted.", status_code=200)
         except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err

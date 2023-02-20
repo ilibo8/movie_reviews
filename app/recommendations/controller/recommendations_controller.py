@@ -17,13 +17,14 @@ class RecommendationController:
         try:
             return RecommendationService.add_post(group_name=group_name, user_id=user_id, post=post)
         except Unauthorized as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except GroupUserNotFound as err:
-            raise HTTPException(status_code=err.code, detail=f"Error. You are not a member of group {group_name}.")
+            raise HTTPException(status_code=err.code,
+                                detail=f"Error. You are not a member of group {group_name}.") from err
         except IntegrityError as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_posts():
@@ -33,7 +34,7 @@ class RecommendationController:
         try:
             return RecommendationService.get_all_posts()
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_posts_by_group_name(group_name: str, user_id: int):
@@ -45,11 +46,11 @@ class RecommendationController:
         try:
             return RecommendationService.get_all_posts_by_group_name(group_name, user_id)
         except Unauthorized as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except GroupUserNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_posts_by_user_id(user_id: int):
@@ -61,9 +62,9 @@ class RecommendationController:
         try:
             return RecommendationService.get_all_posts_by_user_id(user_id)
         except RecommendationNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_post_by_id(recommendation_id: int, user_id: int, new_post: str):
@@ -75,11 +76,11 @@ class RecommendationController:
         try:
             return RecommendationService.change_post_by_id(recommendation_id, user_id, new_post)
         except Unauthorized as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except RecommendationNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_post_by_user(recommendation_id: int, user_id: int):
@@ -92,11 +93,11 @@ class RecommendationController:
             if RecommendationService.delete_post_id_by_user(recommendation_id, user_id):
                 return Response(content=f"Recommendation with id {recommendation_id} is deleted", status_code=200)
         except Unauthorized as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except RecommendationNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_post_by_id(recommendation_id: int):
@@ -108,6 +109,6 @@ class RecommendationController:
             if RecommendationService.delete_post_by_id(recommendation_id):
                 return Response(content=f"Recommendation with id {recommendation_id} is deleted", status_code=200)
         except RecommendationNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err

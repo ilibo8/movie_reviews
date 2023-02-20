@@ -1,3 +1,4 @@
+"""Module for Recommendations schemas"""
 from pydantic import BaseModel
 
 

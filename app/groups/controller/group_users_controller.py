@@ -17,13 +17,13 @@ class GroupUserController:
             group_user = GroupUserService.add_group_user(group_name, user_id)
             return group_user
         except GroupNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except DuplicateEntry as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except IntegrityError as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_joined():
@@ -33,7 +33,7 @@ class GroupUserController:
         try:
             return GroupUserService.get_all_joined()
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all_group_members(group_id: int):
@@ -43,7 +43,7 @@ class GroupUserController:
         try:
             return GroupUserService.get_all_group_members(group_id)
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_group_use(group_id: int, user_id: int):
@@ -55,4 +55,4 @@ class GroupUserController:
                 return Response(content=f"User with id {user_id} is removed from group {group_id}.", status_code=200)
             return Response(content=f"User with id {user_id} and group id {group_id} not found.", status_code=400)
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err

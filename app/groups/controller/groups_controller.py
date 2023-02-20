@@ -15,9 +15,9 @@ class GroupController:
         try:
             return GroupService.add_group(group_name, group_owner_id, description)
         except DuplicateEntry as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_all():
@@ -28,7 +28,7 @@ class GroupController:
             groups = GroupService.get_all()
             return groups
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_group_name(group_name: str, new_name: str, user_id: int):
@@ -38,13 +38,13 @@ class GroupController:
         try:
             return GroupService.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)
         except Unauthorized as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except GroupNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except DuplicateEntry as err:
-            raise HTTPException(status_code=err.code, detail=err.message)
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def delete_group_by_name(group_name: str):
@@ -55,6 +55,6 @@ class GroupController:
             if GroupService.delete_by_id(group_name):
                 return Response(content=f"Group {group_name} deleted.", status_code=200)
         except GroupNotFound as err:
-            raise HTTPException(status_code=400, detail=str(err))
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
