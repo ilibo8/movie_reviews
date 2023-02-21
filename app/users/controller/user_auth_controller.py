@@ -32,7 +32,7 @@ class JWTBearer(HTTPBearer):
             if payload.get("role") != self.role:
                 raise HTTPException(
                     status_code=403,
-                    detail="User with provided role is not permitted to access this " "route.",
+                    detail="User with provided role is not permitted to access this route.",
                 )
             return credentials.credentials
         raise HTTPException(status_code=403, detail="Invalid authorization code.")

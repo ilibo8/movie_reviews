@@ -1,6 +1,7 @@
 """Module for routes for group and group users"""
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
+
 from app.groups.controller import GroupController, GroupUserController
 from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchemaOut
 from app.users.controller import JWTBearer, extract_user_id_from_token
@@ -26,14 +27,13 @@ def get_all_groups_with_members():
 
 
 @group_router.post("/create-group", response_model=GroupSchemaOut, dependencies=[Depends(JWTBearer("classic_user"))])
-def create_group(request: Request, group: GroupSchemaIn):
+def create_group(group: GroupSchemaIn, request: Request):
     """
-    The create_group function creates a new group with the given name and description.
-    It is called when a user wants to create a new group. It takes in the request object,
-    which contains information about who is making this request.
+    The function creates a new group with the given name and description.
+    It is called when a user wants to create a new group.
     """
     user_id = extract_user_id_from_token(request)
-    return GroupController.add_group(group_name=group.group_name, group_owner_id=user_id,
+    return GroupController.add_group(group_name=group.group_name, owner_user_id=user_id,
                                      description=group.description)
 
 
@@ -51,9 +51,8 @@ def join_group(request: Request, group_name: str):
                   dependencies=[Depends(JWTBearer("classic_user"))])
 def change_group_name(request: Request, group_name: str, new_name: str):
     """
-    The change_group_name function allows a user to change the name of their group.
-    The function takes in two parameters, group_name and new_name. The function then checks if the user is an admin
-    of that group and if they are it changes the name of that group to new_name.
+    The function allows a user to change the name of their group.
+    The function checks if the user is an admin of that group and if they are changes the name to new_name.
     """
     user_id = extract_user_id_from_token(request)
     return GroupController.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)

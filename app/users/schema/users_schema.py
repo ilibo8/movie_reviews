@@ -28,3 +28,10 @@ class UserLoginSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserOnlyNameSchema(BaseModel):
+    user_name: str
+
+    class Config:
+        orm_mode = True

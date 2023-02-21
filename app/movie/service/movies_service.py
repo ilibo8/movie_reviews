@@ -219,6 +219,7 @@ class MovieService:
         except Exception as err:
             raise err
 
+
     @staticmethod
     def get_all_directors():
         """

@@ -9,7 +9,7 @@ class GroupService:
     """Class for Group service"""
 
     @staticmethod
-    def add_group(group_name: str, group_owner_id, description: str):
+    def add_group(group_name: str, group_owner_id: int, description: str):
         """
         The add_group function creates a new group in the database.
         """

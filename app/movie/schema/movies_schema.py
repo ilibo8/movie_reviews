@@ -90,3 +90,20 @@ class MovieSchemaUpdateReleaseYear(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class MovieOnlyTitleSchema(BaseModel):
+    title: str
+
+    class Config:
+        orm_mode = True
+
+
+
+
+
+
+
+
+
+

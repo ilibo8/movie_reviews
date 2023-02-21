@@ -27,3 +27,10 @@ class AlreadyExist(Exception):
     def __init__(self, message, code=400):
         self.message = message
         self.code = code
+
+
+class TokenExpired(Exception):
+    """Raise when token expires."""
+    def __init__(self, message="Token expired.", code=401):
+        self.message = message
+        self.code = code

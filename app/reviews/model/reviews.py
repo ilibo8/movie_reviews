@@ -14,8 +14,8 @@ class Review(Base):
     __table_args__ = (CheckConstraint("0 < rating_number <= 10"),
                       UniqueConstraint("movie_id", "user_id", name="review_uc"),)
 
-    movie = relationship("Movie", back_populates="review")
-    user = relationship("User", back_populates="review")
+    movie = relationship("Movie", back_populates="review", lazy="subquery")
+    user = relationship("User", back_populates="review", lazy="subquery")
 
     def __init__(self, movie_id: int, user_id: int, rating_number: int, review: str):
         self.movie_id = movie_id

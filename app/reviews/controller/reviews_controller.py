@@ -1,6 +1,8 @@
 """Module for Reviews controller"""
 from fastapi import HTTPException, Response
 from sqlalchemy.exc import IntegrityError
+
+from app.genre.exceptions import GenreNotFound
 from app.movie.exceptions import MovieNotFound
 from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry, Unauthorized
 from app.reviews.service import ReviewService
@@ -39,25 +41,25 @@ class ReviewController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
-    def get_ratings_table():
+    def get_average_rating_and_count_for_all_movies():
         """
-        The get_ratings_table function returns a table of all the ratings in the database.
-        The function takes no arguments and returns a list of dictionaries, where each dictionary contains information
-        about one rating.
+        Returns average rating and number of user rating movie.
         """
         try:
-            return ReviewService.get_ratings_table()
+            return ReviewService.get_average_rating_and_count_for_all_movies()
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
-    def get_average_rating_for_movie(movie_title: str):
+    def get_average_rating_and_count_for_movie(movie_title: str):
         """
         The get_average_rating_for_movie function accepts a movie title as an argument and returns the average
         rating for that movie. If no ratings are found, it raises a MovieNotFound exception.
         """
         try:
             return ReviewService.get_average_rating_for_movie(movie_title)
+        except ReviewNotFound as err:
+            raise HTTPException(status_code=404, detail=str(err)) from err
         except MovieNotFound as err:
             raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
@@ -75,7 +77,7 @@ class ReviewController:
         except MovieNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
+            raise HTTPException(status_code=404, detail=err.message) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
@@ -90,7 +92,7 @@ class ReviewController:
         except UserNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
+            raise HTTPException(status_code=404, detail=err.message) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
@@ -106,7 +108,41 @@ class ReviewController:
         except UserNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
+            raise HTTPException(status_code=404, detail=err.message) from err
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
+    def get_top_five_users_with_most_reviews():
+        """
+        Get list of most active users with number of their reviews.
+        """
+        try:
+            return ReviewService.get_top_five_users_with_most_reviews()
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
+    def get_top_n_movies_by_avg_rating(top: int):
+        """
+        Get list of top n movies by average rating
+        """
+        try:
+            return ReviewService.get_top_n_movies_by_avg_rating(top)
+        except ValueError as err:
+            raise HTTPException(status_code=404, detail=str(err)) from err
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
+    def get_five_best_rated_movies_by_genre(genre: str):
+        """
+        Returns top n movies of certain genre by their average rating. Returns list[(movie_id, avg_rating, user_rated)]
+        """
+        try:
+            return ReviewService.get_five_best_rated_movies_by_genre(genre)
+        except GenreNotFound as err:
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 

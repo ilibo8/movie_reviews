@@ -1,8 +1,10 @@
 """Module for Review repository"""
 from typing import Type
-from sqlalchemy import and_, func, text
+from sqlalchemy import and_, func, desc
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+
+from app.movie.model import MovieGenre
 from app.reviews.exceptions import ReviewNotFound, ReviewDuplicateEntry, Unauthorized
 from app.reviews.model import Review
 
@@ -55,7 +57,37 @@ class ReviewRepository:
         reviews = self.dbs.query(Review).filter(Review.user_id == user_id).all()
         return reviews
 
-    def get_average_rating_and_count_by_movie_id(self, movie_id: int) -> (float, int):
+    def get_top_five_users_with_most_reviews(self):
+        """
+        Returns top 5 users by number of their reviews. Returns list[(user_id, no. of reviews))].
+        """
+        subquery = self.dbs.query(Review.user_id, func.count(Review.user_id).label("count")).group_by(Review.user_id) \
+            .subquery()
+        users = self.dbs.query(subquery).order_by(desc("count")).limit(5).all()
+        return users
+
+    def get_top_n_movies_by_avg_rating(self, number_of_movies: int):
+        """
+        Returns top n movies by their average rating. Returns list[(movie_id, avg_rating, number_of_ratings)]
+        """
+        subquery = self.dbs.query(Review.movie_id, func.round(func.avg(Review.rating_number), 2).label("avg"),
+                                  func.count(Review.rating_number).label("count")).group_by(Review.movie_id).subquery()
+        movies = self.dbs.query(subquery).order_by(desc("avg")).limit(number_of_movies).all()
+        return movies
+
+    def get_five_best_rated_movies_by_genre(self, genre: str):
+        """
+        Returns top n movies of certain genre by their average rating. Returns list[(movie_id, avg_rating, user_rated)]
+        """
+        movie_ids = self.dbs.query(MovieGenre.movie_id).filter(MovieGenre.genre_name == genre).distinct().all()
+        movie_ids = [x[0] for x in movie_ids]
+        subquery = self.dbs.query(Review.movie_id, func.round(func.avg(Review.rating_number), 2).label("avg"),
+                                  func.count(Review.rating_number).label("count")).group_by(Review.movie_id).filter \
+            (Review.movie_id.in_(movie_ids)).subquery()
+        movies = self.dbs.query(subquery).order_by(desc("avg")).limit(5).all()
+        return movies
+
+    def get_average_rating_and_count_by_movie_id(self, movie_id: int):
         """
         The get_average_rating_and_count_by_movie_id function takes in a movie_id and returns the average rating
         and count of ratings for that movie. It does this by querying the database for all reviews with a given
@@ -63,22 +95,9 @@ class ReviewRepository:
         """
         avg = self.dbs.query(func.round(func.avg(Review.rating_number), 2)).filter(Review.movie_id == movie_id).scalar()
         count = self.dbs.query(func.count(Review.rating_number)).filter(Review.movie_id == movie_id).scalar()
+        if count == 0:
+            return None, 0
         return avg, count
-
-    def get_ratings_table(self) -> list:
-        """
-        The get_ratings_table function returns a list of dictionaries with the movie title and average rating.
-        The function uses a sql statement to get the movies and their ratings from the reviews table. The function then
-        sorts this list by highest rating first.
-        """
-        sql = """select movies.title, avg(reviews.rating_number) as avg_number from movies join reviews on movies.id =
-        reviews.movie_id group by movies.id; """
-        result = self.dbs.execute(text(sql))
-        result_table = []
-        for row in result:
-            result_table.append({"title": row[0], "rating": round(float(row[1]), 2)})
-        sorted_list = sorted(result_table, key=lambda x: x['rating'], reverse=True)
-        return sorted_list
 
     def change_movie_rating(self, movie_id: int, user_id: int, new_rating: int) -> Type[Review]:
         """
@@ -89,7 +108,7 @@ class ReviewRepository:
         """
         review = self.dbs.query(Review).filter(and_(Review.movie_id == movie_id, Review.user_id == user_id)).first()
         if review is None:
-            raise ReviewNotFound(f"There is no review for movie_id {movie_id} for this user.")
+            raise ReviewNotFound("User has no review this movie.")
         review.rating_number = new_rating
         self.dbs.add(review)
         self.dbs.commit()
@@ -104,7 +123,7 @@ class ReviewRepository:
         """
         review = self.dbs.query(Review).filter(and_(Review.movie_id == movie_id, Review.user_id == user_id)).first()
         if review is None:
-            raise ReviewNotFound("There is no review for this user.")
+            raise ReviewNotFound("There is no review made by this user.")
         review.review = new_review
         self.dbs.add(review)
         self.dbs.commit()

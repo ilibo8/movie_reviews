@@ -21,6 +21,36 @@ class TestReviewRepository(TestClass):
             movie_repository.add_movie("red", "dir1", 2000, "USA")
             movie_repository.add_movie("blue", "dir2", 2005, "France")
             movie_repository.add_movie("orange", "dir3", 2010, "Serbia")
+            movie_repository.add_movie("green", "dir3", 2010, "Serbia")
+            movie_repository.add_movie("purple", "dir3", 2010, "Serbia")
+
+    def test_get_users_with_most_reviews(self):
+        """Test method get users with most reviews"""
+        with TestingSessionLocal() as dbs:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(dbs)
+            review_repository.add_review(1, 3, 5, "something")
+            review_repository.add_review(2, 3, 6, "something")
+            review_repository.add_review(3, 3, 7, "something")
+            review_repository.add_review(4, 3, 7, "something")
+            review_repository.add_review(2, 1, 8, "something")
+            review_repository.add_review(1, 1, 7, "something")
+            review_repository.add_review(3, 1, 8, "something")
+            review_repository.add_review(2, 2, 7, "something")
+
+            assert review_repository.get_top_five_users_with_most_reviews() == [(3, 4), (1, 3), (2, 1)]
+
+    def get_top_n_movies_by_avg_rating(self):
+        """Test method get top n movies"""
+        with TestingSessionLocal() as dbs:
+            self.create_foreign_keys()
+            review_repository = ReviewRepository(dbs)
+            review_repository.add_review(1, 3, 5, "something")
+            review_repository.add_review(2, 3, 10, "something")
+            review_repository.add_review(1, 2, 7, "something")
+            review_repository.add_review(2, 2, 10, "something")
+            review_repository.add_review(2, 1, 10, "something")
+            assert review_repository.get_top_n_movies_by_avg_rating(2) == [(2, 10, 3), (1, 6, 2)]
 
     def test_get_average_rating_by_movie_id(self):
         """Testing method get_average_rating_by_movie_id"""
@@ -90,19 +120,6 @@ class TestReviewRepository(TestClass):
             review_repository.add_review(2, 2, 9, "something")
             assert len(review_repository.get_reviews_by_user_id(3)) == 2
             assert review_repository.get_reviews_by_user_id(3)[1].rating_number == 6
-
-    def test_get_ratings_table(self):
-        """Testing method get_ratings_table"""
-        with TestingSessionLocal() as dbs:
-            self.create_foreign_keys()
-            review_repository = ReviewRepository(dbs)
-            review_repository.add_review(1, 3, 5, "something")
-            review_repository.add_review(2, 3, 6, "something")
-            review_repository.add_review(1, 2, 7, "something")
-            review_repository.add_review(2, 2, 7, "something")
-            review_repository.add_review(2, 1, 8, "something")
-            ratings_list = review_repository.get_ratings_table()
-            assert len(ratings_list) == 2
 
     def test_change_movie_rating(self):
         """Testing method change movie rating"""

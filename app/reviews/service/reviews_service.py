@@ -1,71 +1,11 @@
 """Module for Reviews service"""
 from app.db import SessionLocal
+from app.genre.exceptions import GenreNotFound
+from app.genre.repository import GenreRepository
 from app.movie.repository import MovieRepository
-from app.reviews.model import Review
 from app.reviews.repository import ReviewRepository
 from app.reviews.exceptions import ReviewNotFound, Unauthorized, ReviewDuplicateEntry
 from app.users.repository import UserRepository
-
-
-def reformat_output_list(review_list: list) -> list[dict]:
-    """
-    The reformat_output_list function takes a list of review objects and reformat them into a list of dictionaries.
-    Each dictionary contains the movie title, user_name, rating number and review text for each object in the inputted
-    list.
-    """
-    try:
-        with SessionLocal() as dbs:
-            movie_repository = MovieRepository(dbs)
-            user_repository = UserRepository(dbs)
-            reviews_reformatted = []
-            for review in review_list:
-                movie_title = movie_repository.get_title_by_id(review.movie_id)
-                user_name = user_repository.get_user_name_by_user_id(review.user_id)
-                reformatted = {"movie_title": movie_title, "user_name": user_name,
-                               "rating_number": review.rating_number, "review": review.review}
-                reviews_reformatted.append(reformatted)
-            return reviews_reformatted
-    except Exception as err:
-        raise err
-
-
-def reformat_output_list_with_id(review_list: list) -> list[dict]:
-    """
-    The reformat_output_list_with_id function takes a list of review objects and reformat them to include the movie
-    title and user_name. It returns a list of dictionaries with id, movie_title, user_name, rating_number and review.
-    """
-    try:
-        with SessionLocal() as dbs:
-            movie_repository = MovieRepository(dbs)
-            user_repository = UserRepository(dbs)
-            reviews_reformatted = []
-            for review in review_list:
-                movie_title = movie_repository.get_title_by_id(review.movie_id)
-                user_name = user_repository.get_user_name_by_user_id(review.user_id)
-                reformatted = {"id": review.id, "movie_title": movie_title, "user_name": user_name,
-                               "rating_number": review.rating_number, "review": review.review}
-                reviews_reformatted.append(reformatted)
-            return reviews_reformatted
-    except Exception as err:
-        raise err
-
-
-def reformat_output(review: Review) -> dict:
-    """
-    The reformat_output function takes a review object and reformat it into a dictionary.
-    It returns the movie title, user_name, rating number and review text as key value pairs.
-    """
-    try:
-        with SessionLocal() as dbs:
-            movie_repository = MovieRepository(dbs)
-            user_repository = UserRepository(dbs)
-            movie_title = movie_repository.get_title_by_id(review.movie_id)
-            user_name = user_repository.get_user_name_by_user_id(review.user_id)
-            reformatted = {"movie_title": movie_title, "user_name": user_name,
-                           "rating_number": review.rating_number, "review": review.review}
-            return reformatted
-    except Exception as err:
-        raise err
 
 
 class ReviewService:
@@ -86,7 +26,7 @@ class ReviewService:
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.add_review(movie_id=movie_id, user_id=user_id, rating_number=rating_number,
                                                       review=review)
-                return reformat_output(review)
+                return review
         except ReviewDuplicateEntry as err:
             raise err
         except Exception as err:
@@ -105,15 +45,15 @@ class ReviewService:
             raise err
 
     @staticmethod
-    def get_ratings_table():
+    def get_all_reviews_for_users():
         """
-        The get_ratings_table function returns a table of ratings for all the reviews in the database.
-        The table is sorted by review date, with most recent reviews first.
+        The get_all_reviews function returns all reviews in the database.
         """
         try:
             with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                return review_repository.get_ratings_table()
+                movie_repository = MovieRepository(dbs)
+                movies = movie_repository.get_all_movies_order_by_name()
+                return movies
         except Exception as err:
             raise err
 
@@ -129,8 +69,30 @@ class ReviewService:
                 review_repository = ReviewRepository(dbs)
                 movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_title)
+                if len(review_repository.get_reviews_by_movie_id(movie_id)) == 0:
+                    raise ReviewNotFound(f"There are no reviews for movie {movie_title}")
                 rating_and_count = review_repository.get_average_rating_and_count_by_movie_id(movie_id)
-                return {"movie title": movie_title, "rating": rating_and_count[0], "users rated": rating_and_count[1]}
+                movie = movie_repository.get_movie_by_id(movie_id)
+                movie.average_rating = rating_and_count[0]
+                movie.number_of_ratings = rating_and_count[1]
+                return movie
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_average_rating_and_count_for_all_movies():
+        """
+        Returns average rating and number of user rating movie.
+        """
+        try:
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                all_movies = movie_repository.get_all_movies_order_by_name()
+                for movie in all_movies:
+                    movie.average_rating = review_repository.get_average_rating_and_count_by_movie_id(movie.id)[0]
+                    movie.number_of_ratings = review_repository.get_average_rating_and_count_by_movie_id(movie.id)[1]
+                return all_movies
         except Exception as err:
             raise err
 
@@ -146,9 +108,9 @@ class ReviewService:
                 movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_title)
                 reviews = review_repository.get_reviews_by_movie_id(movie_id)
-                if reviews is None:
-                    raise ReviewNotFound(f"There is no review with movie id {movie_id}.")
-                return reformat_output_list(reviews)
+                if len(reviews) == 0:
+                    raise ReviewNotFound(f"There is no review for movie {movie_title}.")
+                return reviews
         except Exception as err:
             raise err
 
@@ -164,9 +126,9 @@ class ReviewService:
                 user_repository = UserRepository(dbs)
                 user = user_repository.get_user_by_user_name(user_name)
                 reviews = review_repository.get_reviews_by_user_id(user.id)
-                if reviews is None:
-                    raise ReviewNotFound(f"There is no review with user name {user_name}.")
-                return reformat_output_list(reviews)
+                if len(reviews) == 0:
+                    raise ReviewNotFound(f"User {user_name} didn't post any reviews yet.")
+                return reviews
         except Exception as err:
             raise err
 
@@ -180,13 +142,90 @@ class ReviewService:
         try:
             with SessionLocal() as dbs:
                 review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                user_repository = UserRepository(dbs)
                 reviews = review_repository.get_reviews_by_user_id(user_id)
-                if reviews is None:
-                    raise ReviewNotFound("There are no review.")
-                reformatted_reviews = reformat_output_list_with_id(reviews)
-                return reformatted_reviews
+                reviews_dict = []
+                if len(reviews) == 0:
+                    raise ReviewNotFound("You don't have reviews yet.")
+                for review in reviews:
+                    movie_title = movie_repository.get_title_by_id(review.movie_id)
+                    user_name = user_repository.get_user_name_by_user_id(review.user_id)
+                    reviews_dict.append({"id": review.id, "movie_title": movie_title, "user_name": user_name,
+                                         "rating_number": review.rating_number, "review": review.review})
+                return reviews_dict
         except Exception as err:
             raise err
+
+    @staticmethod
+    def get_top_five_users_with_most_reviews():
+        """
+        Get list of most active users with number of their reviews.
+        """
+        try:
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                user_repository = UserRepository(dbs)
+                users = review_repository.get_top_five_users_with_most_reviews()
+                users_reformatted = []
+                for count, user in enumerate(users):
+                    user_name = user_repository.get_user_name_by_user_id(user[0])
+                    users_reformatted.append({f"No. {count+1}" : user_name, "number_of_ratings": user[1]})
+                return users_reformatted
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_top_n_movies_by_avg_rating(top: int):
+        """
+        Get list of top n movies by average rating
+        """
+        try:
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                movies = movie_repository.get_all_movies()
+                if top > len(movies) or top <= 0:
+                    raise ValueError("Number too big or less than 1.")
+                movies_tuple = review_repository.get_top_n_movies_by_avg_rating(top)
+                movies = []
+                for count, movie in enumerate(movies_tuple):
+                    movie_obj = movie_repository.get_movie_by_id(movie[0])
+                    movie_obj.average_rating = movie[1]
+                    movie_obj.number_of_ratings = movie[2]
+                    movies.append({f"rank": count + 1, "movie" : movie_obj})
+                return movies
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_five_best_rated_movies_by_genre(genre: str):
+        """
+        Returns top n movies of certain genre by their average rating.
+        """
+        try:
+            with SessionLocal() as dbs:
+                review_repository = ReviewRepository(dbs)
+                movie_repository = MovieRepository(dbs)
+                genre_repository = GenreRepository(dbs)
+                if genre_repository.check_is_there(genre) is False:
+                    raise GenreNotFound(f"There is no genre named {genre}")
+                movies_tuple = review_repository.get_five_best_rated_movies_by_genre(genre)
+                movies = []
+                for count, movie in enumerate(movies_tuple):
+                    movie_obj = movie_repository.get_movie_by_id(movie[0])
+                    movie_obj.average_rating = movie[1]
+                    movie_obj.number_of_ratings = movie[2]
+                    movies.append({f"rank": count + 1, "movie": movie_obj})
+                return movies
+                # for count, movie in enumerate(movies):
+                #     movie_name = movie_repository.get_title_by_id(movie[0])
+                #     movies_reformatted.append({f"Movie No. {count + 1}": movie_name, "average_rating": float(movie[1]),
+                #                                "number_of_ratings": movie[2]})
+                # return movies_reformatted
+        except Exception as err:
+            raise err
+
 
     @staticmethod
     def change_movie_rating_number(movie_name: str, user_id: int, new_rating: int):
@@ -200,7 +239,7 @@ class ReviewService:
                 movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.change_movie_rating(movie_id, user_id, new_rating)
-                return reformat_output(review)
+                return review
         except Exception as err:
             raise err
 
@@ -215,7 +254,7 @@ class ReviewService:
                 movie_repository = MovieRepository(dbs)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.change_movie_review(movie_id, user_id, new_review)
-                return reformat_output(review)
+                return review
         except Exception as err:
             raise err
 

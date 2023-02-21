@@ -1,196 +1,310 @@
-use movie_reviews;
+CREATE DATABASE  IF NOT EXISTS `movie_reviews` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `movie_reviews`;
+-- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+--
+-- Host: localhost    Database: movie_reviews
+-- ------------------------------------------------------
+-- Server version	8.0.31
 
--- USERS --
-insert into users (id, user_name, password, email, is_superuser) values
-(null, "superuser", "9fa7b1c3f5ae1bbcd5a9a444acbeba2c0ce3eeecea3508d25964dac2fb29bd64", "superuser@gmail.com", true),
-(null, "alex", "d9508122cd143d69df229bf3624b7bcb2b8ac81ed210a0c926455ef119c12abd", "alex@gmail.com", false),
-(null, "emma", "52293754fdbea92ab6c69cd64e644deed1552f40ccd3c1cef9d4d63c754d13e3", "emma@gmail.com", false),
-(null, "johny", "2b1b370c3baa4ad73cc84d40740834901e691ad9c718246aaa9953da488d99bf", "johny@gmail.com", false),
-(null, "sara", "926b4b8a00cfab44b758450fa6bf188d4bf8541c2fd6b3d9b93d152d43a99f64", "sara@gmail.com", false),
-(null,  "frida", "02a3ebd48b40ef1f24a1a5716de4417c9b1871d84e9735e9fdaac6613067f8f4", "frida@gmail.com", false),
-(null, "nick", "2bf050d4df32457042f9ccf649e2d0c6939a98d63785f0f7483d76d73b9ae201", "nick@gmail.com", false),
-(null, "nora", "8579d18ca272b4cb6033ccb8919cb357539ce8726d10f59b5b21d752ea9e8b2a", "nora@gmail.com", false),
-(null, "julia", "cdbd41d016cdec10d0ff2291a6bdae398b565a831622bedcd4dcafa69252b5e7", "julia@gmail.com", false),
-(null, "simon", "edde0aa0be04ade2ccbb008e7f2f177c7999daf1c3c301b8ced9398ffcae9ef1", "simon@gmail.com", false);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- GENRES --
-insert into genres (name) values
-('comedy'),
-('romance'),
-('action'),
-('drama'),
-('horror'),
-('thriller'),
-('western'),
-('sci-fi'),
-('animation'),
-('mystery'),
-('biographical'),
-('documentary'),
-('musical'),
-('crime');
+--
+-- Table structure for table `actors`
+--
 
--- ACTORS --
-insert into actors (id, full_name, nationality) values
-(null, 'Jessica Chastain', 'American'),
-(null, 'Julia Roberts', 'American'),
-(null, 'George Clooney', 'American'),
-(null, 'Matt Damon', 'American'),
-(null, 'Emily Blunt', 'English'),
-(null, 'Morgan Freeman', 'American'),
-(null, 'Tim Robbins', 'American'),
-(null, 'Tom Hanks', 'American'),
-(null, 'Robin Wright', 'American'),
-(null, 'John Travolta', 'American'),
-(null, 'Bruce Willis', 'American'),
-(null, 'Samuel L. Jackson', 'American'),
-(null, 'Uma Thurman', 'American'),
-(null, 'Carrie-Anne Moss', 'Canadian'),
-(null, 'Keanu Reeves', 'Canadian'),
-(null, 'Laurence Fishburne', 'American'),
-(null, 'Jodie Foster', 'American'),
-(null, 'Anthony Hopkins', 'American'),
-(null, 'Brad Pitt', 'American');
+DROP TABLE IF EXISTS `actors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `actors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(50) DEFAULT NULL,
+  `nationality` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `full_name` (`full_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- GROUPS --
-insert into movie_groups (id, group_name, owner_id, description, date_created) values
-(null, "Serbian movies", 5, "For fans of Serbian movies", "2020-01-15"), -- 1
-(null, "Romantics", 7, "Best romantic movies", "2019-11-22"), -- 2
-(null, "Best funny movies", 3, "We need more laugh", "2020-01-15"), -- 3
-(null, "Dramatic", 6, "Who likes drama", "2020-2-10"); -- 4
+--
+-- Dumping data for table `actors`
+--
 
--- GROUP USERS --
-insert into groups_users(group_id, user_id) values
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 5),
-(2, 3),
-(2, 4),
-(2, 5),
-(2, 7),
-(3, 3),
-(3, 4),
-(3, 5),
-(3, 6),
-(3, 7),
-(3, 8),
-(4, 6),
-(4, 7),
-(4, 2),
-(4, 10);
+LOCK TABLES `actors` WRITE;
+/*!40000 ALTER TABLE `actors` DISABLE KEYS */;
+INSERT INTO `actors` VALUES (1,'Jessica Chastain','American'),(2,'Julia Roberts','American'),(3,'George Clooney','American'),(4,'Matt Damon','American'),(5,'Emily Blunt','British'),(6,'Morgan Freeman','American'),(7,'Tim Robbins','American'),(8,'Tom Hanks','American'),(9,'Robin Wright','American'),(10,'John Travolta','American'),(11,'Bruce Willis','American'),(12,'Samuel L. Jackson','American'),(13,'Uma Thurman','American'),(14,'Carrie-Anne Moss','Canadian'),(15,'Keanu Reeves','Canadian'),(16,'Laurence Fishburne','American'),(17,'Jodie Foster','American'),(18,'Anthony Hopkins','American'),(19,'Brad Pitt','American'),(20,'Angelina Jolie','American'),(21,'Winona Ryder','American'),(22,'Kristen Stewart','American'),(23,'Albert Finney','American'),(24,'Richard Gere','American'),(25,'Lucas Hedges','American'),(26,'Meryl Streep','American'),(27,'Vanessa Kirby','British'),(28,'Hugh Jackman','Australian'),(29,'Laura Dern','American'),(30,'Jenna Ortega','American'),(31,'Nicole Kidman','Australian'),(32,'Ewan McGregor','Scottish'),(33,'Sean Connery','Scottish'),(34,'Ben Affleck','Scottish'),(35,'Robin Williams','Scottish'),(36,'David Carradine','American'),(37,'Idris Elba','British'),(38,'Dev Patel','British'),(39,'Freida Pinto','Indian'),(40,'Cooper Raiff','American'),(41,'Dakota Johnson','American'),(42,'Mila Kunis','American'),(43,'Christina Applegate','American'),(44,'Seth MacFarlane','American'),(45,'Charlize Theron','South African'),(46,'Liam Neeson','Irish'),(47,'Brendan Gleeson','Irish'),(48,'Don Cheadle','American'),(49,'Sandra Bullock','American'),(50,'Melissa McCarthy','American'),(51,'Anna Kendrick','American'),(52,'Rebel Wilson','American');
+/*!40000 ALTER TABLE `actors` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `genres`
+--
 
- -- MOVIES --
-insert into movies (id, title, director, release_year, country_of_origin) values
-(null,'The Shawshank Redemption', 'Frank Darabont', 1994, 'USA'),
-(null,'Forrest Gump', 'Robert Zemeckis', 1994, 'USA'),
-(null,'Pulp Fiction', 'Quentin Tarantino', 1994, 'USA'),
-(null,'The Matrix', 'Lana & Lilly Wachowski', 1999, 'USA'),
-(null,'The Silence of the Lambs', 'Jonathan Demme', 1991, 'USA'),
-(null,'Se7en', 'David Fincher', 1995, 'USA');
+DROP TABLE IF EXISTS `genres`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `genres` (
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`name`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- MOVIE GENRE --
-insert into movie_genre (movie_id, genre_name) values
-(1, 'drama'),
-(2, 'romance'),
-(2, 'drama'),
-(3, 'drama'),
-(3, 'crime'),
-(4, 'action'),
-(4, 'sci-fi'),
-(5, 'drama'),
-(5, 'thriller'),
-(5, 'crime'),
-(6, 'crime'),
-(6, 'drama'),
-(6, 'mystery');
+--
+-- Dumping data for table `genres`
+--
 
--- MOVIE CAST --
-insert into movie_cast (movie_id, actor_id) values
-(1, 6),
-(1, 7),
-(2, 8),
-(2, 9),
-(3, 10),
-(3, 11),
-(3, 12),
-(3, 13),
-(4, 14),
-(4, 15),
-(4, 16),
-(5, 17),
-(5, 18),
-(6, 6),
-(6, 19);
+LOCK TABLES `genres` WRITE;
+/*!40000 ALTER TABLE `genres` DISABLE KEYS */;
+INSERT INTO `genres` VALUES ('action'),('animation'),('biography'),('comedy'),('crime'),('documentary'),('drama'),('horror'),('musical'),('mystery'),('romance'),('sci-fi'),('thriller'),('western');
+/*!40000 ALTER TABLE `genres` ENABLE KEYS */;
+UNLOCK TABLES;
 
-insert into recommendations (id, group_user_id, post) values
-(null, 5, "My recommendation is Message in a Bottle from 1999 with Kevin Costner and Robin Wright. Just beautiful."),
-(null, 6, "Definetly my favourite Original sin with Antonio Banderas and Agelina Jolie."),
-(null, 7, "I realy liked Cha Cha Real Smooth, 2022, Dakota Jonson is playing."),
-(null, 1, "I watched The Trap (2007), it's not bad."),
-(null, 2, "I really liked The Wounds (1998), must watch."),
-(null, 3, "Tears for Sale (2008), it's a little bit comedy and fantasy but very good overall."),
-(null, 9, "Bad moms 2016, veeery funny"),
-(null, 10, "Pitch Perfect 2012, not fan of musicles, but can stop laughing at Rebel Wilson."),
-(null, 11, "The Guard 2011, it's not tipical comedy but movie is excellent."),
-(null, 12, "The heat 2013, Sandra and Melissa are perfect together."),
-(null, 13, "How to be single 2016, also a fan of Rebel."),
-(null, 14, "A Million Ways to Die in the West belive it or not Liam is in it,"),
-(null, 15, "Girl, Interrupted (1999), with Winona and Angelina, got an Oscar, highly recommend."),
-(null, 16, "Pretty Woman (1990), classic, if somebody hasn't seen it."),
-(null, 17, "Splendor in the Grass (1961), with Natalie Wood."),
-(null, 18, "The Intouchables (2011) french one, excellent.");
+--
+-- Table structure for table `groups_users`
+--
 
-insert into reviews (id, movie_id, user_id, rating_number, review) values
-(null, 1, 2, 10, "It is no wonder that the film has such a high rating, it is quite literally breathtaking. What can I say that hasn't said before? Not much, it's the story, the acting, the premise, but most of all, this movie is about how it makes you feel. Sometimes you watch a film, and can't remember it days later, this film loves with you, once you've seen it, you don't forget.
-The ultimate story of friendship, of hope, and of life, and overcoming adversity.
-I understand why so many class this as the best film of all time, it isn't mine, but I get it. If you haven't seen it, or haven't seen it for some time, you need to watch it, it's amazing."),
-(null, 1, 3, 10, "This movie is not your ordinary Hollywood flick. It has a great and deep message. This movie has a foundation and just kept on being built on from their and that foundation is hope. Whatever you do, don't listen to the people who say this movie is overrated because this is one of the most inspiring and greatest movies ever. It has everything you could possibly want."),
-(null, 1, 4, 10, "I've lost count of the number of times I have seen this movie, but it is more than 20. It has to be one of the best movies ever made. It made me take notice Morgan Freeman and Tim Robbins like I had never noticed any actors before.
-I have from a very young age been a huge fan of anything Stephen King writes and had already read the short story that this movie is based on years prior to seeing this movie.
-Not everything Stephen King has written that gets turned into a movie comes out well, but this is as close to perfection as it gets and has everything you could ever want in a movie."),
-(null, 1, 5, 10, "The Shawshank Redemption has great performances, extremely well written script and story all leading to a deeply emotional climax! One of the best dramas of all time!"),
-(null, 1, 6, 9, "Its two stars, Tim Robbins as Andy and Morgan Freeman as Red, are both excellent. Its initial lack of success may have had something to do with its rather clumsy title.
-'Shawshank' is not a word that will mean anything to the average person (according to one story Darabont was once asked how his 'rickshaw' film was going) and 'redemption', except in technical legal contexts, normally has a religious connotation. This is not an explicitly religious film; indeed, in its portrayal of Warden Norton as a sanctimonious, Bible-bashing hypocrite, it can be seen as critical of religion.
-Nevertheless, the word 'redemption' is perhaps appropriate in this context, after undergoing the hell of Shawshank Andy and Red manage to find a sort of secular redemption. It may be this message of hope that accounts for the film's continuing popularity."),
-(null, 2, 6, 10, "'I've made about 20 films and 5 of them are pretty good'-Tom Hanks.
-'Forrest Gump' is one of the best movies of all time, guaranteed. I really just love this movie and it has such a special place in my heart. The performances are just so unforgettable and never get out of your head. The characters, I mean the actors turned into them and that's what got to me. The lines are so memorable, touching, and sometimes hilarious."),
-(null, 2, 7, 10, "Quite simply, the greatest film ever made.
-Humour, sadness, action, drama and a Vietnam film all rolled into one.
-But seriously - I bawled my big brown eyes out, on several occasions in this film. A real tear-jerker, and a wonderful character, played to perfection by Tom Hanks. Every bit as worthy for the Oscar as Rooney was to win the Premiership in 2007.
-I cannot say it enough: This is THE film of all time. Watch it, and you'll see."),
-(null, 2, 8, 10, "The movie has it all too,drama,comedy and it challenges societal norms as well. Then there are the almost endless quotes from the movie that have slipped into everyday speech. They are too numerous to say at this point.One of the toppers for me in the movie is when Forrest is in a quandary about life and wondering as Lt.Dan said we all have a destiny and his Mom says it is where we are all just floating around like a feather in the wind.
-Forrest's character terms it very well with this quote,'I think it is a little bit of both.'
-From my experiences in life it does appear to be that way. So if you have not seen the movie,see it soon you are in for a real treat. If you did not like it, give it a try again and hopefully you will see it for the great story it is!"),
-(null, 2, 9, 10, "I have seen this movie easily a half a dozen times, and I find that the beauty of the film is how Forrest Gump not only shares his innocence and purity with others, including the audience, he also manages to retain that innocence and purity through some very difficult times. As a Viet Nam veteran, and a college graduate of the late Sixties, I could of course personally relate to the various periods that Forrest Gump endures.
-I would only mention that the skillful and seamless blending of music, action, and period costume was enthralling. And yet it was so perfectly understated that Forrest Gump's travels through thirty five years of the stormiest and most meaningful years of American history only became clearly defined for the viewer. Even more so than the well known chocolates quote as a metaphor for life, I felt that the remark that stupid is what you do is probably more workable for most of us."),
-(null, 2, 10, 10, "Winston Groom's Forrest Gump was a novel that was complicated, but (Oscar winning) director Robert Zemeckis brings events together with visual effects that boggle even George Lucas.
-And leading the film in this odyssey of American life is Tom Hanks playing Gump (he won his second Oscar for his portrayal) in a film that shows one man who goes through many events in history to find the one he loves. Well done, well acted, and well directed to pythagorean procision. A++"),
-(null, 3, 3, 9, "This is Tarantino's masterpiece, there's no other way to say it. It has arguably one of the smartest scripts I've ever seen. The story, which is non-linear, is so well constructed it takes several viewings to grasp it all. The movie doesn't seem to be about any spesific thing, but there is a subtle hint of redemption as a central theme. The characters and preformances in this movie are practically perfect. This is still one of the best performances I've seen from Sam Jackson, and it's an outrage he didn't win an Oscar. Each scene has its own unique flavour and charm, every segment has its own arc while also tying into the main plot. The comedy is great, the serious moments are great, every word of dialogue is exciting despite seemingly not having any reason to exist. This movie is just such a great time, and I recommend it to everyone who loves movies. I cannot think of a single genuine flaw with it, and it will remain one of my favorite movies for a long time."),
-(null, 3, 5, 9, "Before I saw this I assumed it was probably overrated. I was wrong. It lives up to and surpasses its reputation in pretty much every way. I would definitely recommend."),
-(null, 3, 7, 9, "Pulp Fiction is the most original, rule breaking film I have ever seen. Instead of following the widely used 3 act structure, Pulp Fiction makes up its own and while the 3 stories may seem completely disconnected at first, once you look closely you can find the underlying themes that they all share. Anyone who says that the movie lacks focus or has no meaning hasn't analysed enough. I highly recommend this film since it is number one on my list of my favourite movies of all time."),
-(null, 3, 8, 8, "Just the best movie... I can imagine my family seeing this movie in 30 years. I really love this movie and his soundtrack."),
-(null, 4, 3, 9, "When this came out, I was living with a roommate. He went out and saw it, came home and said, 'Dude, you have to go see The Matrix.' So we left and he sat through it a second time. This movie is splendidly done. The mystery about what the Matrix is, unravels and you see a dystopian future unlike any we as a race would want. I have watched this over and over and never tire of it. Everyone does a great job acting in this, the special effects are above par and the story is engaging."),
-(null, 4, 4, 10, "This film doesn't age, it will be contemporary even in 2030 or 2040. Wachowski's best one, by far."),
-(null, 4, 6, 9, "The film is as well crafted as the matrix itself! On another level entirely to any other science fiction film from the last 20 years . Getting lost in another world, is interly what Cinema is made for. This one takes you into a whole new universe interly "),
-(null, 4, 8, 10, "So much greatness about this well done crafty philosophical masterpiece! One of the greatest films ever made; a true benchmark in cinema and huge meticulously brilliant cabinet file of important metaphors. I smile so much while watching The Matrix, I'm so happy it had a 20th anniversary. I'm beyond intrigued by these types of society thought-provoking gems; there aren't enough of them!!"),
-(null, 4, 9, 10, "I remember taking a class in social psychology many years ago. The Joy Luck Club figured prominently in the course. I like the idea of combining movies and theory.
-I am now studying metaphysics, and any study of reality begins with René Descartes, the father of modern philosophy. Descartes began his intellectual odyssey with this question: How do we know that there is a reality outside our own minds? We each know that we have experiences, and we can be sure of these experiences; therefore, each of us can be sure that we exist. But how do we know that the internal experiences we have corresponds to objects outside our minds?
-This is the whole theme of The Matrix. Watching this film is like studying metaphysics."),
-(null, 5, 2, 10, "The Silence of the Lambs runs two hours. Anthony Hopkins appears for little more than sixteen minutes, yet during those minutes he hasn't bored you for a second, not even after the tenth or eleventh viewing. Such is the power of his performance, it's absolutely impossible to forget him.His character, Dr.Hannibal 'The Cannibal' Lecter, is a brutal killer with revolting methods and habits, but he's also very intelligent, charismatic and with good taste(you can interpret that as you like).A clichè by now, but who cares? He still is one of the key elements in this wonderful thriller, which sees Jodie Foster's Clarice Starling asking for Lecter's help to catch another killer.The result is a dangerous yet fascinating relationship between the young, unexperienced FBI-agent and the convicted,but basically omnipotent, psychiatrist.He's a step ahead of everyone all the time, and makes sure everyone notices, with his witty, unforgettable one-liners.If there had to be only one reason to worship this movie, then it would have to be the chemistry between the two leading actors.Never before has a non-sexual man/woman connection been more thrilling.Never before has a film's ending been more unsettling and brilliant and left us asking for more."),
-(null, 5, 3, 10, "Brilliant Best Picture of 1991 that never gets old. 'The Silence of the Lambs' deals with a young FBI cadet (Oscar-winner Jodie Foster) who is sent to interview a captured madman (Oscar-winner Anthony Hopkins in one of the greatest performances ever on the screen) to find out about a serial killer (Ted Levine) who is stripping the skin from his female victims after they die. The FBI has had no luck with the case and agent Scott Glenn tries to throw a curve-ball to Hopkins by sending Foster. Hopkins is a former doctor of Levine and holds the clues to capturing the unknown criminal. Needless to say the film takes many twists and turns, creating a suspenseful thriller that has no equal. At the heart of 'The Silence of the Lambs' are the confrontations between Hopkins and Foster. They play a complicated chess match of words which results in some of the greatest footage ever captured for the cinema. Hopkins dominates in spite of the fact he has approximately 17 minutes of time in the film. This is a film that will wrap itself around you and you will likely never be able to shake some of the key elements you have seen in this amazing masterpiece. 5 stars out of 5."),
-(null, 5, 4, 9, "This is definitely a film that proves you don't need tons of blood and gore to have a good suspense film. Anthony Hopkins performance as the deranged genius Lecter earned him a well deserved Academy Award and the same was true of Jodie Foster's performance as Clarice Starling. This film should go down in history as one of the greatest suspense films in the history of cinema."),
-(null, 5, 5, 9, "The Silence of the Lambs, having accomplished the rare feat of winning all five of the major Academy Award categories, is a remarkable achievement in filmmaking. Gruesome, pulpish material was transformed by dedicated participants on all levels of production, and a film that would have failed in the hands of many others wound up becoming a modern masterpiece. Taut direction and a superb screenplay might be the best arguments for the film's power, but the flashiest are certainly delivered in the bravura performances of Hopkins and Foster. Their interplay -- and remember, they only share a handful of scenes together -- is nothing short of riveting."),
-(null, 6, 2, 8, "Dark and depressing but just fascinating. Director David Fincher shots the entire film in dim light and shoves the victims mutilated bodies in our face. The grimness of the tone wears you down but that's appropriate considering the subject matter. No humor either. It all leads to a truly harrowing ending. There was supposed to be a happy ending but they (wisely) chose not to do it. Freeman and Pitt work very well together and both give excellent performances. I even thought Paltrow (who I hate) was good! Kevin Spacey is very good too in a small role.
-If you have trouble with blood, gore and disturbing subject matter stay far away from this movie. But if you can handle that, watch this one. It's depressing and unpleasant but riveting."),
-(null, 6, 4, 7, "Pros: 1. The score is beautifully ominous which only deepens the thrilling and unsettling atmosphere. 2. Brad Pitt (Mills), Morgan Freeman (Somerset), and Kevin Spacey (John Doe) give amazing performances. 3. The colour palette being dark and monotone helps to cement the gloomy and grim tone. 4. The gore and practical effects are immense and they still stand up 25 years later. The sloth, lust, and gluttony murders, in particular, stick in mind. 5. The great cinematography knows when to pull the camera back, as well as to draw it close for great effect. 6. Both Morgan Freeman and Brad Pitt have great chemistry together. 7. The back-and-forth between Somerset, Mills, and John Doe in the police car is one of the most intense and captivating scenes in the history of cinema. 8. The movie presents the interesting and complex moral quandary of: is it immoral to kill the immoral? Even if those immoral people adversely affect other people? And who gets to decide who is immoral, and what punishment should be meted out to them? 9. Despite the underdeveloped character of Tracy (Gwyneth Paltrow), the conclusion is still one of the hardest hitting and iconic endings ever created.
-Cons: 1. Tracy is a severely underdeveloped character, with her pregnancy-confessing scene to Somerset feeling lazily forced to add weight to the final scene."),
-(null, 6, 6, 8, "A retiring Detective and a young rookie are hunting down a serial killer, a killer with a dark MO, murdering his victims using the seven deadly sins.
-As I watch this, it's coming up to its thirtieth anniversary, and it's as fresh now as it was back in 1995, it's an intensely macabre take, crimes that are infinitely macabre and depraved, and intensely twisted.
-The combination of Freeman and Pitt is incredible, they work immensely well together, we have the fresh zest of Mills, and the unshakable, but battle weary Somerset. Paltrow and Spacey are excellent in support.
-Two hours flashed past, there is no lull, no moment to switch off and boil the kettle, the intensity is immediate, the pacing designed to keep you glued.
-I have always thought there is a shade of Alfred Hitchcock about this movie, such is the intelligence of the plot.
-Very good visuals, the macabre and gruesome bodies look shocking still, nothing is spared or hidden away."),
-(null, 6, 7, 8, "Somerset (Morgan Freeman) is a wearied homicide detective. Mills (Brad Pitt) worked hard to transfer to the troubled precinct. He's married to Tracy (Gwyneth Paltrow). There is a serial killer on the loose delivering his sermon on the Seven Deadly Sins. Somerset is tired of the city. Mills is eager to investigate.
-reviewsDirector David Fincher has filled with beautiful darkness. It's more than just the gruesome murders. It's the rain, the music score and the grungy setting. Fincher has weaved together an artistic masterpiece. Freeman is the perfect grizzled veteran. Brad Pitt is a terrific eager newcomer. There are surprising comedy sprinkled in. The final twist is simply cinematic history. The big line is awesome. Pitt delivers it perfectly with so much heart aching pleading. Some do deride its grotesque gloom but that's like complaining about a movie being too funny or too exciting. This is suppose to be dark and it achieves it.");
+DROP TABLE IF EXISTS `groups_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `groups_users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `group_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_user_uc` (`group_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `groups_users_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `movie_groups` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `groups_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups_users`
+--
+
+LOCK TABLES `groups_users` WRITE;
+/*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
+INSERT INTO `groups_users` VALUES (1,1,2),(2,1,3),(3,1,4),(4,1,5),(5,2,3),(6,2,4),(7,2,5),(8,2,7),(9,3,3),(10,3,4),(11,3,5),(12,3,6),(13,3,7),(14,3,8),(17,4,2),(15,4,6),(16,4,7),(18,4,10);
+/*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `movie_cast`
+--
+
+DROP TABLE IF EXISTS `movie_cast`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movie_cast` (
+  `movie_id` int NOT NULL,
+  `actor_id` int NOT NULL,
+  PRIMARY KEY (`movie_id`,`actor_id`),
+  UNIQUE KEY `movie_cast_uc` (`movie_id`,`actor_id`),
+  KEY `actor_id` (`actor_id`),
+  CONSTRAINT `movie_cast_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `movie_cast_ibfk_2` FOREIGN KEY (`actor_id`) REFERENCES `actors` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movie_cast`
+--
+
+LOCK TABLES `movie_cast` WRITE;
+/*!40000 ALTER TABLE `movie_cast` DISABLE KEYS */;
+INSERT INTO `movie_cast` VALUES (20,1),(9,2),(10,2),(11,2),(12,2),(13,2),(11,3),(18,4),(1,6),(6,6),(1,7),(2,8),(2,9),(3,10),(3,11),(3,12),(3,13),(19,13),(4,14),(4,15),(4,16),(5,17),(8,17),(5,18),(6,19),(7,20),(7,21),(8,22),(9,23),(10,24),(12,25),(13,26),(14,27),(14,28),(14,29),(15,30),(16,31),(16,32),(17,33),(18,34),(18,35),(19,36),(20,37),(21,38),(21,39),(22,40),(22,41),(23,42),(23,43),(24,44),(24,45),(24,46),(25,47),(25,48),(26,49),(26,50),(27,51),(27,52);
+/*!40000 ALTER TABLE `movie_cast` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `movie_genre`
+--
+
+DROP TABLE IF EXISTS `movie_genre`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movie_genre` (
+  `movie_id` int NOT NULL,
+  `genre_name` varchar(20) NOT NULL,
+  PRIMARY KEY (`movie_id`,`genre_name`),
+  UNIQUE KEY `movie_genre_uc` (`movie_id`,`genre_name`),
+  KEY `genre_name` (`genre_name`),
+  CONSTRAINT `movie_genre_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `movie_genre_ibfk_2` FOREIGN KEY (`genre_name`) REFERENCES `genres` (`name`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movie_genre`
+--
+
+LOCK TABLES `movie_genre` WRITE;
+/*!40000 ALTER TABLE `movie_genre` DISABLE KEYS */;
+INSERT INTO `movie_genre` VALUES (4,'action'),(19,'action'),(26,'action'),(7,'biography'),(9,'biography'),(20,'biography'),(10,'comedy'),(13,'comedy'),(22,'comedy'),(23,'comedy'),(24,'comedy'),(25,'comedy'),(26,'comedy'),(27,'comedy'),(3,'crime'),(5,'crime'),(6,'crime'),(8,'crime'),(11,'crime'),(19,'crime'),(20,'crime'),(21,'crime'),(25,'crime'),(1,'drama'),(2,'drama'),(3,'drama'),(5,'drama'),(6,'drama'),(7,'drama'),(8,'drama'),(9,'drama'),(11,'drama'),(12,'drama'),(13,'drama'),(14,'drama'),(15,'drama'),(16,'drama'),(17,'drama'),(18,'drama'),(19,'drama'),(20,'drama'),(21,'drama'),(22,'drama'),(16,'musical'),(27,'musical'),(6,'mystery'),(11,'mystery'),(2,'romance'),(10,'romance'),(16,'romance'),(18,'romance'),(21,'romance'),(27,'romance'),(4,'sci-fi'),(5,'thriller'),(8,'thriller'),(11,'thriller'),(19,'thriller'),(25,'thriller'),(24,'western');
+/*!40000 ALTER TABLE `movie_genre` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `movie_groups`
+--
+
+DROP TABLE IF EXISTS `movie_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movie_groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(30) DEFAULT NULL,
+  `owner_id` int DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `date_created` date NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_name` (`group_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movie_groups`
+--
+
+LOCK TABLES `movie_groups` WRITE;
+/*!40000 ALTER TABLE `movie_groups` DISABLE KEYS */;
+INSERT INTO `movie_groups` VALUES (1,'Serbian movies',5,'For fans of Serbian movies','2020-01-15'),(2,'Romantics',7,'Best romantic movies','2019-11-22'),(3,'Best funny movies',3,'We need more laugh','2020-01-15'),(4,'Dramatic',6,'Who likes drama','2020-02-10');
+/*!40000 ALTER TABLE `movie_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `movies`
+--
+
+DROP TABLE IF EXISTS `movies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movies` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL,
+  `director` varchar(50) DEFAULT NULL,
+  `release_year` int DEFAULT NULL,
+  `country_of_origin` varchar(50) DEFAULT NULL,
+  `average_rating` float DEFAULT NULL,
+  `number_of_ratings` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `movie_uc` (`title`,`director`,`release_year`,`country_of_origin`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movies`
+--
+
+LOCK TABLES `movies` WRITE;
+/*!40000 ALTER TABLE `movies` DISABLE KEYS */;
+INSERT INTO `movies` VALUES (1,'The Shawshank Redemption','Frank Darabont',1994,'USA',NULL,NULL),(2,'Forrest Gump','Robert Zemeckis',1994,'USA',NULL,NULL),(3,'Pulp Fiction','Quentin Tarantino',1994,'USA',NULL,NULL),(4,'The Matrix','Lana & Lilly Wachowski',1999,'USA',NULL,NULL),(5,'The Silence of the Lambs','Jonathan Demme',1991,'USA',NULL,NULL),(6,'Se7en','David Fincher',1995,'USA',NULL,NULL),(7,'Girl, Interrupted','James Mangold',1999,'USA',NULL,NULL),(8,'Panic Room','David Fincher',2002,'USA',NULL,NULL),(9,'Erin Brockovich','Steven Soderbergh',2000,'USA',NULL,NULL),(10,'Pretty Woman','Garry Marshall',1990,'USA',NULL,NULL),(11,'Money Monster','Jodie Foster',2016,'USA',NULL,NULL),(12,'Ben is Back','Peter Hedges',2018,'USA',NULL,NULL),(13,'August: Osage County','John Wells',2013,'USA',NULL,NULL),(14,'The Son','Florian Zeller',2022,'USA',NULL,NULL),(15,'The Fallout','Megan Park',2021,'USA',NULL,NULL),(16,'Moulin Rouge!','Baz Luhrmann',2001,'USA',NULL,NULL),(17,'Finding Forrester','Gus Van Sant',2000,'USA',NULL,NULL),(18,'Good Will Hunting','Gus Van Sant',1997,'USA',NULL,NULL),(19,'Kill Bill: Vol. 1','Quentin Tarantino',2003,'USA',NULL,NULL),(20,'Molly\'s Game','Aaron Sorkin',2017,'USA',NULL,NULL),(21,'Slumdog Millionaire','Danny Boyle',2008,'USA',NULL,NULL),(22,'Cha Cha Real Smooth','Cooper Raiff',2022,'USA',NULL,NULL),(23,'Bad Moms','Jon Lucas',2016,'USA',NULL,NULL),(24,'A Million Ways to Die in the West','Seth MacFarlane',2014,'USA',NULL,NULL),(25,'The Guard','John Michael McDonagh',2011,'Ireland',NULL,NULL),(26,'The Heat','Paul Feig',2013,'USA',NULL,NULL),(27,'Pitch Perfect','Jason Moore',2012,'USA',NULL,NULL);
+/*!40000 ALTER TABLE `movies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recommendations`
+--
+
+DROP TABLE IF EXISTS `recommendations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recommendations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `group_user_id` int DEFAULT NULL,
+  `post` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_user_id` (`group_user_id`),
+  CONSTRAINT `recommendations_ibfk_1` FOREIGN KEY (`group_user_id`) REFERENCES `groups_users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recommendations`
+--
+
+LOCK TABLES `recommendations` WRITE;
+/*!40000 ALTER TABLE `recommendations` DISABLE KEYS */;
+INSERT INTO `recommendations` VALUES (1,5,'My recommendation is Message in a Bottle from 1999 with Kevin Costner and Robin Wright. Just beautiful.'),(2,6,'Definetly my favourite Original sin with Antonio Banderas and Agelina Jolie.'),(3,7,'I realy liked Cha Cha Real Smooth, 2022, Dakota Jonson is playing.'),(4,1,'I watched The Trap (2007), it\'s not bad.'),(5,2,'I really liked The Wounds (1998), must watch.'),(6,3,'Tears for Sale (2008), it\'s a little bit comedy and fantasy but very good overall.'),(7,9,'Bad moms 2016, veeery funny'),(8,10,'Pitch Perfect 2012, not fan of musicles, but can stop laughing at Rebel Wilson.'),(9,11,'The Guard 2011, it\'s not tipical comedy but movie is excellent.'),(10,12,'The heat 2013, Sandra and Melissa are perfect together.'),(11,13,'How to be single 2016, also a fan of Rebel.'),(12,14,'A Million Ways to Die in the West belive it or not Liam is in it,'),(13,15,'Girl, Interrupted (1999), with Winona and Angelina, got an Oscar, highly recommend.'),(14,16,'Pretty Woman (1990), classic, if somebody hasn\'t seen it.'),(15,17,'Splendor in the Grass (1961), with Natalie Wood.'),(16,18,'The Intouchables (2011) french one, excellent.');
+/*!40000 ALTER TABLE `recommendations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reviews`
+--
+
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reviews` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `movie_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `rating_number` int DEFAULT NULL,
+  `review` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `review_uc` (`movie_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reviews_chk_1` CHECK (((0 < `rating_number`) <= 10)),
+  CONSTRAINT `reviews_chk_2` CHECK (((0 < `rating_number`) <= 10))
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reviews`
+--
+
+LOCK TABLES `reviews` WRITE;
+/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+INSERT INTO `reviews` VALUES (1,1,2,10,'It is no wonder that the film has such a high rating, it is quite literally breathtaking. What can I say that hasn\'t said before? Not much, it\'s the story, the acting, the premise, but most of all, this movie is about how it makes you feel. Sometimes you watch a film, and can\'t remember it days later, this film loves with you, once you\'ve seen it, you don\'t forget.\nThe ultimate story of friendship, of hope, and of life, and overcoming adversity.\nI understand why so many class this as the best film of all time, it isn\'t mine, but I get it. If you haven\'t seen it, or haven\'t seen it for some time, you need to watch it, it\'s amazing.'),(2,1,3,10,'This movie is not your ordinary Hollywood flick. It has a great and deep message. This movie has a foundation and just kept on being built on from their and that foundation is hope. Whatever you do, don\'t listen to the people who say this movie is overrated because this is one of the most inspiring and greatest movies ever. It has everything you could possibly want.'),(3,1,4,10,'I\'ve lost count of the number of times I have seen this movie, but it is more than 20. It has to be one of the best movies ever made. It made me take notice Morgan Freeman and Tim Robbins like I had never noticed any actors before.\nI have from a very young age been a huge fan of anything Stephen King writes and had already read the short story that this movie is based on years prior to seeing this movie.\nNot everything Stephen King has written that gets turned into a movie comes out well, but this is as close to perfection as it gets and has everything you could ever want in a movie.'),(4,1,5,10,'The Shawshank Redemption has great performances, extremely well written script and story all leading to a deeply emotional climax! One of the best dramas of all time!'),(5,1,6,9,'Its two stars, Tim Robbins as Andy and Morgan Freeman as Red, are both excellent. Its initial lack of success may have had something to do with its rather clumsy title. \n\'Shawshank\' is not a word that will mean anything to the average person (according to one story Darabont was once asked how his \'rickshaw\' film was going) and \'redemption\', except in technical legal contexts, normally has a religious connotation. This is not an explicitly religious film; indeed, in its portrayal of Warden Norton as a sanctimonious, Bible-bashing hypocrite, it can be seen as critical of religion. \nNevertheless, the word \'redemption\' is perhaps appropriate in this context, after undergoing the hell of Shawshank Andy and Red manage to find a sort of secular redemption. It may be this message of hope that accounts for the film\'s continuing popularity.'),(6,2,6,10,'\'I\'ve made about 20 films and 5 of them are pretty good\'-Tom Hanks.\n\'Forrest Gump\' is one of the best movies of all time, guaranteed. I really just love this movie and it has such a special place in my heart. The performances are just so unforgettable and never get out of your head. The characters, I mean the actors turned into them and that\'s what got to me. The lines are so memorable, touching, and sometimes hilarious.'),(7,2,7,10,'Quite simply, the greatest film ever made.\nHumour, sadness, action, drama and a Vietnam film all rolled into one.\nBut seriously - I bawled my big brown eyes out, on several occasions in this film. A real tear-jerker, and a wonderful character, played to perfection by Tom Hanks. Every bit as worthy for the Oscar as Rooney was to win the Premiership in 2007.\nI cannot say it enough: This is THE film of all time. Watch it, and you\'ll see.'),(8,2,8,10,'The movie has it all too,drama,comedy and it challenges societal norms as well. Then there are the almost endless quotes from the movie that have slipped into everyday speech. They are too numerous to say at this point.One of the toppers for me in the movie is when Forrest is in a quandary about life and wondering as Lt.Dan said we all have a destiny and his Mom says it is where we are all just floating around like a feather in the wind. \nForrest\'s character terms it very well with this quote,\'I think it is a little bit of both.\' \nFrom my experiences in life it does appear to be that way. So if you have not seen the movie,see it soon you are in for a real treat. If you did not like it, give it a try again and hopefully you will see it for the great story it is!'),(9,2,9,10,'I have seen this movie easily a half a dozen times, and I find that the beauty of the film is how Forrest Gump not only shares his innocence and purity with others, including the audience, he also manages to retain that innocence and purity through some very difficult times. As a Viet Nam veteran, and a college graduate of the late Sixties, I could of course personally relate to the various periods that Forrest Gump endures. \nI would only mention that the skillful and seamless blending of music, action, and period costume was enthralling. And yet it was so perfectly understated that Forrest Gump\'s travels through thirty five years of the stormiest and most meaningful years of American history only became clearly defined for the viewer. Even more so than the well known chocolates quote as a metaphor for life, I felt that the remark that stupid is what you do is probably more workable for most of us.'),(10,2,10,10,'Winston Groom\'s Forrest Gump was a novel that was complicated, but (Oscar winning) director Robert Zemeckis brings events together with visual effects that boggle even George Lucas.\nAnd leading the film in this odyssey of American life is Tom Hanks playing Gump (he won his second Oscar for his portrayal) in a film that shows one man who goes through many events in history to find the one he loves. Well done, well acted, and well directed to pythagorean procision. A++'),(11,3,3,9,'This is Tarantino\'s masterpiece, there\'s no other way to say it. It has arguably one of the smartest scripts I\'ve ever seen. The story, which is non-linear, is so well constructed it takes several viewings to grasp it all. The movie doesn\'t seem to be about any spesific thing, but there is a subtle hint of redemption as a central theme. The characters and preformances in this movie are practically perfect. This is still one of the best performances I\'ve seen from Sam Jackson, and it\'s an outrage he didn\'t win an Oscar. Each scene has its own unique flavour and charm, every segment has its own arc while also tying into the main plot. The comedy is great, the serious moments are great, every word of dialogue is exciting despite seemingly not having any reason to exist. This movie is just such a great time, and I recommend it to everyone who loves movies. I cannot think of a single genuine flaw with it, and it will remain one of my favorite movies for a long time.'),(12,3,5,9,'Before I saw this I assumed it was probably overrated. I was wrong. It lives up to and surpasses its reputation in pretty much every way. I would definitely recommend.'),(13,3,7,9,'Pulp Fiction is the most original, rule breaking film I have ever seen. Instead of following the widely used 3 act structure, Pulp Fiction makes up its own and while the 3 stories may seem completely disconnected at first, once you look closely you can find the underlying themes that they all share. Anyone who says that the movie lacks focus or has no meaning hasn\'t analysed enough. I highly recommend this film since it is number one on my list of my favourite movies of all time.'),(14,3,8,8,'Just the best movie... I can imagine my family seeing this movie in 30 years. I really love this movie and his soundtrack.'),(15,4,3,9,'When this came out, I was living with a roommate. He went out and saw it, came home and said, \'Dude, you have to go see The Matrix.\' So we left and he sat through it a second time. This movie is splendidly done. The mystery about what the Matrix is, unravels and you see a dystopian future unlike any we as a race would want. I have watched this over and over and never tire of it. Everyone does a great job acting in this, the special effects are above par and the story is engaging.'),(16,4,4,10,'This film doesn\'t age, it will be contemporary even in 2030 or 2040. Wachowski\'s best one, by far.'),(17,4,6,9,'The film is as well crafted as the matrix itself! On another level entirely to any other science fiction film from the last 20 years . Getting lost in another world, is interly what Cinema is made for. This one takes you into a whole new universe interly '),(18,4,8,10,'So much greatness about this well done crafty philosophical masterpiece! One of the greatest films ever made; a true benchmark in cinema and huge meticulously brilliant cabinet file of important metaphors. I smile so much while watching The Matrix, I\'m so happy it had a 20th anniversary. I\'m beyond intrigued by these types of society thought-provoking gems; there aren\'t enough of them!!'),(19,4,9,10,'I remember taking a class in social psychology many years ago. The Joy Luck Club figured prominently in the course. I like the idea of combining movies and theory.\nI am now studying metaphysics, and any study of reality begins with René Descartes, the father of modern philosophy. Descartes began his intellectual odyssey with this question: How do we know that there is a reality outside our own minds? We each know that we have experiences, and we can be sure of these experiences; therefore, each of us can be sure that we exist. But how do we know that the internal experiences we have corresponds to objects outside our minds?\nThis is the whole theme of The Matrix. Watching this film is like studying metaphysics.'),(20,5,2,10,'The Silence of the Lambs runs two hours. Anthony Hopkins appears for little more than sixteen minutes, yet during those minutes he hasn\'t bored you for a second, not even after the tenth or eleventh viewing. Such is the power of his performance, it\'s absolutely impossible to forget him.His character, Dr.Hannibal \'The Cannibal\' Lecter, is a brutal killer with revolting methods and habits, but he\'s also very intelligent, charismatic and with good taste(you can interpret that as you like).A clichè by now, but who cares? He still is one of the key elements in this wonderful thriller, which sees Jodie Foster\'s Clarice Starling asking for Lecter\'s help to catch another killer.The result is a dangerous yet fascinating relationship between the young, unexperienced FBI-agent and the convicted,but basically omnipotent, psychiatrist.He\'s a step ahead of everyone all the time, and makes sure everyone notices, with his witty, unforgettable one-liners.If there had to be only one reason to worship this movie, then it would have to be the chemistry between the two leading actors.Never before has a non-sexual man/woman connection been more thrilling.Never before has a film\'s ending been more unsettling and brilliant and left us asking for more.'),(21,5,3,10,'Brilliant Best Picture of 1991 that never gets old. \'The Silence of the Lambs\' deals with a young FBI cadet (Oscar-winner Jodie Foster) who is sent to interview a captured madman (Oscar-winner Anthony Hopkins in one of the greatest performances ever on the screen) to find out about a serial killer (Ted Levine) who is stripping the skin from his female victims after they die. The FBI has had no luck with the case and agent Scott Glenn tries to throw a curve-ball to Hopkins by sending Foster. Hopkins is a former doctor of Levine and holds the clues to capturing the unknown criminal. Needless to say the film takes many twists and turns, creating a suspenseful thriller that has no equal. At the heart of \'The Silence of the Lambs\' are the confrontations between Hopkins and Foster. They play a complicated chess match of words which results in some of the greatest footage ever captured for the cinema. Hopkins dominates in spite of the fact he has approximately 17 minutes of time in the film. This is a film that will wrap itself around you and you will likely never be able to shake some of the key elements you have seen in this amazing masterpiece. 5 stars out of 5.'),(22,5,4,9,'This is definitely a film that proves you don\'t need tons of blood and gore to have a good suspense film. Anthony Hopkins performance as the deranged genius Lecter earned him a well deserved Academy Award and the same was true of Jodie Foster\'s performance as Clarice Starling. This film should go down in history as one of the greatest suspense films in the history of cinema.'),(23,5,5,9,'The Silence of the Lambs, having accomplished the rare feat of winning all five of the major Academy Award categories, is a remarkable achievement in filmmaking. Gruesome, pulpish material was transformed by dedicated participants on all levels of production, and a film that would have failed in the hands of many others wound up becoming a modern masterpiece. Taut direction and a superb screenplay might be the best arguments for the film\'s power, but the flashiest are certainly delivered in the bravura performances of Hopkins and Foster. Their interplay -- and remember, they only share a handful of scenes together -- is nothing short of riveting.'),(24,6,2,8,'Dark and depressing but just fascinating. Director David Fincher shots the entire film in dim light and shoves the victims mutilated bodies in our face. The grimness of the tone wears you down but that\'s appropriate considering the subject matter. No humor either. It all leads to a truly harrowing ending. There was supposed to be a happy ending but they (wisely) chose not to do it. Freeman and Pitt work very well together and both give excellent performances. I even thought Paltrow (who I hate) was good! Kevin Spacey is very good too in a small role.\nIf you have trouble with blood, gore and disturbing subject matter stay far away from this movie. But if you can handle that, watch this one. It\'s depressing and unpleasant but riveting.'),(25,6,4,7,'Pros: 1. The score is beautifully ominous which only deepens the thrilling and unsettling atmosphere. 2. Brad Pitt (Mills), Morgan Freeman (Somerset), and Kevin Spacey (John Doe) give amazing performances. 3. The colour palette being dark and monotone helps to cement the gloomy and grim tone. 4. The gore and practical effects are immense and they still stand up 25 years later. The sloth, lust, and gluttony murders, in particular, stick in mind. 5. The great cinematography knows when to pull the camera back, as well as to draw it close for great effect. 6. Both Morgan Freeman and Brad Pitt have great chemistry together. 7. The back-and-forth between Somerset, Mills, and John Doe in the police car is one of the most intense and captivating scenes in the history of cinema. 8. The movie presents the interesting and complex moral quandary of: is it immoral to kill the immoral? Even if those immoral people adversely affect other people? And who gets to decide who is immoral, and what punishment should be meted out to them? 9. Despite the underdeveloped character of Tracy (Gwyneth Paltrow), the conclusion is still one of the hardest hitting and iconic endings ever created.\nCons: 1. Tracy is a severely underdeveloped character, with her pregnancy-confessing scene to Somerset feeling lazily forced to add weight to the final scene.'),(26,6,6,8,'A retiring Detective and a young rookie are hunting down a serial killer, a killer with a dark MO, murdering his victims using the seven deadly sins.\nAs I watch this, it\'s coming up to its thirtieth anniversary, and it\'s as fresh now as it was back in 1995, it\'s an intensely macabre take, crimes that are infinitely macabre and depraved, and intensely twisted.\nThe combination of Freeman and Pitt is incredible, they work immensely well together, we have the fresh zest of Mills, and the unshakable, but battle weary Somerset. Paltrow and Spacey are excellent in support.\nTwo hours flashed past, there is no lull, no moment to switch off and boil the kettle, the intensity is immediate, the pacing designed to keep you glued.\nI have always thought there is a shade of Alfred Hitchcock about this movie, such is the intelligence of the plot.\nVery good visuals, the macabre and gruesome bodies look shocking still, nothing is spared or hidden away.'),(27,6,7,8,'Somerset (Morgan Freeman) is a wearied homicide detective. Mills (Brad Pitt) worked hard to transfer to the troubled precinct. He\'s married to Tracy (Gwyneth Paltrow). There is a serial killer on the loose delivering his sermon on the Seven Deadly Sins. Somerset is tired of the city. Mills is eager to investigate.\nreviewsDirector David Fincher has filled with beautiful darkness. It\'s more than just the gruesome murders. It\'s the rain, the music score and the grungy setting. Fincher has weaved together an artistic masterpiece. Freeman is the perfect grizzled veteran. Brad Pitt is a terrific eager newcomer. There are surprising comedy sprinkled in. The final twist is simply cinematic history. The big line is awesome. Pitt delivers it perfectly with so much heart aching pleading. Some do deride its grotesque gloom but that\'s like complaining about a movie being too funny or too exciting. This is suppose to be dark and it achieves it.'),(28,7,4,9,'If you want well-done drama with splendid performances, look no further, and enjoy yourself. Especially Angelina Jolie\'s phenomenal Oscar-winning performance.'),(29,7,5,10,'This is definitely one of the best films to deal with life inside a mental institution. This was the career maker for Angelina Jolie and it solidified Wynona Ryder\'s career. The person I really enjoyed in this film was Britanny Murphy as Daisy. She was a person who had a tough exterior but after you chipped away at that shell there was really a fragile little girl underneath. This film is definitely something I would watch again.'),(30,7,9,10,'The absolute best thing about this film are the knockout performances by it\'s 2 main stars Winona Ryder and Angelina Jolie though both characters (hence performances) are very different they stand out nonetheless. It seems to me to be somewhat easier to play a psychotic than to play a regular neurotic, so who really has the better portrayal of the two?\nBrittany Murphy as \'Daisy\' shines in her scenes. She is a force to reckon with in her future film career.\nJames Mangold directed this film quite nicely from a very good screenplay; he managed to portray all these young women as young women in turmoil. No melodrama, no over the top sentimentality, just a frank peek into their tumultuous lives.\nIt is a heavy drama, so be forewarned! And a very moving drama at that.'),(31,7,2,10,'Winona Ryder was incredible as the teen who was really just being a rebellious teen, and got caught up in a system that won\'t let loose until you admit you are crazy, even if you aren\'t. She is joined by the best performance I have ever seen by Whoopi Goldberg.\nAs good as these two were, it was Angelina that shined in this film. Jolie was absolutely incredible as the one who was really off the deep end. She was in so much pain, that she loved causing it to others. A super performance by a super actress.'),(32,7,6,10,'How good is Angelina Jolie in this film? It is a testament to this young actor\'s presence that even as dark and soul sickened and gloriously decaying as her character is, there is not a frame in this film that doesn\'t feel her infection.\nWinona Rider is equally excellent as the psychologically confused (or is it enlightened?) hero forced to navigate the depths of her own psyche. The interplay between these two is somehow able to range from the enchanting to the exquisitely painful; but from beginning to end remains capable of leaving you breathless.'),(33,8,2,8,'There are three reasons to see Panic Room. 1) The titles: understated, gorgeous, uncanny letters floating in the Manhattan cityscape. 2) The photography: camera moving like an animal, slipping between tiny spaces, swinging across rooms and through floors, inhabiting the screen like another character. 3) Forest Whitaker, again (he\'s so good so often it\'s hard to not expect a great performance).'),(34,8,4,7,'Director David Fincher lays out a tight simple thriller. It takes place all in and around the house. Meg Altman (Jodie Foster) is recently divorced and buying a house in the Upper West Side of Manhattan. It has a panic room. On their first night in the house, they get invaded by three criminals (Forest Whitaker, Dwight Yoakam, Jared Leto) intend on getting something from the previous owner left in the panic room. Only Meg and her daughter Sarah (Kristen Stewart) get there first.\nFincher has striped away all the unnecessary filler from the story. It\'s a simple cat and mouse game. Nothing could be simpler. Even at almost 2 hours, there isn\'t a slow moment. All the actors get their fair share. Jodie and Forest lead the cast, but Jared and Kristen also shine. I wouldn\'t say this was the greatest or the most original. It is simply a good movie.'),(35,8,6,7,'David Fincher directs this cleverly conceived thriller about a mother and daughter trapped inside a panic room by three criminals. The film is well-paced and the camera work is slick. The film does well in exploring the confines of the house. Jodie Foster is effective and maintains a high intensity throughout. Kristen Stewart is decent as her daughter. Forest Whitaker plays a slightly sympathetic criminal and does well. Unfortunately, after an engrossing game of cat and mouse, the conclusion is weak. Staple clichés crop up and the film goes for a crowd-pleasing finale that doesn\'t quite feel right. Still watchable.'),(36,9,2,9,'Soderbergh infuses the proceedings with a vibrant, almost peppy sense of style that would not have been half as compelling had a less edgy director helmed it. It would have been easy for him to have allowed Erin Brockovich to descend into manipulative melodrama, but he resists that path of least resistance, instead giving us a film that is smart, savvy, funny, and, at times, poignant.'),(37,9,3,9,'\'Erin Brockovich\' is better than the average feel-good story. When there\'s little melodrama and great acting, a feel-good story becomes a great movie. Sports films based on true stories are feel-good stories, but they don\'t get nominated for best picture. While it may all seem too good to be true and the positive seems to trump the negative more times than it ought to, the film still feels very real and one that no one should miss.'),(38,9,4,9,'The story of corporate carelessness and a small-town lady who found out that the water was contaminated and decided to do something about it in spite of heavy lawyers who do whatever the client says, might give others the incentive to do their own action? \'hope so.\nAlthough this is a huge legal battle, there is very little of that shown - good idea, courtroom stuff can be so boring and irrelevant. We do see the judge deliver a judgement on a procedural matter, that is all that matters, and the no doubt long legal arguments are ignored all together. Good.'),(39,9,5,8,'I\'ve never been a big fan of Julia Roberts as an actress and so I approached this movie with trepidation but I have to admit that I really enjoyed it. Not only that, but Julia Roberts was excellent. I don\'t think I\'ve ever seen a Roberts movie where she had this commanding a screen presence. Her physical presence may have helped in that regard but so did her acting. But man, she really looked good in this movie. Oh, and Albert Finney displayed some pretty solid acting skills as well even though he didn\'t look good. Overall, I\'d say that most people who watch this movie will probably find themselves cheering for Erin and will be very satisfied with the film. I was.'),(40,9,6,10,'Maybe this movie is not the right choice for action fans, but that is the only restriction of my otherwise fullest recommendation for this movie. It has everything, ranging from real-life documentary through love story via comedy to tragedy. And it is so lovingly done, and played so well. And it also has a wonderful soundtrack.'),(41,9,8,10,'After all of the hype surrounding this film I was prepared to be disappointed. I was not! This film deserved to win Roberts the Oscar, her performance was superb. She plays the seemingly white trash Erin who may not have the qualifications but does not lack the intelligence. Through a simple research job she discovers that a large corporation has been poisoning the water supply of a town. She fights their corner for them and eventually secures them a huge court settlement. It is not plain sailing for Erin as she has to overcome stereotypes and prejudice but she wins through in the end through her hard work and determination. Finney provides sterling support and his exchanges with Roberts provide some classic moments. I cannot recommend this film highly enough!'),(42,9,9,10,'For starters, Julia Roberts does more than focus on beauty in this movie. As a twice-divorced single mother who helps prosecute a corporation that had polluted a town\'s water supply, Roberts is a lot bitchier in this role than in most of her other roles. Occasionally blurting out lines that sound like they came from George Carlin, Erin is one bad-ass mother. The movie is also helped by good support from Albert Finney as Erin\'s boss Ed Masry.\nSo, in conclusion, even though I generally consider Julia Roberts pretty worthless, I do agree that her Oscar win for this movie was well deserved.'),(43,10,2,7,'The movie that made Julia Roberts a star and brought hope to hookers everywhere.\nMany condemned this movie as an irresponsible and inappropriate Cinderella fantasy, only proving how stupid they were to take a movie like this seriously enough to protest in the first place.\nHell, if hookers actually looked like Julia Roberts, I might be tempted to dabble in the flesh trade myself. Unfortunatelty, most of them look more like Jason Alexander.\nEntertaining, harmless and mostly forgettable.'),(44,10,4,9,'What is it about this movie that made it such an instant mega smash when it was released? I\'m not sure if it\'s The incredible chemistry between Gear and Roberts, the smart dialog, the storyline-combination of all of the above-etc etc. But I do think These days, so few GREAT romantic comedies get made. Pretty woman is great. I enjoyed every moment of this and have seen it many times.'),(45,10,6,8,'Pretty Woman is a very entertaining film indeed. However, for me, it isn\'t completely perfect, there were times when the script could have been developed a LITTLE more, and the film itself is a bit on the long side. But overall, you have a charming and entertaining movie. Richard Gere is a charming lead, and I do find him charming in everything he\'s in. Julia Roberts is wonderful also as Vivienne Ward, a beautiful but down on her luck sort of woman. I will confess I am not a Julia Roberts fan, but she put a lot into this film, and it showed. I was also really impressed with the supporting performances from Jason Alexander, Ralph Bellamy and Hector Elizondo. The film also has some excellent camera-work and well-intentioned direction, with a very lovely scene in the opera house, showing La Traviata, one of the world\'s saddest operas. The script, while a little frothy and contrived at times, still had a lot of humour and heart. Overall, I really liked this film, it made me feel good, like it promised.'),(46,10,8,10,'Wow! Richard Gere and Julia Roberts give magical performances as a shrewd businessman and a lovely prostitute. I was really moved by the blend of humor and romance. The romance was what really moved me. I thought that Edward (Richard Gere) and Vivian (Julia Roberts) looked good in the attire they wore to the opera in San Francisco. Oh, boy, if you ask me, Julia Roberts did, indeed, look like a pretty woman in this movie. PRETTY WOMAN really tugged at my heart and soul and made me laugh at times. Don\'t say I have a twisted sense of humor, but I laughed really hard when Edward yelled at Stuckey (Jason Alexander) to get out of his hotel room. If I ever travel to Beverly Hills, I\'m going to stay at the Regent Beverly Wilshire, that is, if I can afford it. Before I wrap this up, I\'d like to say that I think Richard Gere and Julia Roberts each deserved an Academy Award for their performances. Now, in conclusion, I recommend this star-studded hit to anyone who\'s a fan of Richard Gere or Julia Roberts. You\'ll laugh, you might cry, you\'ll be touched, and you\'ll want to see this box-office smash over and over again.'),(47,10,10,6,'This was the ultimate example of Hollywood glorifying prostitutes and showing them to be gorgeous (and basically good-hearted) women. I do NOT speak from experience but from number of real-life cop-friends I can tell you this: you average hooker looks the OPPOSITE of Julia Roberts (or Melanie Griffth or Elizabeth Shue and all the rest of the hooker-hotties Hollywood throws at us.)\nHokey? Definitely, but it\'s still a fun movie which has entertained most people who have watched it the past 15 years. Roberts and Richard Gere certainly make a handsome couple. Hector Elizondo almost steals the show with his minor role as \'Barney,\' the hotel manager. He is definitely the most humorous character in the film.\nIt\'s a funny, charming and romantic film that was a big hit. Just don\'t believe it when Hollywood continues to glamorize the worst aspects of society, something it always does.'),(48,11,3,8,'Considering this is a pretty intense movie about a desperate guy threatening to shoot and blow up people, this movie had moments of unexpected humour. The whole cinema was laughing at various points. Which was very cleverly done by director, Jodie Foster. The movie is well scripted and well acted. Clooney and Roberts clearly enjoy working together (just don\'t remind me of Ocean\'s 12). I agree with the other reviewer who said the movie should have just stopped with the return to the foosball table, and not gone for the schmaltzy hospital scene. Not the greatest movie of the year and not Oscar-worthy, but well worth the price of the movie ticket.'),(49,11,4,7,'Even though the film deals with a serious subject, an eye opener leading one to wonder about the real money monsters out there, it remains an excellent thriller with top class actors.'),(50,11,7,7,'Above-Average But Superficial Hostage Yarn.'),(51,12,6,7,'Writer/director Peter Hedges did a better job on his 4th directorial film than he did with his story. The 103 min length was decent, but the pacing felt really slow and lacked any luster or peaks in its screenplay. The message was strong and powerful, but I think it was under-emphasized and too typical to get a powerful message across, well, powerfully. The casting was great and all performances were very convincing. This film is certainly a must see to open the eyes of society on how addition can destroy many lives, not just the person addicted. Would I recommend it? Yes. Would I see it again? No, it lacked that luster and oomph for me to want to see it again.'),(52,12,7,7,'I don\'t know if this is going to get award season love but I\'d like for it to get nominated for its original screenplay and some acting plaudits. Its easily identifiable, and the characters are strong and driven, a testament to the actors who commit to the performances. Wouldn\'t have minded this thing being 10-20 minutes longer because not a minute is wasted here.'),(53,12,9,8,'Julia Roberts spent much of the 1990s in romantic comedies. This movie is nothing like those. It\'s got to be one of the grittiest movies of 2018. There were scenes that made me feel as if I was on pins and needles. It\'s far from the year\'s greatest movie, but the roughness alone makes it worth seeing.\nIn the end, the movie\'s message seems to be that parents must love their children, no matter how low the latter sink. At the very least, they should make an effort to do so. I hope that Hedges keeps turning out movies like this one.'),(54,12,8,8,'Ben Is Back follows a story of a young addict returning home for holidays by putting the lives of his family members and those who he had affected as an addict dramatically changes within 24 hours. A triumphal performance of Julia Roberts as the mother, who is fighting for salvation of her child, is probably one of the best of her career. Lucas Hedges, who plays Ben, also son of the director Peter Hedges, is on a phenomenal rise, appearing in not one but two Oscar-worthy performances this year, proving that Hollywood can still hold on the line with decent young actors such as Hedges as old talents slowly fade out. A passionate project that is ambitious, raw and tender, centered on the redemption addicts can get from their family.'),(55,13,2,8,'The dialogue is real, the awful failure to express love and respect is well presented, painful as it may be. While this was not a pleasant experience, I could not take my eyes off the principles. I think about this movie all the time which means it must have got to me.'),(56,13,3,10,'This is an exceptionally challenging film and most won\'t be able to stay with it as it hurtles, repeatedly, from hysterical comedy to blackest tragedy in almost the same breath - the term \'tragicomedy\' never fit a film so well ... There are some stupendous performances here, Meryl Streep in particular but Roberts is outstanding too amongst a superb ensemble cast - the script is firecrackingly terrific and the direction is perfect too..'),(57,13,6,7,'Weddings and funerals bring out the best in SOME families.'),(58,13,9,8,'This film was amazing. The cast, director, and cinematographer are top notch. It will surely be nominated for several Oscars. I had a chance to view it during a Film Festival and was excited that I got a ticket to this sold out showing. But then, halfway through the movie, I nearly walked out.\nThe outrageous, violent, destructive behavior of the characters and between the characters hit a little too close to home for my comfort. For those who think the actions of the characters seem over the top, let me assure you they are not. When you mix addiction, lies, and a lifetime of pain, you get exactly this type of toxic concoction.\nI required multiple tissues to get me through to the end, but ultimately I stayed (as a film lover, I could not bring myself to walk out of such a wonderfully crafted movie). I\'m glad I did.'),(59,14,3,8,'I actually really liked this movie. I believe it tells a good story about family as their son struggles with a mental illness. The biggest problem with this movie is that some of its line deliveries come off as weird and unnatural. Also there is a scene that is mentioned but we do not actually see it. This movie is not an easy watch. The movie gets to be very heavy at certain moments. Even with all of those problems the movie is carried by a great performance by Huge Jackman and Lora Dern. This movie gives great insight into what it is like to be battle with a mental illness. Some people may not like this as much as me, but this is a really good movie.'),(60,14,4,8,'The Son is an emotionally devastating film with a shocking yet important cautionary message for all parents.'),(61,14,10,8,'It felt personal somehow, when thinking of myself in all their places. It is so hard and devastating. I sometimes see that look in my father\'s eyes, and sometimes in my mother\'s or my sister\'s, sometimes I have these mixed feelings and the deep conviction that I don\'t desire to keep on living, but I don\'t know how anyone else can survive this, anyone else that\'s similar to Nicholas. Such a real and painful movie. I don\'t know why it touched me so deep, and why it made me cry so hard, it felt too personal. And it makes you think, what can anyone do really? What can we do, and is it anyone\'s fault?'),(62,14,2,9,'This movie creates unexpected moments of deep reflections and touches one of the most important themes of nowadays societies. We need these kind of art and scripts. People are just so superficial that don\'t really understand the depth of this film.\nThe capacity of the actors to really take you into a deep conversation where themes like empathy, kindness, depression and human interaction is always rich and powerful.\nIt\'s always beyond the typical script where common places fall. It can become so personal that for some people this movie can be so hurting that creates a sense of impotence and frustration with what seems to be a normal situation in life.\nExcellent and unforgettable.'),(63,14,6,10,'It shook me to my foundation. It was like looking in the mirror for two hours. My own position in life: twice divorced successful father with four children, the way the son in the film looks, behaves, and even his passion - writing are strikingly similar to my younger son, now 27. I felt like someone recorded conversations with my children and spouses. It is word to word... The successful father is a curse for his children, or can be... The father of the father in the film is very much like my late father was. The mother in the film is exactly like both of my ex-spouses.'),(64,15,2,9,'I wasn\'t interested in another gun-violence teen drama. However, 10 minutes in, I was struggling to hold it together. Ten minutes after it ended, I was reeling from a gut-punch ending. Ortega, Ziegler, & Park give an authentic presentation of teendom, like Burnham\'s Eight Grade, with an intense injection of tragedy. The fact that writer-director Park didn\'t live through a school shooting shows her innate touch at empathetic filmmaking.'),(65,15,3,8,'A harrowing movie about the aftermath of a high school shooting. Jenna Ortega is outstanding in the lead role and plays it so well in capturing the sadness and also the funny side to her character (like when she tells her mum everything). Megan Park in her directorial debut does a great job in letting the movie flow at it\'s own pace and doesn\'t rush anything. A really nice gem that deserves to be seen by a wide audience.'),(66,15,4,7,'The scars of a school shooting weep through a young students actions as she struggles to come to terms with the mental conflict playing out in her mind, with teenage distractions, reactions and inactions all compounding, confusing and amplifying already heightened emotions, devotions and affections. Great performance from Jenna Ortega who delivers a truly believable and sympathetic portrayal of something few of us could ever imagine.'),(67,15,5,9,'I am impressed by the actors and the characters they play in this movie. They feel very real.\nThis is a really really good, strong, and emotionally movie.\nYou dont see the violence, but you hear it, and you feel it together with the characters.\nI cant forget the actors. They do a really good job in this one.'),(68,16,2,9,'Moulin Rouge portrays a complicated, passionate and powerful love story, that is also incredibly moving. I am 17, and I thought the film was near-perfect, I mean I loved the overall look of the film with its gorgeous costumes, dazzling choreography and sumptuous cinematography.'),(69,16,3,10,'One of the few movies out there worth watching several times, just because of the sheer visual and musical enchantment.'),(70,16,5,10,'I have not ever felt for a movie the way I do about \'Moulin Rouge.\' It is not just a movie...it is a cinematic experience the likes of which I have never before seen. The story, the music, the acting, the visual imagery strikes emotion in me I never before thought possible from a film. It is without a doubt the most brilliant piece of cinematic art I have ever seen. It is dizzy, maddening, beautiful, and heartbreaking!'),(71,16,6,7,'Overall, it\'s exhausting and insane, but for me at least it mostly worked. I can understand people loving this movie. I can understand people hating this movie. And honestly, I can understand anyone being anywhere inbetween on this movie.'),(72,16,9,10,'I have seen Moulin Rouge at least 25 times. I think it is the most extraordinary movie of my generation and breaks every limit set by the industry. I have heard all the traditional complaints...people didn\'t like the music, the editing was too swift, or it wasn\'t \'their taste\'. Moulin Rouge took a risk. A risk films like A Beautiful Mind and Shakespeare in Love don\'t. It risked by being controversial. To make a likeable movie isn\'t hard, follow the Hollywood mold and stick in a few attractive actors, some bland dialogue and viola you have a film. Moulin Rouge was made knowing that not everyone would like it, but knowing everyone would at least appreciate it for its artistic ingenuity. Visually it is superb, an indulgent feast for the eyes with every breathtaking, artistic scene.'),(73,17,2,10,'Wonderful movie with a stunning performance from Connery'),(74,17,3,9,'This is a highly intelligent film with a strong story, steady direction and marvelous acting. I rated it a 9/10. Despite an all too familiar storyline, it differentiates itself by its wide-ranging excellence. For those who enjoy good dramatic performances and intriguing character studies, this film is not to be missed.'),(75,17,4,9,'\'Finding Forrester\' is without any doubt the best movie of the year 2000. I\'ve heard many people say that this is just director Gus Van Sant\'s retread of his oscar winning hit \'Good Will Hunting\'. That is the furthest statement from the truth. Eventhough the general idea of two different people bonding is here, everything else is as different as it comes.'),(76,17,5,10,'What a nice movie. Great plot, nice character development, and moments of brilliance. To be sure the story of a prodigy and brilliant but sometimes reluctant mentor has been told before, but this story is a unique and interesting take on the subject. Jamal Wallace (Rob Brown) is a writing prodigy. His journey makes for riveting stuff.'),(77,18,2,10,'I don\'t know whether Matt and Ben have ever been in therapy, but they certainly understand a lot about the human psyche, how it ducks responsibility, and pushes blame onto others, how it dismisses the real gifts it has and concentrates on running itself down. How many of us suffer from the same problems as Will? Only those who deny their own vulnerability will remain unaffected by this film.\nNot only is the script powerful, but the dynamics between the characters - all of them selfish, even Skylar - is vividly and plausibly executed. The film just about manages to avoid easy answers, preferring to acknowledge (indeed, highlight) the complexity and pain of personal growth and self-realisation.\nYou could read a lot of self-help books, but they won\'t bring across to you as powerfully as this film what it\'s like to be scared, what it\'s like to experience loss, how difficult it is to shake off your old ways of thinking, how important honesty to yourself is. If this is the kind of revelation Matt and Ben are going to come up with, I look forward to their future efforts.\nThe first time I saw it, I felt moved as the credits rolled. On my way home from the cinema, I felt sombre. When I got home, I finally burst into tears. This film burns slowly, inside you.\nAs cinema, it\'s fair to middling. The performances are all first class. The script is a jewel. As wisdom, it\'s second to none. A fine achievement.\n'),(78,18,3,10,'I don\'t think I have been this moved by a movie in a while. Good Will Hunting is an incredible movie and if I had to say what I think is Gus Van Sant\'s best film, this would be it.'),(79,18,5,9,'It was these obstacles that made Will Hunting such a complex character: while he was a genius at the definite (math), he was a bit of a moron at the indefinite (human relationships). His rough-edged exterior was simply a cry for help, and the process of which the obstacles in his life realized that and attempted *to* help him was nothing short of extraordinarily touching.'),(80,18,7,9,'\'Good Will Hunting\' is a good production, with solid craftsmanship in all departments -- thanks to the creativity of Damon and Affleck.'),(81,18,6,10,'Robin Williams gives the best performance of his career alongside memorable performances from Matt Damon and Ben Affleck. This masterpiece will have you laughing and crying and by the end feeling reborn.'),(82,18,10,10,'A Sensitive, Remarkable Look at Genius'),(83,19,3,10,'Having seen Tarantino\'s 3 previous films, going into the cinema, my expectations for \'Kill Bill\' were already over the roof. However, regardless of my high hopes for quality entertainment, I was not prepared for this film. I was dumbfounded. I was blown away. I had quite simply never seen anything even remotely like it.'),(84,19,5,10,'This is movie is unusual, but it works for me. It kept me intrigued from the beginning with the plot which is not entirely clearly, but that made it more interesting for me. There\'s a lot of action in the movie which I found excellent and enjoyed a lot. It might not be realistic, but its a movie so it doesn\'t have to be. The plot is amazing and I can\'t wait to watch volume 2 soon because of how intriguing volume 1 was.'),(85,19,8,9,'I wouldn\'t really recommend this film to someone who is really not from the Pulp Fiction era. This film is really just homage to flicks that frequently appear on Sunday Samurai Showcase, revenge and Tarantino\'s continuous fascination with Uma Thurman. This film contains extreme violence and sometimes strange dialog coupled with some pretty good acting and directing. If you\'re not a fan of Tarantino\'s films, you should pass on this one because it is doesn\'t stray to far from his other stuff. If you like his other works, this is a must see due to its originality and quality. And, if you just don\'t like Tarantino himself, and find him annoying like everybody else, I don\'t blame you but it\'s still worth your while seeing.'),(86,20,8,8,'If I had to rate it in poker terms I would say Full House.'),(87,20,9,8,'Aaron Sorkin\'s directorial debut is a solid, entertaining entry from 2017. His script is full of his trademark rapid-fire dialogue and keeps the film moving at a brisk pace. The voiceover can be a bit exhausting at times, but it adds a lot of context to the film. Chastain and Elba are both terrific and each get their moments to shine. The film is a tad long, but it\'s never dull. Molly\'s Game is a very interesting true story that lends itself well to cinema.'),(88,20,10,8,'A fast, excellently written and well-cast film. Jessica Chastain plays outstandingly well as both a fragile beginner, a brilliant winner as well as a strong woman. I would advise everyone to take a look at this strip.'),(89,22,10,9,'This is the sweetest, freshest, most genuinely heartfelt movie that I\'ve seen in ages.\nThe script is thoroughly original, warm and witty, and the story unfolds without a false moment or even a whiff of predictably. The direction is sensitive and assured, and the leading man is endearingly winning.\nIt blows my mind that all of these are the work of the same person: the 25-year-old Cooper Raiff.\nIf you are reading this, Mr. Raiff, bravo and congratulations! Whoever funded this film needs to give him more money to make more films.'),(90,22,9,8,'A dose of sweetness when it\'s needed'),(91,22,2,8,'It was a very sweet movie. Made me laugh as well. Glad it didn\'t have the ending some would\'ve wanted. Not really sure where all the hate comes in, or how this movie has ruined weekends. It was a good enough movie that you didn\'t have to pay extra for, that\'s for sure!'),(92,22,5,9,'This kid has such a knack for finding connections that feel human - joyous and complicated and cringy and triumphant and sad. Nothing in this movie feels like a stretch. So much happens, and so little happens all at once....for the plot and for the protagonist. I so wanted Andrew to be the best version of himself through it all. I\'m excited Raiff has found a way to make this kind of story because we need more of them.'),(93,22,7,9,'Where this actor, director and writer who called Mr. Raiff been!? This movie is such incredible one for those who love drama and calm movies! Right amount of laughters and tears, Besides that it has the touch of Apple+, the music and the simplicity of telling the story. Love this movie so much.'),(94,22,8,8,'It\'s a classic indie film and that\'s a plus in my book! It\'s a really nice story and it\'s perfectly directed, Cooper Raiff did an excellent job! There are some really joyful and humorous moments, really liked Raiff\'s sense of humour and there also some touching scenes, in particular the one where Raiff and Johnson talk about depression (I cried my eyes out during that scene)! Though I\'d like to notify that there\'s a cringe dialogue between them in another scene later in the movie too! All in all, the movie is definitely worth watching if you love the combination of sentimental and funny!'),(95,23,2,6,'Kathyrn Hahn absolutely steals the show in this comedy about moms rebelling. She\'s a riot and the film somewhat drags when she isn\'t on screen. It never takes full advantage of its premise, but there\'s enough talented actors involved to lift it up above most raunchy comedies like this. It won\'t blow your mind, however you should be able to find some good laughs.'),(96,23,3,5,'Inconsistent laughs in a comedy of parental duty'),(97,23,5,8,'One of the funniest movies of the year and one that men and women will both love plus the message doesn\'t get lost in the comedy.'),(98,23,4,6,'A lighthearted slapstick comedy on the shaming of stressed-out moms'),(99,23,6,6,'\'Bad Moms\' is a very funny and entertaining movie, and if you enjoy comedies where there are little limitations. There might be situations that some people will find to be a bit too much, but hey, this is an R-rated movie.\nThis is also the type of comedy that you can watch again, although I would say that some time should definitely pass in between such multiple viewings. This is hardly a comedy classic, but it still a very enjoyable and entertaining comedy.'),(100,24,2,10,'If you know that Seth MacFarlane is the creator of \'Family Guy\', then you\'ll have an idea of what \'A Million Ways to Die in the West\' contains. Executive producing this year\'s \'Cosmos\' showed that he has a serious side, but his silliness is on full display here with him in the lead role. The movie shows what the Old West would\'ve been like had it been the brainchild of 10- to 14-year-old boys. Not even \'Blazing Saddles\' showed the stuff that we see here!'),(101,24,6,9,'It\'s not a timeless piece of comedy, but it\'s got spunk, wonderful production values, inspired comedic acting (even the \'bit\' roles), and it has well-turned moments of stunningly genuine romance. Of note: If other comedy films are \'better\', why did I find more good ol\', down-home belly laughs in this one? I think I know why: Sure, MacFarlane can play it blue and scatological, but he also values that other timeless comedic tradition; that which is Truly Funny Because It Is True.'),(102,24,7,7,'So bottom line: If you like stupid & silly comedies with racist jokes & stereotypes, go watch this one. If you are a typical fan of the humor in Family Guy, South Park etc you will enjoy. There\'s plenty of different kinds of jokes in here. None of them classy, but funny. Toilet humor, foul mouths, racist stereotypes, offensive parodies & a few references that will be totally unexpected. If you\'re a fan of cleverly written scripts & wants to watch a classy comedy film; well, this movie is a total waste of time for you. I watched this expecting it to be really dumb, but enjoyable and it surpassed my expectations. The plot is simple, the jokes aren\'t clever but funny, the actors are doing a more than well job. I couldn\'t ask for more. This one deserves at least a 7 star rating. I found this movie much funnier than TED, which also was pretty dumb.'),(103,24,8,7,'I\'ve sometimes enjoyed watching Family Guy and actually even enjoyed Ted. Reading the reviews on this movie made me not go see it in theaters, but I am satisfied with my choice to finally watch and to have given it a chance. Because of this, this is my first review posted on years of being on this site.\nSeth knows his niche and the audience the directs his work towards. It was nice to have a genuinely funny movie that falls in line with the sense of humor I expected.\nIf you don\'t like his regular work, I don\'t recommend it, but if you do, you\'ll probably enjoy.'),(104,24,9,8,'I was not expecting to find an innocent love story about people making the most of their lives and their situations. I was not expecting many of the things in the film, but enjoyed it all. 8 out of 10 because I\'m knocking the film for its slender story arc. Another producer or some studio bigwigs could perhaps have retooled the script to make it more dramatic or rapid -- but then they might have killed off the good things in the script, too. All in all, I recommend.'),(105,25,9,8,'Wendell is a straight laced privileged guy on a mission. Gerry is an irreverent drug-doing whore-doing racist-commenting loudmouth cop. So Wendell takes him as an idiot at first. But it\'s soon obvious to Wendell that Gerry is the smartest guy in the room and he knows all the local players.\nBrendan Gleeson has created one of the funniest raunchiest cop character ever.'),(106,25,8,8,'Gleeson and Cheadle spar well and develop a likable relationship, despite this it\'s not the heart of the movie; that belongs, again, to Gleeson in a tour de force performance.\nCheadle\'s good and is a great foil. The baddies are less well developed characters and, for my taste, were slightly too caricaturised.'),(107,25,4,7,'Sergeant Gerry Boyle (Brendan Gleeson) is an off-the-wall, somewhat crotchety veteran police officer who patrols a small Irish town. Shortly after beginning an investigation into a peculiar murder, Boyle discovers that his case is related to a major drug ring that is currently being hunted by FBI agent Wendell Everett (Don Cheadle). As straight-laced as they come, Everett is an odd pair for Boyle but the two are forced to work together to take down the cartel. When the case pulls Boyle in deeper than he would have ever imagined he is forced to reexamine his life\'s work and turn himself into an unlikely hero.'),(108,26,2,8,'Sandra Bullock and Melissa McCarthy are a great hilarious duo, even when things feel off it\'s so much fun! Paul Feig created an excellent comedy that is mixed perfectly with some action. I love these goofy movies they are easy to enjoy anytime and I\'m glad it has more praised reviews. I love how delightful the bar scenes are The Heat is great all around!'),(109,26,5,7,'Plot In A Paragraph: FBI Agent Sarah Ashburn (Sandra Bullock) is a very skilled investigator in New York City, but is despised by her fellow agents for her arrogant attitude. On a brief assignment in Boston, she meets Shannon Mullins (Melissa McCarthy) a foulmouthed and rebellious police officer with the Boston Police Department. Ashburn\'s by-the-book philosophy clashes with Mullins\' rugged and violent style of police work. Under pressure from her FBI boss Hale, Ashburn reluctantly agrees to team up with Mullins.'),(110,26,4,10,'Sandra Bullock looks stunning, lean and strong. Granted she does her frumpy best as Ashburn, \'straight man\' to McCarthy\'s Mullins. Pants suits can do only so much. The one thing that is odd about the story is that Bullock comes off so stiff, that we forget that she is extremely competent at what she does. Like McCarthy\'s Mullins, she is smart, but the story finally circles back and reminds that both can kick some ass as well. McCarthy is brilliant balancing authentic compassion in the midst of what could have been a broad strokes caricature. She is hysterical and whimsically grounded. Together Bullock and McCarthy are on fire chemistry. Too bad Marlon Wayans is not leveraged more as Levy, Ashburn\'s \'awkward\' and endearing love interest. He is very cool. Perhaps, next time. Let\'s see Bullock and McCarthy together again. Bring on \'The Heat 2\'. In the meantime, see \'The Heat\'. You\'ll laugh a whole lot.'),(111,27,4,7,'The film is about a capella singing....certainly not the sort of thing most of us enjoy or even care about...though the film manages to infuse the subject with enthusiasm. And, you\'ll soon find yourself moving along with the singing...and much of it is very infectious. And, the film is about most every stereotype I could think of when it comes to young adult films---you have the bossy and nasty leader of the group, the lesbian, the fat girl who is funny and the rest of the clichés (such as the final big number where not only do ALL the ladies know the lyrics BUT also the choreography of a song they NEVER practiced). But, it manages to make it enjoyable because it SAYS that these are stereotypes at times and the music is pretty cool.'),(112,27,3,9,'We two 50+ grandmas went to see this film on the spur of the moment because we enjoy musical movies. We were probably the oldest people in the audience which ranged down to younger teens but everyone, regardless of age, was laughing and having a grand time. Much less schmaltzy and self-serious than Glee, but wonderful vocals and dancing and personality. You can\'t help but fall in love with the hilariously quirky characters, especially Rebel Wilson as the irrepressible Fat Amy, Elizabeth Banks as Gail, the sexually frustrated female announcer, and Hanna Mae Lee as Lilly, the wackadoo who releases the most shocking comments in a voice that barely exceeds a murmur. Fun, feel-good and highly entertaining.'),(113,27,2,8,'The film takes a little getting used to but about half way through i was so sold on all the wonderful characters and the films undeniable charm. Filled with exciting musical numbers and solid performances from Anna Kendrick, Rebel Wilson as Fat Amy, the adorable Skylar Kenstin as Beccas love interest and so many others Pitch perfect is something truly special. Not to say t\'s flawless it\'s a little amateur in spots and Brittany Snow\'s character feels a little confusing. But it\'s easy to overlook the small stuff when the film is so entertaining.');
+/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(50) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `is_superuser` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'superuser','9fa7b1c3f5ae1bbcd5a9a444acbeba2c0ce3eeecea3508d25964dac2fb29bd64','superuser@gmail.com',1),(2,'alex','d9508122cd143d69df229bf3624b7bcb2b8ac81ed210a0c926455ef119c12abd','alex@gmail.com',0),(3,'emma','52293754fdbea92ab6c69cd64e644deed1552f40ccd3c1cef9d4d63c754d13e3','emma@gmail.com',0),(4,'johny','2b1b370c3baa4ad73cc84d40740834901e691ad9c718246aaa9953da488d99bf','johny@gmail.com',0),(5,'sara','926b4b8a00cfab44b758450fa6bf188d4bf8541c2fd6b3d9b93d152d43a99f64','sara@gmail.com',0),(6,'frida','02a3ebd48b40ef1f24a1a5716de4417c9b1871d84e9735e9fdaac6613067f8f4','frida@gmail.com',0),(7,'nick','2bf050d4df32457042f9ccf649e2d0c6939a98d63785f0f7483d76d73b9ae201','nick@gmail.com',0),(8,'nora','8579d18ca272b4cb6033ccb8919cb357539ce8726d10f59b5b21d752ea9e8b2a','nora@gmail.com',0),(9,'julia','cdbd41d016cdec10d0ff2291a6bdae398b565a831622bedcd4dcafa69252b5e7','julia@gmail.com',0),(10,'simon','edde0aa0be04ade2ccbb008e7f2f177c7999daf1c3c301b8ced9398ffcae9ef1','simon@gmail.com',0);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-02-21 14:59:57

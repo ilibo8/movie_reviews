@@ -1,5 +1,6 @@
 """Module for custom exceptions for Reviews"""
 
+
 class ReviewNotFound(Exception):
     def __init__(self, message : str, code=400):
         self.code = code

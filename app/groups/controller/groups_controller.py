@@ -3,17 +3,20 @@ from fastapi import HTTPException
 from starlette.responses import Response
 from app.groups.exceptions import GroupNotFound, DuplicateEntry, Unauthorized
 from app.groups.service import GroupService
+from app.users.exceptions import TokenExpired
 
 
 class GroupController:
     """Class for Group controller"""
     @staticmethod
-    def add_group(group_name: str, group_owner_id: int, description: str):
+    def add_group(group_name: str, owner_user_id: int, description: str):
         """
         The add_group function adds a new group to the database.
         """
         try:
-            return GroupService.add_group(group_name, group_owner_id, description)
+            return GroupService.add_group(group_name, owner_user_id, description)
+        except TokenExpired as err:
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except DuplicateEntry as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:

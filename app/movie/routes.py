@@ -12,7 +12,7 @@ movie_superuser_router = APIRouter(prefix="/api/superuser/movies", tags=["superu
 @movie_router.get("/get-all-movies", response_model=list[MovieSchemaJoined])
 def get_all_movies():
     """
-    The get_all_movies function returns a list of all movies in the database.
+    The function returns a list of all movies in the database.
     """
     return MovieController.get_all_movies()
 
@@ -20,7 +20,7 @@ def get_all_movies():
 @movie_router.get("/get-movie-by-title/{movie_title}", response_model=MovieSchemaJoined)
 def get_movie_by_title(movie_title: str):
     """
-    The get_movie_by_title function takes a movie title as an argument and returns the Movie object with that title.
+    The function takes a movie title as an argument and returns the movie with that title.
     """
     return MovieController.get_movie_by_title(movie_title)
 
@@ -28,8 +28,7 @@ def get_movie_by_title(movie_title: str):
 @movie_router.get("/get-all-movies-by/word-in-title", response_model=list[MovieSchemaJoined])
 def get_movies_by_word_in_title(word: str):
     """
-    The get_movies_by_word_in_title function takes a word as an argument and returns all movies that contain the
-    word in their title.
+    The function takes a word as an argument and returns all movies that contain the word in their title.
     """
     return MovieController.get_movies_by_word_in_title(str(word))
 
@@ -37,8 +36,7 @@ def get_movies_by_word_in_title(word: str):
 @movie_router.get("/get-movies-by/actor-full-name/{actor_full_name}", response_model=list[MovieSchemaJoined])
 def get_movies_by_actor_full_name(actor_full_name: str):
     """
-    The get_movies_by_actor_full_name function takes an actor's full name as a string and returns all movies
-    that the actor has been in.
+    The function takes an actor's full name as a string and returns all movies that the actor has been in.
     """
     return MovieController.get_movies_by_actor_full_name(actor_full_name)
 
@@ -46,7 +44,7 @@ def get_movies_by_actor_full_name(actor_full_name: str):
 @movie_router.get("/get-all-movies-by/genre/{genre}")
 def get_movies_of_certain_genre(genre: str):
     """
-    The get_movies_of_certain_genre function takes a genre as an argument and returns all movies of that genre.
+    The function takes a genre as an argument and returns all movies of that genre.
     """
     return MovieController.get_movies_of_certain_genre(str(genre))
 
@@ -54,7 +52,7 @@ def get_movies_of_certain_genre(genre: str):
 @movie_router.get("/get-all/directors", response_model=list)
 def get_all_directors():
     """
-    The get_all_directors function returns a list of all directors in the database.
+    The function returns a list of all directors in the database.
     """
     return MovieController.get_all_directors()
 
@@ -62,7 +60,7 @@ def get_all_directors():
 @movie_router.get("/get-all-movies-by/director", response_model=list[MovieSchemaIn])
 def get_all_movies_by_director(director_name: str):
     """
-    The get_all_movies_by_director function returns a list of all movies by the given director.
+    The function returns a list of all movies by the given director.
     """
     return MovieController.get_all_movies_by_director(director_name)
 
@@ -71,7 +69,7 @@ def get_all_movies_by_director(director_name: str):
                             dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_movies_with_cast_and_genre():
     """
-    The get_all_movies_with_cast_and_genre function returns all movies in the database with their cast and genre.
+    The function returns all movies in the database with their cast and genre.
     """
     return MovieController.get_all()
 
@@ -80,7 +78,7 @@ def get_all_movies_with_cast_and_genre():
                             dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_movies_cast():
     """
-    The get_all_movies_cast function returns a list of all the movies cast members.
+    The function returns a list of all the movies cast members.
     """
     return MovieController.get_all_movie_cast()
 
@@ -88,7 +86,7 @@ def get_all_movies_cast():
 @movie_superuser_router.post("/add-movie", response_model=MovieSchema, dependencies=[Depends(JWTBearer("super_user"))])
 def add_movie(movie: MovieSchemaIn):
     """
-    The add_movie function adds a new movie to the database.
+    The function adds a new movie to the database.
     """
     return MovieController.add_movie(movie.title, movie.director, movie.release_year, movie.country_of_origin)
 
@@ -97,7 +95,7 @@ def add_movie(movie: MovieSchemaIn):
                              dependencies=[Depends(JWTBearer("super_user"))])
 def add_movie_genre(movie_genre: MovieGenreSchema):
     """
-    The add_movie_genre function adds a movie genre to the database.
+    The function adds a movie genre to the database.
     """
     return MovieController.add_genre_to_movie(movie_genre.movie_id, movie_genre.genre_name)
 
@@ -106,7 +104,7 @@ def add_movie_genre(movie_genre: MovieGenreSchema):
                              dependencies=[Depends(JWTBearer("super_user"))])
 def add_movie_cast(movie_cast: MovieCastSchema):
     """
-    The add_movie_cast function adds a new movie cast to the database.
+    The function adds a new movie cast to the database.
     """
     return MovieController.add_movie_cast(movie_cast.movie_id, movie_cast.actor_id)
 
@@ -115,7 +113,7 @@ def add_movie_cast(movie_cast: MovieCastSchema):
                             dependencies=[Depends(JWTBearer("super_user"))])
 def change_movie_title(movie : MovieSchemaUpdateTitle):
     """
-    The change_movie_title function is used to change the title of a movie.
+    The function is used to change the title of a movie.
     """
     return MovieController.change_movie_title(movie_id=movie.id, new_movie_title=movie.title)
 
@@ -124,7 +122,7 @@ def change_movie_title(movie : MovieSchemaUpdateTitle):
                             dependencies=[Depends(JWTBearer("super_user"))])
 def change_movie_director(movie : MovieSchemaUpdateDirector):
     """
-    The change_movie_director function allows the user to change the director of a movie.
+    The function allows the user to change the director of a movie.
     """
     return MovieController.change_movie_director(movie_id=movie.id, director=movie.director)
 
@@ -133,7 +131,7 @@ def change_movie_director(movie : MovieSchemaUpdateDirector):
                             dependencies=[Depends(JWTBearer("super_user"))])
 def change_movie_release_year(movie : MovieSchemaUpdateReleaseYear):
     """
-    The change_movie_release_year function updates the release year of a movie.
+    The function updates the release year of a movie.
     """
     return MovieController.change_movie_release_year(movie_id=movie.id, release_year=movie.release_year)
 
@@ -141,7 +139,7 @@ def change_movie_release_year(movie : MovieSchemaUpdateReleaseYear):
 @movie_superuser_router.delete("/delete-movie-genre/", dependencies=[Depends(JWTBearer("super_user"))])
 def delete_movie_genre(movie_genre: MovieGenreSchema):
     """
-    The delete_movie_genre function deletes a movie genre from the database.
+    The function deletes a movie genre from the database.
     """
     return MovieController.delete_movie_genre(movie_id=movie_genre.movie_id, genre_name=movie_genre.genre_name)
 
@@ -149,7 +147,7 @@ def delete_movie_genre(movie_genre: MovieGenreSchema):
 @movie_superuser_router.delete("/delete-movie-cast/", dependencies=[Depends(JWTBearer("super_user"))])
 def delete_movie_cast_member(movie_cast: MovieCastSchema):
     """
-    The delete_movie_cast_member function deletes a movie cast member from the database.
+    The function deletes a movie cast member from the database.
     """
     return MovieController.delete_movie_cast(movie_id=movie_cast.movie_id, actor_id=movie_cast.actor_id)
 
@@ -157,6 +155,6 @@ def delete_movie_cast_member(movie_cast: MovieCastSchema):
 @movie_superuser_router.delete("/delete-movie-by-id/{movie_id}", dependencies=[Depends(JWTBearer("super_user"))])
 def delete_movie_by_id(movie_id: int):
     """
-    The delete_movie_by_id function deletes a movie from the database by its id.
+    The function deletes a movie from the database by its id.
     """
     return MovieController.delete_movie_by_id(movie_id)

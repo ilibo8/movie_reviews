@@ -24,7 +24,7 @@ def get_all_your_posts(request: Request):
                             dependencies=[Depends(JWTBearer("classic_user"))])
 def get_all_posts_from_your_group(group_name: str, request: Request):
     """
-    The get_all_posts_from_your_group function returns a list of all post made in group of request.
+    The function returns a list of all post made in group of request.
     """
     user_id = extract_user_id_from_token(request)
     return RecommendationController.get_all_posts_by_group_name(group_name=group_name, user_id=user_id)

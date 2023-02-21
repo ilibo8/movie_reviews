@@ -34,6 +34,13 @@ class MovieRepository:
         """
         return self.dbs.query(Movie).order_by(Movie.id).all()
 
+    def get_all_movies_order_by_name(self) -> list[Type[Movie]]:
+        """
+        The get_all_movies_order_by_name function returns a list of all movies in the database, ordered by title.
+        It takes no arguments and returns a list of Movie objects.
+        """
+        return self.dbs.query(Movie).order_by(Movie.title).all()
+
     def get_movie_by_id(self, movie_id: int) -> Type[Movie] | None:
         """
         The get_movie_by_id function takes a movie_id as an argument and returns the Movie object with that id.
@@ -41,13 +48,6 @@ class MovieRepository:
         """
         movie = self.dbs.query(Movie).filter(Movie.id == movie_id).first()
         return movie
-
-    def get_all_movies_order_by_name(self) -> list[Type[Movie]]:
-        """
-        The get_all_movies_order_by_name function returns a list of all movies in the database, ordered by title.
-        It takes no arguments and returns a list of Movie objects.
-        """
-        return self.dbs.query(Movie).order_by(Movie.title).all()
 
     def get_movie_by_title(self, movie_title: str) -> Type[Movie] | None:
         """
@@ -131,6 +131,7 @@ class MovieRepository:
         titles = [x[0] for x in titles_tuple]
         titles.sort()
         return titles
+
 
     def change_movie_title(self, movie_id: int, title: str) -> (Movie, None):
         """

@@ -10,7 +10,7 @@ genre_superuser_router = APIRouter(prefix="/api/superuser/movies/genres", tags=[
 @genre_superuser_router.get("/get-all", response_model=list[str], dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_genre():
     """
-    The get_all_genre function returns a list of all genres in the database.
+    The function returns a list of all genres in the database.
     """
     return GenreController.get_all_genres()
 
@@ -18,7 +18,7 @@ def get_all_genre():
 @genre_superuser_router.post("/add-genre", response_model=GenreSchema, dependencies=[Depends(JWTBearer("super_user"))])
 def add_genre(genre: GenreSchema):
     """
-    The add_genre function adds a new genre to the database.
+    The function adds a new genre to the database.
     """
     return GenreController.add_genre(genre.name)
 
@@ -26,6 +26,6 @@ def add_genre(genre: GenreSchema):
 @genre_superuser_router.delete("/delete-genre", dependencies=[Depends(JWTBearer("super_user"))])
 def delete(name: str):
     """
-    The delete_genre function deletes genre from the database.
+    The function deletes genre from the database.
     """
     return GenreController.delete(name)
