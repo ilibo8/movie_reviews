@@ -57,7 +57,8 @@ def get_all_posts():
     return RecommendationController.get_all_posts()
 
 
-@recommendations_superuser_router.get("/get-all-posts-by-user-id/{user_id}", response_model=list[RecommendationSchemaOut],
+@recommendations_superuser_router.get("/get-all-posts-by-user-id/{user_id}",
+                                      response_model=list[RecommendationSchemaOut],
                                       dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_posts_by_user(user_id: int):
     """

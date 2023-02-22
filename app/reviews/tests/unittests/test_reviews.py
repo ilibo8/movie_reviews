@@ -1,7 +1,7 @@
 """Module for Review repository testing"""
 import pytest
 from app.movie.repository import MovieRepository
-from app.reviews.exceptions import ReviewDuplicateEntry, ReviewNotFound, Unauthorized
+from app.reviews.exceptions import ReviewDuplicateEntry, ReviewNotFound
 from app.reviews.repository import ReviewRepository
 from app.tests import TestClass, TestingSessionLocal
 from app.users.repository import UserRepository
