@@ -1,7 +1,7 @@
 """Module for Group services"""
 from app.db import SessionLocal
-from app.groups.exceptions import GroupNotFound, Unauthorized
-from app.groups.repository import GroupRepository
+from app.groups.exceptions import GroupNotFound, Unauthorized, GroupUserNotFound
+from app.groups.repository import GroupRepository, GroupUserRepository
 from app.users.repository import UserRepository
 
 
@@ -27,6 +27,16 @@ class GroupService:
     @staticmethod
     def get_all() -> list:
         """
+        Returns a list of all the groups in the database.
+        """
+        with SessionLocal() as db:
+            group_repository = GroupRepository(db)
+            groups = group_repository.get_all()
+            return groups
+
+    @staticmethod
+    def get_all_reformatted() -> list:
+        """
         The get_all function returns a list of all the groups in the database.
         """
         with SessionLocal() as db:
@@ -39,6 +49,18 @@ class GroupService:
                 all_groups.append({"group_name": group.group_name, "owner_user_name": owner_name,
                                    "description": group.description, "date_created": group.date_created})
             return all_groups
+
+    @staticmethod
+    def get_all_group_users() -> list:
+        """
+        Returns a list of all groups and their users.
+        """
+        with SessionLocal() as db:
+            group_user_repository = GroupUserRepository(db)
+            all_group_users = group_user_repository.get_all()
+            if len(all_group_users) == 0:
+                raise GroupUserNotFound("There are no groups yet.")
+            return all_group_users
 
     @staticmethod
     def change_group_name(group_name: str, new_name: str, user_id: int):
@@ -62,17 +84,14 @@ class GroupService:
             raise GroupNotFound(err.message) from err
 
     @staticmethod
-    def delete_by_id(group_name: str):
+    def delete_by_id(group_id: int):
         """
         The delete_by_id function deletes a group by id.
         """
         try:
             with SessionLocal() as db:
                 group_repository = GroupRepository(db)
-                group = group_repository.get_group_by_name(group_name)
-                if group is None:
-                    raise GroupNotFound(f"There is no group with name {group_name}")
-                if group_repository.delete_group_by_id(group.id):
+                if group_repository.delete_group_by_id(group_id):
                     return True
                 raise GroupNotFound("There is no group with that id")
         except Exception as err:

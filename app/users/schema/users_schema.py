@@ -35,3 +35,11 @@ class UserOnlyNameSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserIdNameSchema(BaseModel):
+    id: int
+    user_name: str
+
+    class Config:
+        orm_mode = True

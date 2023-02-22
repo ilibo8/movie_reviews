@@ -12,9 +12,10 @@ class GroupUser(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     __table_args__ = (UniqueConstraint("group_id", "user_id", name="group_user_uc"),)
 
-    movie_group = relationship("Group", back_populates="group_user")
+    movie_group = relationship("Group", back_populates="group_user", lazy="joined")
     user = relationship("User", back_populates="group_user", lazy="joined")
-    recommendations = relationship("Recommendation", cascade="all, delete-orphan", back_populates="group_user")
+    recommendations = relationship("Recommendation", cascade="all, delete-orphan", back_populates="group_user",
+                                   lazy="joined")
 
     def __init__(self, group_id: int, user_id: int):
         self.group_id = group_id

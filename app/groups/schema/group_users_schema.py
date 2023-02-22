@@ -1,11 +1,14 @@
 """Module for GroupUser schemas"""
 from pydantic import BaseModel
 
+from app.groups.schema import GroupSchema
+from app.users.schema import UserIdNameSchema
 
-class GroupUserSchema(BaseModel):
+
+class GroupUserNamesSchemaOut(BaseModel):
     id: int
-    group_id: int
-    user_id: int
+    user: UserIdNameSchema
+    movie_group: GroupSchema
 
     class Config:
         orm_mode = True

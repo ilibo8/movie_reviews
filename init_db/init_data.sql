@@ -28,9 +28,8 @@ CREATE TABLE `actors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `full_name` varchar(50) DEFAULT NULL,
   `nationality` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `full_name` (`full_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +38,7 @@ CREATE TABLE `actors` (
 
 LOCK TABLES `actors` WRITE;
 /*!40000 ALTER TABLE `actors` DISABLE KEYS */;
-INSERT INTO `actors` VALUES (1,'Jessica Chastain','American'),(2,'Julia Roberts','American'),(3,'George Clooney','American'),(4,'Matt Damon','American'),(5,'Emily Blunt','British'),(6,'Morgan Freeman','American'),(7,'Tim Robbins','American'),(8,'Tom Hanks','American'),(9,'Robin Wright','American'),(10,'John Travolta','American'),(11,'Bruce Willis','American'),(12,'Samuel L. Jackson','American'),(13,'Uma Thurman','American'),(14,'Carrie-Anne Moss','Canadian'),(15,'Keanu Reeves','Canadian'),(16,'Laurence Fishburne','American'),(17,'Jodie Foster','American'),(18,'Anthony Hopkins','American'),(19,'Brad Pitt','American'),(20,'Angelina Jolie','American'),(21,'Winona Ryder','American'),(22,'Kristen Stewart','American'),(23,'Albert Finney','American'),(24,'Richard Gere','American'),(25,'Lucas Hedges','American'),(26,'Meryl Streep','American'),(27,'Vanessa Kirby','British'),(28,'Hugh Jackman','Australian'),(29,'Laura Dern','American'),(30,'Jenna Ortega','American'),(31,'Nicole Kidman','Australian'),(32,'Ewan McGregor','Scottish'),(33,'Sean Connery','Scottish'),(34,'Ben Affleck','Scottish'),(35,'Robin Williams','Scottish'),(36,'David Carradine','American'),(37,'Idris Elba','British'),(38,'Dev Patel','British'),(39,'Freida Pinto','Indian'),(40,'Cooper Raiff','American'),(41,'Dakota Johnson','American'),(42,'Mila Kunis','American'),(43,'Christina Applegate','American'),(44,'Seth MacFarlane','American'),(45,'Charlize Theron','South African'),(46,'Liam Neeson','Irish'),(47,'Brendan Gleeson','Irish'),(48,'Don Cheadle','American'),(49,'Sandra Bullock','American'),(50,'Melissa McCarthy','American'),(51,'Anna Kendrick','American'),(52,'Rebel Wilson','American');
+INSERT INTO `actors` VALUES (1,'Jessica Chastain','American'),(2,'Julia Roberts','American'),(3,'George Clooney','American'),(4,'Matt Damon','American'),(5,'Emily Blunt','British'),(6,'Morgan Freeman','American'),(7,'Tim Robbins','American'),(8,'Tom Hanks','American'),(9,'Robin Wright','American'),(10,'John Travolta','American'),(11,'Bruce Willis','American'),(12,'Samuel L. Jackson','American'),(13,'Uma Thurman','American'),(14,'Carrie-Anne Moss','Canadian'),(15,'Keanu Reeves','Canadian'),(16,'Laurence Fishburne','American'),(17,'Jodie Foster','American'),(18,'Anthony Hopkins','American'),(19,'Brad Pitt','American'),(20,'Angelina Jolie','American'),(21,'Winona Ryder','American'),(22,'Kristen Stewart','American'),(23,'Albert Finney','American'),(24,'Richard Gere','American'),(25,'Lucas Hedges','American'),(26,'Meryl Streep','American'),(27,'Vanessa Kirby','British'),(28,'Hugh Jackman','Australian'),(29,'Laura Dern','American'),(30,'Jenna Ortega','American'),(31,'Nicole Kidman','Australian'),(32,'Ewan McGregor','Scottish'),(33,'Sean Connery','Scottish'),(34,'Ben Affleck','Scottish'),(35,'Robin Williams','Scottish'),(36,'David Carradine','American'),(37,'Idris Elba','British'),(38,'Dev Patel','British'),(39,'Freida Pinto','Indian'),(40,'Cooper Raiff','American'),(41,'Dakota Johnson','American'),(42,'Mila Kunis','American'),(43,'Christina Applegate','American'),(44,'Seth MacFarlane','American'),(45,'Charlize Theron','South African'),(46,'Liam Neeson','Irish'),(47,'Brendan Gleeson','Irish'),(48,'Don Cheadle','American'),(49,'Sandra Bullock','American'),(50,'Melissa McCarthy','American'),(51,'Anna Kendrick','American'),(52,'Rebel Wilson','American'),(53,'Jessica Chastain','string');
 /*!40000 ALTER TABLE `actors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,4 +306,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-22 17:10:09
+-- Dump completed on 2023-02-22 18:11:59

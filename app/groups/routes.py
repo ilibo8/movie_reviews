@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
 from app.groups.controller import GroupController, GroupUserController
-from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchemaOut
+from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchemaOut, GroupSchema, \
+    GroupUserNamesSchemaOut
 from app.users.controller import JWTBearer, extract_user_id_from_token
 
 group_router = APIRouter(prefix="/api/groups", tags=["Groups"])
@@ -14,7 +15,7 @@ def get_all_groups():
     """
     The function returns a list of all the groups in the database.
     """
-    return GroupController.get_all()
+    return GroupController.get_all_reformatted()
 
 
 @group_router.get("/get-all-groups-with-members", response_model=list[GroupWithUsersSchemaOut])
@@ -57,9 +58,27 @@ def change_group_name(request: Request, group_name: str, new_name: str):
     return GroupController.change_group_name(group_name=group_name, new_name=new_name, user_id=user_id)
 
 
-@group_superuser_router.delete("/delete-group-by-name/{group_name}", dependencies=[Depends(JWTBearer("super_user"))])
-def delete_group_by_name(group_name: str):
+@group_superuser_router.get("/get-all-groups", response_model=list[GroupSchema],
+                            dependencies=[Depends(JWTBearer("super_user"))],)
+def get_all_groups():
+    """
+    Get info about all groups - for superuser.
+    """
+    return GroupController.get_all()
+
+
+@group_superuser_router.get("/get-all-group-users", response_model=list[GroupUserNamesSchemaOut],
+                            dependencies=[Depends(JWTBearer("super_user"))],)
+def get_all_group_users():
+    """
+    Get info about all groups and their members - for superuser.
+    """
+    return GroupController.get_all_group_users()
+
+
+@group_superuser_router.delete("/delete-group-by-id/{group_id}", dependencies=[Depends(JWTBearer("super_user"))])
+def delete_group_by_id(group_id: int):
     """
     The function deletes a group from the database.
     """
-    return GroupController.delete_group_by_name(group_name=group_name)
+    return GroupController.delete_group_by_id(group_id=group_id)
