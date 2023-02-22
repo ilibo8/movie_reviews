@@ -4,4 +4,3 @@ venv/
 .coverage
 venv_activate.md
 .idea
-.gitignore
