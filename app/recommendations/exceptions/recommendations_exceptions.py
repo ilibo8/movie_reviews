@@ -2,7 +2,7 @@
 
 
 class RecommendationNotFound(Exception):
-    def __init__(self, message: str, code=400):
+    def __init__(self, message: str, code=404):
         self.message = message
         self.code = code
 

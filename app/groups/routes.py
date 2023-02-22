@@ -1,13 +1,12 @@
 """Module for routes for group and group users"""
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
-
 from app.groups.controller import GroupController, GroupUserController
 from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchemaOut
 from app.users.controller import JWTBearer, extract_user_id_from_token
 
 group_router = APIRouter(prefix="/api/groups", tags=["Groups"])
-group_superuser_router = APIRouter(prefix="/api/superuser/groups", tags=["superuser - Groups"])
+group_superuser_router = APIRouter(prefix="/api/superuser/groups", tags=["superuser - Groups & Recommendations"])
 
 
 @group_router.get("/get-all-groups", response_model=list[GroupSchemaOut])

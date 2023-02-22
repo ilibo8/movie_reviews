@@ -32,26 +32,6 @@ class ReviewSchemaIn(BaseModel):
     review: str
 
 
-class ReviewWithIdSchemaOut(BaseModel):
-    id: int
-    movie_title: str
-    user_name: str
-    rating_number: int
-    review: str
-
-
-class MovieReviewsSchema(BaseModel):
-    title: str
-    director: str
-    release_year: int
-    country_of_origin: str
-
-    review: list
-
-    class Config:
-        orm_mode = True
-
-
 class MovieAverageAndCountSchema(BaseModel):
     title: str
     director: str

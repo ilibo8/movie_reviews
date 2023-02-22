@@ -130,6 +130,18 @@ class ReviewController:
         try:
             return ReviewService.get_top_n_movies_by_avg_rating(top)
         except ValueError as err:
+            raise HTTPException(status_code=400, detail=str(err)) from err
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
+    def get_users_not_reviewed_movies(user_id: int):
+        """
+        Get list of movies user hasn't reviewed.
+        """
+        try:
+            return ReviewService.get_users_not_reviewed_movies(user_id)
+        except ReviewNotFound as err:
             raise HTTPException(status_code=404, detail=str(err)) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
@@ -179,7 +191,7 @@ class ReviewController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
-    def delete_review_id_by_user(review_id: int, user_id):
+    def delete_review_by_user(movie_title: str, user_id: int):
         """
         The delete_review_id_by_user function deletes a review from the database.
         It takes in two parameters, review_id and user_id. It then checks if the user is authorized to delete this
@@ -187,8 +199,10 @@ class ReviewController:
         from the database.
         """
         try:
-            if ReviewService.delete_review_id_by_user(review_id, user_id):
-                return Response(content=f"Review with id {review_id} is deleted", status_code=200)
+            if ReviewService.delete_review_by_user(movie_title, user_id):
+                return Response(content=f"Review for movie {movie_title} deleted", status_code=200)
+        except MovieNotFound as err:
+            raise HTTPException(status_code=err.code, detail=err.message) from err
         except ReviewNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except Unauthorized as err:

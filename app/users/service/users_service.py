@@ -17,8 +17,8 @@ class UserService:
             - email: The email address of the new user.
         """
         try:
-            with SessionLocal() as dbs:
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                user_repository = UserRepository(db)
                 hashed_password = hashlib.sha256(bytes(password, "utf-8")).hexdigest()
                 return user_repository.create_user(user_name, hashed_password, email)
         except Exception as err:
@@ -32,8 +32,8 @@ class UserService:
         The function returns the newly created super_user.
         """
         try:
-            with SessionLocal() as dbs:
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                user_repository = UserRepository(db)
                 hashed_password = hashlib.sha256(bytes(password, "utf-8")).hexdigest()
                 return user_repository.create_super_user(user_name, hashed_password, email)
         except Exception as err:
@@ -44,8 +44,8 @@ class UserService:
         """
         The get_user_by_id function takes in a user_id and returns the User object associated with that id.
         """
-        with SessionLocal() as dbs:
-            user_repository = UserRepository(dbs)
+        with SessionLocal() as db:
+            user_repository = UserRepository(db)
             return user_repository.get_user_by_id(user_id)
 
     @staticmethod
@@ -53,8 +53,8 @@ class UserService:
         """
         The get_all_users function returns all users in the database.
         """
-        with SessionLocal() as dbs:
-            user_repository = UserRepository(dbs)
+        with SessionLocal() as db:
+            user_repository = UserRepository(db)
             return user_repository.get_all_users()
 
     @staticmethod
@@ -65,8 +65,8 @@ class UserService:
         was successful.
         """
         try:
-            with SessionLocal() as dbs:
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                user_repository = UserRepository(db)
                 return user_repository.delete_user_by_id(user_id)
         except Exception as err:
             raise err
@@ -80,8 +80,8 @@ class UserService:
         a User object which contains all information about that particular user. Otherwise, we raise an exception.
         """
         try:
-            with SessionLocal() as dbs:
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                user_repository = UserRepository(db)
                 user = user_repository.get_user_by_user_name(user_name=user_name)
                 if user is None:
                     raise UserNotFound(f"User name {user_name} not found.")

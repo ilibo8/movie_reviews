@@ -7,7 +7,7 @@ from app.recommendations.controller import RecommendationController
 
 recommendations_router = APIRouter(prefix="/api/recommendations", tags=["Group Recommendations"])
 recommendations_superuser_router = APIRouter(prefix="/api/superuser/recommendations",
-                                             tags=["superuser - Group Recommendations"])
+                                             tags=["superuser - Groups & Recommendations"])
 
 
 @recommendations_router.get("/get-all-your-posts",

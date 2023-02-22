@@ -87,8 +87,7 @@ class UserController:
         It takes in an integer as an argument, and returns a string.
         """
         try:
-            deleted = UserService.delete_user_by_id(user_id)
-            if deleted:
+            if UserService.delete_user_by_id(user_id):
                 return Response(content=f"User with id - {user_id} is deleted.")
             return Response(content=f"User with id - {user_id} doesn't exist.")
         except Exception as err:

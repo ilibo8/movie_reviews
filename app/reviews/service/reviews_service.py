@@ -20,9 +20,9 @@ class ReviewService:
         review is a string containing your opinion about this particular film.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.add_review(movie_id=movie_id, user_id=user_id, rating_number=rating_number,
                                                       review=review)
@@ -38,8 +38,8 @@ class ReviewService:
         The get_all_reviews function returns all reviews in the database.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
                 return review_repository.get_all_reviews()
         except Exception as err:
             raise err
@@ -50,8 +50,8 @@ class ReviewService:
         The get_all_reviews function returns all reviews in the database.
         """
         try:
-            with SessionLocal() as dbs:
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                movie_repository = MovieRepository(db)
                 movies = movie_repository.get_all_movies_order_by_name()
                 return movies
         except Exception as err:
@@ -65,9 +65,9 @@ class ReviewService:
         then uses get_average_rating to retrieve the average rating and number of ratings for that movie.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 movie_id = movie_repository.get_movie_id_by_title(movie_title)
                 if len(review_repository.get_reviews_by_movie_id(movie_id)) == 0:
                     raise ReviewNotFound(f"There are no reviews for movie {movie_title}")
@@ -85,9 +85,9 @@ class ReviewService:
         Returns average rating and number of user rating movie.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 all_movies = movie_repository.get_all_movies_order_by_name()
                 for movie in all_movies:
                     movie.average_rating = review_repository.get_average_rating_and_count_by_movie_id(movie.id)[0]
@@ -103,9 +103,9 @@ class ReviewService:
         that movie. If there are no reviews for that movie, it will return an error message.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 movie_id = movie_repository.get_movie_id_by_title(movie_title)
                 reviews = review_repository.get_reviews_by_movie_id(movie_id)
                 if len(reviews) == 0:
@@ -121,9 +121,9 @@ class ReviewService:
         written by that user. If no review is found, it raises a ReviewNotFound exception.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                user_repository = UserRepository(db)
                 user = user_repository.get_user_by_user_name(user_name)
                 reviews = review_repository.get_reviews_by_user_id(user.id)
                 if len(reviews) == 0:
@@ -140,20 +140,12 @@ class ReviewService:
         information about one review.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
                 reviews = review_repository.get_reviews_by_user_id(user_id)
-                reviews_dict = []
                 if len(reviews) == 0:
                     raise ReviewNotFound("You don't have reviews yet.")
-                for review in reviews:
-                    movie_title = movie_repository.get_title_by_id(review.movie_id)
-                    user_name = user_repository.get_user_name_by_user_id(review.user_id)
-                    reviews_dict.append({"id": review.id, "movie_title": movie_title, "user_name": user_name,
-                                         "rating_number": review.rating_number, "review": review.review})
-                return reviews_dict
+                return reviews
         except Exception as err:
             raise err
 
@@ -163,9 +155,9 @@ class ReviewService:
         Get list of most active users with number of their reviews.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                user_repository = UserRepository(db)
                 users = review_repository.get_top_five_users_with_most_reviews()
                 users_reformatted = []
                 for count, user in enumerate(users):
@@ -181,19 +173,19 @@ class ReviewService:
         Get list of top n movies by average rating
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 movies = movie_repository.get_all_movies()
                 if top > len(movies) or top <= 0:
-                    raise ValueError("Number too big or less than 1.")
+                    raise ValueError("Must be positive number.")
                 movies_tuple = review_repository.get_top_n_movies_by_avg_rating(top)
                 movies = []
                 for count, movie in enumerate(movies_tuple):
                     movie_obj = movie_repository.get_movie_by_id(movie[0])
                     movie_obj.average_rating = movie[1]
                     movie_obj.number_of_ratings = movie[2]
-                    movies.append({f"rank": count + 1, "movie" : movie_obj})
+                    movies.append({"rank": count + 1, "movie" : movie_obj})
                 return movies
         except Exception as err:
             raise err
@@ -204,10 +196,10 @@ class ReviewService:
         Returns top n movies of certain genre by their average rating.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
-                genre_repository = GenreRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
+                genre_repository = GenreRepository(db)
                 if genre_repository.check_is_there(genre) is False:
                     raise GenreNotFound(f"There is no genre named {genre}")
                 movies_tuple = review_repository.get_five_best_rated_movies_by_genre(genre)
@@ -216,8 +208,29 @@ class ReviewService:
                     movie_obj = movie_repository.get_movie_by_id(movie[0])
                     movie_obj.average_rating = movie[1]
                     movie_obj.number_of_ratings = movie[2]
-                    movies.append({f"rank": count + 1, "movie": movie_obj})
+                    movies.append({"rank": count + 1, "movie": movie_obj})
                 return movies
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_users_not_reviewed_movies(user_id: int):
+        """
+        Returns list of movies user hasn't reviewed.
+        """
+        try:
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movies_repository = MovieRepository(db)
+                reviews = review_repository.get_reviews_by_user_id(user_id)
+                movies = movies_repository.get_all_movies()
+                all_movies_ids = [movie.id for movie in movies]
+                user_reviewed_movie_ids = [review.movie_id for review in reviews]
+                unreviewed = set(all_movies_ids).difference(set(user_reviewed_movie_ids))
+                unreviewed_movies = [movies_repository.get_movie_by_id(m_id) for m_id in unreviewed]
+                if len(unreviewed_movies) == 0:
+                    raise ReviewNotFound("You've reviewed all movies.")
+                return unreviewed_movies
         except Exception as err:
             raise err
 
@@ -228,9 +241,9 @@ class ReviewService:
         rated.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.change_movie_rating(movie_id, user_id, new_rating)
                 return review
@@ -243,9 +256,9 @@ class ReviewService:
         The change_movie_review function allows a user to change the review they have written for a movie.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                movie_repository = MovieRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
                 movie_id = movie_repository.get_movie_id_by_title(movie_name)
                 review = review_repository.change_movie_review(movie_id, user_id, new_review)
                 return review
@@ -253,14 +266,19 @@ class ReviewService:
             raise err
 
     @staticmethod
-    def delete_review_id_by_user(review_id: int, user_id):
+    def delete_review_by_user(movie_title: str, user_id: int):
         """
         The delete_review_id_by_user function deletes a review by the user's id.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
-                review = review_repository.delete_review_id_by_user(review_id, user_id)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                movie_repository = MovieRepository(db)
+                movie_id = movie_repository.get_movie_id_by_title(movie_title)
+                review = review_repository.get_reviews_by_user_id_and_movie_id(movie_id=movie_id, user_id=user_id)
+                if review is None:
+                    raise ReviewNotFound("You don't have review for this movie.")
+                review = review_repository.delete_review_by_id(review.id)
                 if review:
                     return review
         except ReviewNotFound as err:
@@ -277,8 +295,8 @@ class ReviewService:
         It takes in an integer as an argument and returns True if it is successful.
         """
         try:
-            with SessionLocal() as dbs:
-                review_repository = ReviewRepository(dbs)
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
                 if review_repository.delete_review_by_id(review_id):
                     return True
         except ReviewNotFound as err:

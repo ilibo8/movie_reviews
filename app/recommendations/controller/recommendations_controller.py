@@ -91,7 +91,7 @@ class RecommendationController:
         """
         try:
             if RecommendationService.delete_post_id_by_user(recommendation_id, user_id):
-                return Response(content=f"Recommendation with id {recommendation_id} is deleted", status_code=200)
+                return Response(content=f"Post with id {recommendation_id} deleted", status_code=200)
         except Unauthorized as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except RecommendationNotFound as err:

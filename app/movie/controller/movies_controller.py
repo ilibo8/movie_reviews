@@ -70,6 +70,19 @@ class MovieController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
+    def find_movie(movie: dict):
+        """
+        Function to find movies by multiple criteria.
+        """
+        try:
+            movies = MovieService.find_movie(movie)
+            return movies
+        except MovieNotFound as err:
+            raise HTTPException(status_code=404, detail=str(err)) from err
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
     def get_all_movies():
         """
         The get_all_movies function returns all movies in the database.
@@ -96,36 +109,6 @@ class MovieController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
-    def get_movies_of_certain_genre(genre_name: str):
-        """
-        The get_movies_of_certain_genre function is used to retrieve all movies of a certain genre.
-        It takes in the name of the genre as an argument and returns a list of movies that are associated with
-        that specific genre.
-        """
-        try:
-            return MovieService.get_all_movies_of_certain_genre(genre_name)
-        except GenreNotFound as err:
-            raise HTTPException(status_code=400, detail=err.message) from err
-        except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
-
-    @staticmethod
-    def get_movies_by_word_in_title(word: str):
-        """
-        The get_movies_by_word_in_title function returns a list of movies whose titles contain the given word.
-        The function takes one argument, which is the word to be searched for in movie titles.
-        """
-        try:
-            movie = MovieService.get_movies_by_word_in_title(word)
-            return movie
-        except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
-
-    @staticmethod
     def get_movies_by_actor_full_name(actor_full_name: str):
         """
         The get_movies_by_actor_full_name function returns a list of movies that an actor has starred in.
@@ -138,30 +121,6 @@ class MovieController:
             raise HTTPException(status_code=400, detail=err.message) from err
         except MovieNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
-
-    @staticmethod
-    def get_all_movies_by_director(director_name: str):
-        """
-        The get_all_movies_by_director function returns all movies by a given director.
-        It takes one argument, the name of the director to search for.
-        """
-        try:
-            movies = MovieService.get_all_movies_by_director(director_name)
-            return movies
-        except MovieNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
-
-    @staticmethod
-    def get_all_directors():
-        """
-        The get_all_directors function returns a list of all directors in the database.
-        """
-        try:
-            return MovieService.get_all_directors()
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 

@@ -34,7 +34,7 @@ class GenreController:
                 genre_names.append(genre.name)
             return genre_names
         except NoEntryForGenre as err:
-            raise HTTPException(status_code=400, detail=err.message) from err
+            raise HTTPException(status_code=404, detail=err.message) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 

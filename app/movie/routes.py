@@ -1,4 +1,5 @@
 """Module for Movie routes"""
+from typing import Optional
 from fastapi import APIRouter, Depends
 from app.movie.controller import MovieController
 from app.movie.schema import MovieSchemaJoined, MovieSchemaIn, MovieCastSchema, MovieSchemaAll, MovieSchema, \
@@ -25,44 +26,12 @@ def get_movie_by_title(movie_title: str):
     return MovieController.get_movie_by_title(movie_title)
 
 
-@movie_router.get("/get-all-movies-by/word-in-title", response_model=list[MovieSchemaJoined])
-def get_movies_by_word_in_title(word: str):
-    """
-    The function takes a word as an argument and returns all movies that contain the word in their title.
-    """
-    return MovieController.get_movies_by_word_in_title(str(word))
-
-
 @movie_router.get("/get-movies-by/actor-full-name/{actor_full_name}", response_model=list[MovieSchemaJoined])
-def get_movies_by_actor_full_name(actor_full_name: str):
+def get_movies_by_actor(actor_full_name: str):
     """
     The function takes an actor's full name as a string and returns all movies that the actor has been in.
     """
     return MovieController.get_movies_by_actor_full_name(actor_full_name)
-
-
-@movie_router.get("/get-all-movies-by/genre/{genre}")
-def get_movies_of_certain_genre(genre: str):
-    """
-    The function takes a genre as an argument and returns all movies of that genre.
-    """
-    return MovieController.get_movies_of_certain_genre(str(genre))
-
-
-@movie_router.get("/get-all/directors", response_model=list)
-def get_all_directors():
-    """
-    The function returns a list of all directors in the database.
-    """
-    return MovieController.get_all_directors()
-
-
-@movie_router.get("/get-all-movies-by/director", response_model=list[MovieSchemaIn])
-def get_all_movies_by_director(director_name: str):
-    """
-    The function returns a list of all movies by the given director.
-    """
-    return MovieController.get_all_movies_by_director(director_name)
 
 
 @movie_superuser_router.get("/get-all-movies", response_model=list[MovieSchemaAll],
@@ -81,6 +50,17 @@ def get_all_movies_cast():
     The function returns a list of all the movies cast members.
     """
     return MovieController.get_all_movie_cast()
+
+
+@movie_router.get("/find-movie", response_model=list[MovieSchemaJoined])
+def find_movie(word_in_title : Optional[str] = None, director: Optional[str] = None, release_year: Optional[int] = None,
+               country_of_origin: Optional[str] = None, genre: Optional[str] = None, actor: Optional[str] = None):
+    """
+    The function returns movie based on provided criteria.
+    """
+    return MovieController.find_movie(
+        {"word_in_title" : word_in_title, "director": director, "release_year": release_year, "genre": genre,
+         "country_of_origin": country_of_origin, "actor": actor})
 
 
 @movie_superuser_router.post("/add-movie", response_model=MovieSchema, dependencies=[Depends(JWTBearer("super_user"))])
@@ -111,7 +91,7 @@ def add_movie_cast(movie_cast: MovieCastSchema):
 
 @movie_superuser_router.put("/change-movie-title", response_model=MovieSchema,
                             dependencies=[Depends(JWTBearer("super_user"))])
-def change_movie_title(movie : MovieSchemaUpdateTitle):
+def change_movie_title(movie: MovieSchemaUpdateTitle):
     """
     The function is used to change the title of a movie.
     """
@@ -120,7 +100,7 @@ def change_movie_title(movie : MovieSchemaUpdateTitle):
 
 @movie_superuser_router.put("/change-movie-director", response_model=MovieSchema,
                             dependencies=[Depends(JWTBearer("super_user"))])
-def change_movie_director(movie : MovieSchemaUpdateDirector):
+def change_movie_director(movie: MovieSchemaUpdateDirector):
     """
     The function allows the user to change the director of a movie.
     """
@@ -129,7 +109,7 @@ def change_movie_director(movie : MovieSchemaUpdateDirector):
 
 @movie_superuser_router.put("/change-movie-release-year", response_model=MovieSchema,
                             dependencies=[Depends(JWTBearer("super_user"))])
-def change_movie_release_year(movie : MovieSchemaUpdateReleaseYear):
+def change_movie_release_year(movie: MovieSchemaUpdateReleaseYear):
     """
     The function updates the release year of a movie.
     """

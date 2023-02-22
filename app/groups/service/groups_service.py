@@ -14,9 +14,9 @@ class GroupService:
         The add_group function creates a new group in the database.
         """
         try:
-            with SessionLocal() as dbs:
-                group_repository = GroupRepository(dbs)
-                user_repository = UserRepository(dbs)
+            with SessionLocal() as db:
+                group_repository = GroupRepository(db)
+                user_repository = UserRepository(db)
                 group = group_repository.add_group(group_name, group_owner_id, description)
                 owner_name = user_repository.get_user_name_by_user_id(group_owner_id)
                 return {"group_name": group.group_name, "owner_user_name": owner_name,
@@ -29,9 +29,9 @@ class GroupService:
         """
         The get_all function returns a list of all the groups in the database.
         """
-        with SessionLocal() as dbs:
-            group_repository = GroupRepository(dbs)
-            user_repository = UserRepository(dbs)
+        with SessionLocal() as db:
+            group_repository = GroupRepository(db)
+            user_repository = UserRepository(db)
             groups = group_repository.get_all()
             all_groups = []
             for group in groups:
@@ -46,10 +46,10 @@ class GroupService:
         The change_group_name function changes the name of a group.
         """
         try:
-            with SessionLocal() as dbs:
-                group_repository = GroupRepository(dbs)
+            with SessionLocal() as db:
+                group_repository = GroupRepository(db)
                 group = group_repository.get_group_by_name(group_name)
-                user_repository = UserRepository(dbs)
+                user_repository = UserRepository(db)
                 if group is None:
                     raise GroupNotFound(f"There is no group with name {group_name}")
                 if group.owner_id == user_id:
@@ -67,8 +67,8 @@ class GroupService:
         The delete_by_id function deletes a group by id.
         """
         try:
-            with SessionLocal() as dbs:
-                group_repository = GroupRepository(dbs)
+            with SessionLocal() as db:
+                group_repository = GroupRepository(db)
                 group = group_repository.get_group_by_name(group_name)
                 if group is None:
                     raise GroupNotFound(f"There is no group with name {group_name}")

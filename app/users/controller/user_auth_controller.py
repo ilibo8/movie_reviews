@@ -42,7 +42,7 @@ class JWTBearer(HTTPBearer):
     def verify_jwt(jwt_token: str) -> dict:
         try:
             payload = decodeJWT(jwt_token)
-        except Exception as e:
-            print(e)
+        except Exception as err:
+            print(err)
             payload = None
         return {"valid": bool(payload), "role": payload["role"] if payload else None}

@@ -2,9 +2,10 @@
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
 
+from app.movie.schema import MovieSchemaOut
 from app.reviews.controller import ReviewController
 from app.reviews.schema import ReviewSchema, ReviewSchemaOut, ReviewSchemaIn, \
-    ReviewSchemaChangeRating, MovieAverageAndCountSchema, ReviewWithIdSchemaOut, TopMoviesSchema
+    ReviewSchemaChangeRating, MovieAverageAndCountSchema, TopMoviesSchema
 from app.users.controller import JWTBearer, extract_user_id_from_token
 
 reviews_router = APIRouter(prefix="/api/reviews", tags=["Reviews & Ratings"])
@@ -44,7 +45,7 @@ def get_reviews_by_user_name(user_name: str):
 
 
 @reviews_router.get("/get-top-five-users-with-most-reviews")
-def get_top_five_users_with_most_reviews():
+def top_five_users_with_most_reviews():
     """
     Get list of most active users with number of their reviews.
     """
@@ -52,7 +53,7 @@ def get_top_five_users_with_most_reviews():
 
 
 @reviews_router.get("/get-list-of-top-rated-movies/number_of_movies_to_show", response_model=list[TopMoviesSchema])
-def get_list_of_top_rated_movies(number_of_movies_to_show : int):
+def top_rated_movies(number_of_movies_to_show : int):
     """
     Get list of top-rated movies.
     """
@@ -60,26 +61,36 @@ def get_list_of_top_rated_movies(number_of_movies_to_show : int):
 
 
 @reviews_router.get("/get-five-best-rated-movies-by-genre/{movie_genre)", response_model=list[TopMoviesSchema])
-def get_five_best_rated_movies_by_genre(movie_genre: str):
+def five_best_rated_movies_by_genre(movie_genre: str):
     """
     Get list of top 5 movies by genre.
     """
     return ReviewController.get_five_best_rated_movies_by_genre(movie_genre)
 
 
-@reviews_router.get("/get-personal-reviews-info", response_model=list[ReviewWithIdSchemaOut],
+@reviews_router.get("/get-all-your-reviews", response_model=list[ReviewSchemaOut],
                     dependencies=[Depends(JWTBearer("classic_user"))])
-def get_personal_reviews_info(request: Request):
+def get_all_your_reviews(request: Request):
     """
-    The is used to get all the reviews that a user has made.
+    The function is used to get all the reviews that a user has made.
     """
     user_id = extract_user_id_from_token(request)
     return ReviewController.get_personal_reviews(user_id)
 
 
-@reviews_router.post("/add-rating-and-review", response_model=ReviewSchemaOut,
+@reviews_router.get("/get-not-reviewed-movie-titles", response_model=list[MovieSchemaOut],
+                    dependencies=[Depends(JWTBearer("classic_user"))])
+def get_list_of_movies_you_have_not_reviewed(request: Request):
+    """
+    Returns list of movies user hasn't reviewed.
+    """
+    user_id = extract_user_id_from_token(request)
+    return ReviewController.get_users_not_reviewed_movies(user_id)
+
+
+@reviews_router.post("/add-review", response_model=ReviewSchemaOut,
                      dependencies=[Depends(JWTBearer("classic_user"))])
-def add_rating_and_review(review: ReviewSchemaIn, request: Request):
+def add_review(review: ReviewSchemaIn, request: Request):
     """
     The function adds a rating and review to the database.
     """
@@ -111,12 +122,12 @@ def change_movie_review(movie_name: str, new_review: str, request: Request):
 
 
 @reviews_router.delete("/delete-personal-review", dependencies=[Depends(JWTBearer("classic_user"))])
-def delete_personal_review_by_id(review_id: int, request: Request):
+def delete_movie_review(movie_title: str, request: Request):
     """
     The function is used to delete a review by the user who created it.
     """
     user_id = extract_user_id_from_token(request)
-    return ReviewController.delete_review_id_by_user(review_id, user_id)
+    return ReviewController.delete_review_by_user(movie_title, user_id)
 
 
 @reviews_superuser_router.get("/get-all-ratings-and-reviews", response_model=list[ReviewSchema],

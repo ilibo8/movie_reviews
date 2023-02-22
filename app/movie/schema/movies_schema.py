@@ -15,6 +15,16 @@ class MovieSchema(BaseModel):
         orm_mode = True
 
 
+class MovieSchemaOut(BaseModel):
+    title: str
+    director: str
+    release_year: int
+    country_of_origin: str
+
+    class Config:
+        orm_mode = True
+
+
 class MovieSchemaJoined(BaseModel):
     title: str
     director: str
@@ -97,13 +107,3 @@ class MovieOnlyTitleSchema(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-
-
-
-
-
-
-
-

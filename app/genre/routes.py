@@ -4,7 +4,7 @@ from app.genre.controller import GenreController
 from app.genre.schema import GenreSchema
 from app.users.controller import JWTBearer
 
-genre_superuser_router = APIRouter(prefix="/api/superuser/movies/genres", tags=["superuser - Genre"])
+genre_superuser_router = APIRouter(prefix="/api/superuser/movies/genres", tags=["superuser - Actors & Genre"])
 
 
 @genre_superuser_router.get("/get-all", response_model=list[str], dependencies=[Depends(JWTBearer("super_user"))])

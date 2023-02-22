@@ -17,7 +17,7 @@ class UserNotSuperUser(Exception):
 
 class UserNotFound(Exception):
     """Raise when user object is not found."""
-    def __init__(self, message, code=400):
+    def __init__(self, message, code=404):
         self.message = message
         self.code = code
 

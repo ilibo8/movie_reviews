@@ -1,6 +1,7 @@
 """Module for Actor Controller."""
 from fastapi import HTTPException, Response
-from app.actor.exceptions import ActorNotFound, DuplicateEntry
+from sqlalchemy.exc import IntegrityError
+from app.actor.exceptions import ActorNotFound
 from app.actor.service import ActorService
 
 
@@ -16,8 +17,8 @@ class ActorController:
         """
         try:
             return ActorService.add_actor(full_name, nationality)
-        except DuplicateEntry as err:
-            raise HTTPException(status_code=400, detail=str(err)) from err
+        except IntegrityError as err:
+            raise HTTPException(status_code=400, detail="Duplicate data entry.") from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
@@ -67,7 +68,7 @@ class ActorController:
         try:
             return ActorService.find_actor_by_last_name(last_name)
         except Exception as err:
-            raise HTTPException(status_code=400, detail=str(err)) from err
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def get_actor_by_id(actor_id: int):
@@ -78,7 +79,7 @@ class ActorController:
         try:
             return ActorService.get_actor_by_id(actor_id)
         except ActorNotFound as err:
-            raise HTTPException(status_code=400, detail=str(err.message)) from err
+            raise HTTPException(status_code=404, detail=str(err.message)) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
@@ -93,7 +94,7 @@ class ActorController:
         try:
             return ActorService.change_actor_full_name(actor_id, full_name)
         except ActorNotFound as err:
-            raise HTTPException(status_code=400, detail=str(err.message)) from err
+            raise HTTPException(status_code=404, detail=str(err.message)) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
@@ -108,6 +109,6 @@ class ActorController:
             if ActorService.delete_actor_by_id(actor_id):
                 return Response(content=f"Actor with id - {actor_id} is deleted", status_code=200)
         except ActorNotFound as err:
-            raise HTTPException(status_code=400, detail=str(err)) from err
+            raise HTTPException(status_code=404, detail=str(err)) from err
         except Exception as err:
-            raise HTTPException(status_code=400, detail=str(err)) from err
+            raise HTTPException(status_code=500, detail=str(err)) from err

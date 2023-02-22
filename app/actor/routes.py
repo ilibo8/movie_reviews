@@ -4,7 +4,7 @@ from app.actor.controller import ActorController
 from app.actor.schema import ActorSchema, ActorSchemaIn
 from app.users.controller import JWTBearer
 
-actor_superuser_router = APIRouter(prefix="/api/superuser/movies/actors", tags=["superuser - Actors"])
+actor_superuser_router = APIRouter(prefix="/api/superuser/movies/actors", tags=["superuser - Actors & Genre"])
 
 
 @actor_superuser_router.get("/get-all", response_model=list[ActorSchema],

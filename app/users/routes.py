@@ -3,8 +3,9 @@ from app.users.controller import UserController
 from app.users.controller.user_auth_controller import JWTBearer
 from app.users.schema import UserLoginSchema, UserSchema, UserSchemaIn
 
-user_router = APIRouter(prefix="/api/users", tags=["Users"])
+user_router = APIRouter(prefix="/api/users", tags=["superuser - Users"])
 login_router = APIRouter(prefix="/api/login", tags=["Login"])
+register_router = APIRouter(prefix="/api/users", tags=["Signup"])
 
 
 @login_router.post("/")
@@ -15,7 +16,7 @@ def login_for_access_token(user: UserLoginSchema):
     return UserController.login_user(user.user_name, user.password)
 
 
-@user_router.post("/create-user", response_model=UserSchema)
+@register_router.post("/create-user", response_model=UserSchema)
 def create_user(user: UserSchemaIn):
     """
     The function creates a new user in the database.
