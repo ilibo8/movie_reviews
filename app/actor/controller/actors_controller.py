@@ -70,18 +70,6 @@ class ActorController:
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
-    @staticmethod
-    def get_actor_by_id(actor_id: int):
-        """
-        The get_actor_by_id function is used to retrieve a single actor from the database by their unique id.
-        It takes in an integer as an argument, and returns a dictionary containing the information of that actor.
-        """
-        try:
-            return ActorService.get_actor_by_id(actor_id)
-        except ActorNotFound as err:
-            raise HTTPException(status_code=404, detail=str(err.message)) from err
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_actor_full_name(actor_id, full_name):

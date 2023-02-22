@@ -55,6 +55,9 @@ class MovieGenreRepository:
         return movie_ids
 
     def delete_movie_genre(self, movie_id: int, genre_name: str) -> bool:
+        """
+        Method for deleting genre for movie with provided id.
+        """
         movie = self.db.query(MovieGenre).filter \
             (and_(MovieGenre.movie_id == movie_id, MovieGenre.genre_name == genre_name)).first()
         if movie is None:

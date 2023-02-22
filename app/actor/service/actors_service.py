@@ -34,19 +34,6 @@ class ActorService:
             raise err
 
     @staticmethod
-    def get_actor_by_id(actor_id: int):
-        """
-        The get_actor_by_id function is used to retrieve a single actor from the database by their ID.
-        It takes in an integer as an argument and returns a dictionary containing the actor's information.
-        """
-        try:
-            with SessionLocal() as db:
-                actor_repository = ActorRepository(db)
-                return actor_repository.get_actor_by_id(actor_id)
-        except Exception as err:
-            raise err
-
-    @staticmethod
     def find_actor_by_name(name: str):
         """
         The find_actor_by_name function takes a name as an argument and returns the actor with that name.

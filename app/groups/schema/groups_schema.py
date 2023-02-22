@@ -35,4 +35,3 @@ class GroupWithUsersSchemaOut(BaseModel):
     description: str
     date_created: date
     group_users : list[str]
-

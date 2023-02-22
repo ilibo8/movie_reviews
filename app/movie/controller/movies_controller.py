@@ -132,7 +132,7 @@ class MovieController:
         try:
             return MovieService.get_all_movie_cast()
         except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err))
+            raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
     def change_movie_title(movie_id: int, new_movie_title: str):

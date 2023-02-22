@@ -1,7 +1,7 @@
 """Module for routes for group recommendations"""
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
-from app.recommendations.schema import RecommendationSchema
+from app.recommendations.schema import RecommendationSchema, RecommendationSchemaOut
 from app.users.controller import JWTBearer, extract_user_id_from_token
 from app.recommendations.controller import RecommendationController
 
@@ -55,6 +55,15 @@ def get_all_posts():
     The function returns list of all posts with user and post ids.
     """
     return RecommendationController.get_all_posts()
+
+
+@recommendations_superuser_router.get("/get-all-posts-by-user-id/{user_id}", response_model=list[RecommendationSchemaOut],
+                                      dependencies=[Depends(JWTBearer("super_user"))])
+def get_all_posts_by_user(user_id: int):
+    """
+    The function returns list of all posts with user and post ids.
+    """
+    return RecommendationController.get_all_posts_by_user_id_for_superuser(user_id)
 
 
 @recommendations_superuser_router.delete("/delete-post-by-its-id/{post_id}",

@@ -84,4 +84,3 @@ class GroupController:
             raise HTTPException(status_code=400, detail=str(err)) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
-

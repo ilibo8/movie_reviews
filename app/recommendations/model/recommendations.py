@@ -11,7 +11,7 @@ class Recommendation(Base):
     group_user_id = Column(Integer, ForeignKey("groups_users.id", ondelete="CASCADE"))
     post = Column(String(500))
 
-    group_user = relationship("GroupUser", back_populates="recommendations")
+    group_user = relationship("GroupUser", back_populates="recommendations", lazy="joined")
 
     def __init__(self, group_user_id: int, post: str):
         self.group_user_id = group_user_id

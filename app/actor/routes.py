@@ -16,15 +16,6 @@ def get_all_actors():
     return ActorController.get_all_actors()
 
 
-@actor_superuser_router.get("/get-actors-by-id/{actor_id}", response_model=ActorSchema,
-                            dependencies=[Depends(JWTBearer("super_user"))])
-def get_actor_by_id(actor_id: int):
-    """
-    The function takes an actor_id as a parameter and returns the Actor object with that id.
-    """
-    return ActorController.get_actor_by_id(actor_id)
-
-
 @actor_superuser_router.get("/get-actors-by/name", response_model=list[ActorSchema],
                             dependencies=[Depends(JWTBearer("super_user"))])
 def find_actors_by_name(name: str):
