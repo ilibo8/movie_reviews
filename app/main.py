@@ -4,8 +4,8 @@ from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 from app.db.database import engine, Base
 from app.actor import actor_superuser_router
-from app.movie import movie_router, movie_superuser_router
 from app.genre import genre_superuser_router
+from app.movie import movie_router, movie_superuser_router
 from app.users import login_router, user_router, register_router
 from app.groups import group_router, group_superuser_router
 from app.recommendations import recommendations_router, recommendations_superuser_router

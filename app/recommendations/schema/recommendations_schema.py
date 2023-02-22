@@ -1,12 +1,12 @@
 """Module for Recommendations schemas"""
 from pydantic import BaseModel
 
-from app.groups.schema import GroupUserNamesSchemaOut
+from app.groups.schema import GroupUserNamesSchema, GroupUserNamesSchemaOut
 
 
 class RecommendationSchema(BaseModel):
     id : int
-    group_user_id : int
+    group_user : GroupUserNamesSchema
     post : str
 
     class Config:
@@ -14,7 +14,7 @@ class RecommendationSchema(BaseModel):
 
 
 class RecommendationSchemaOut(BaseModel):
-    id : int
+    id: int
     group_user : GroupUserNamesSchemaOut
     post : str
 

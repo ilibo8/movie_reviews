@@ -35,12 +35,27 @@ class ReviewService:
     @staticmethod
     def get_all_reviews():
         """
-        The get_all_reviews function returns all reviews in the database.
+        The function returns all reviews in the database.
         """
         try:
             with SessionLocal() as db:
                 review_repository = ReviewRepository(db)
                 return review_repository.get_all_reviews()
+        except Exception as err:
+            raise err
+
+    @staticmethod
+    def get_review_by_id(review_id: int):
+        """
+        The function returns review by its id.
+        """
+        try:
+            with SessionLocal() as db:
+                review_repository = ReviewRepository(db)
+                review = review_repository.get_review_by_id(review_id)
+                if review is None:
+                    raise ReviewNotFound(f"There is no review with id {review_id}")
+                return review
         except Exception as err:
             raise err
 

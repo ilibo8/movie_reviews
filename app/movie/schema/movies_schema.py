@@ -1,7 +1,7 @@
 """Module for Movies schemas"""
 from pydantic import BaseModel, StrictInt, StrictStr, validator
 from pydantic.types import date, PositiveInt
-from app.movie.schema import MovieCastSchemaOut, MovieGenreSchemaOut
+from app.movie.schema import MovieCastActorSchemaOut, MovieGenreSchemaOut
 
 
 class MovieSchema(BaseModel):
@@ -63,7 +63,7 @@ class MovieSchemaAll(BaseModel):
     release_year: StrictInt
     country_of_origin: StrictStr
 
-    movie_cast: list[MovieCastSchemaOut]
+    movie_cast: list[MovieCastActorSchemaOut]
     movie_genre: list[MovieGenreSchemaOut]
 
     class Config:
@@ -103,6 +103,14 @@ class MovieSchemaUpdateReleaseYear(BaseModel):
 
 
 class MovieOnlyTitleSchema(BaseModel):
+    title: str
+
+    class Config:
+        orm_mode = True
+
+
+class MovieIdAndTitleSchema(BaseModel):
+    id: int
     title: str
 
     class Config:

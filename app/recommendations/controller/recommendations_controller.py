@@ -56,23 +56,9 @@ class RecommendationController:
     def get_all_posts_by_user_id(user_id: int):
         """
         The function is used to retrieve all the posts by a specific user.
-        It takes in an integer representing the user id and returns a list of dictionaries containing
-        the post information for each post made by that user.
         """
         try:
             return RecommendationService.get_all_posts_by_user_id(user_id)
-        except RecommendationNotFound as err:
-            raise HTTPException(status_code=err.code, detail=err.message) from err
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
-
-    @staticmethod
-    def get_all_posts_by_user_id_for_superuser(user_id: int):
-        """
-        The function is used to retrieve all the posts by a specific user.
-        """
-        try:
-            return RecommendationService.get_all_posts_by_user_id_for_superuser(user_id)
         except RecommendationNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except Exception as err:

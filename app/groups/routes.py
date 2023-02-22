@@ -2,8 +2,7 @@
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
 from app.groups.controller import GroupController, GroupUserController
-from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchemaOut, GroupSchema, \
-    GroupUserNamesSchemaOut
+from app.groups.schema import GroupSchemaIn, GroupSchemaOut, GroupWithUsersSchemaOut, GroupSchema, GroupUserNamesSchema
 from app.users.controller import JWTBearer, extract_user_id_from_token
 
 group_router = APIRouter(prefix="/api/groups", tags=["Groups"])
@@ -67,7 +66,7 @@ def get_all_groups():
     return GroupController.get_all()
 
 
-@group_superuser_router.get("/get-all-group-users", response_model=list[GroupUserNamesSchemaOut],
+@group_superuser_router.get("/get-all-group-users", response_model=list[GroupUserNamesSchema],
                             dependencies=[Depends(JWTBearer("super_user"))],)
 def get_all_group_users():
     """

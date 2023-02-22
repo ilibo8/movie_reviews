@@ -178,8 +178,16 @@ class MovieService:
         try:
             with SessionLocal() as db:
                 movie_cast_repository = MovieCastRepository(db)
+                movie_repository = MovieRepository(db)
+                actor_repository = ActorRepository(db)
                 movie_cast = movie_cast_repository.get_all()
-                return movie_cast
+                all_cast = []
+                for cast in movie_cast:
+                    movie_name = movie_repository.get_title_by_id(cast.movie_id)
+                    actor_name = actor_repository.get_actor_full_name_by_id(cast.actor_id)
+                    all_cast.append({"movie_id": cast.movie_id, "movie_name": movie_name, "actor_id": cast.actor_id,
+                                     "actor_name": actor_name})
+                return all_cast
         except Exception as err:
             raise err
 

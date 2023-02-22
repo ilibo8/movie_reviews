@@ -35,3 +35,10 @@ class GroupWithUsersSchemaOut(BaseModel):
     description: str
     date_created: date
     group_users : list[str]
+
+
+class GroupOnlyNameSchema(BaseModel):
+    group_name: str
+
+    class Config:
+        orm_mode = True

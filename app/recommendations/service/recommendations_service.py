@@ -1,6 +1,5 @@
 """Module for Recommendation servide."""
 from sqlalchemy.exc import IntegrityError
-
 from app.db import SessionLocal
 from app.groups.exceptions import GroupUserNotFound
 from app.groups.repository import GroupRepository, GroupUserRepository
@@ -74,29 +73,6 @@ class RecommendationService:
     @staticmethod
     def get_all_posts_by_user_id(user_id: int):
         """
-        Get all posts added by user with provided id
-        """
-        try:
-            with SessionLocal() as db:
-                recommendation_repo = RecommendationRepository(db)
-                group_user_repository = GroupUserRepository(db)
-                group_repository = GroupRepository(db)
-                all_posts = recommendation_repo.get_all_posts_by_user_id(user_id)
-                if len(all_posts) == 0:
-                    raise RecommendationNotFound("No data found")
-                posts_reformatted = []
-                for post in all_posts:
-                    group_id = group_user_repository.get_group_id_by_group_user_id(post.group_user_id)
-                    group_name = group_repository.get_group_name_by_id(group_id)
-                    reformatted = {"group_name": group_name, "post_id": post.id, "post": post.post}
-                    posts_reformatted.append(reformatted)
-                return posts_reformatted
-        except Exception as err:
-            raise err
-
-    @staticmethod
-    def get_all_posts_by_user_id_for_superuser(user_id: int):
-        """
         Get all posts added by user with provided id for superuser route.
         """
         try:
@@ -104,7 +80,7 @@ class RecommendationService:
                 recommendation_repo = RecommendationRepository(db)
                 all_posts = recommendation_repo.get_all_posts_by_user_id(user_id)
                 if len(all_posts) == 0:
-                    raise RecommendationNotFound("No data found")
+                    raise RecommendationNotFound("No posts yet.")
                 return all_posts
         except Exception as err:
             raise err

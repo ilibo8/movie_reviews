@@ -10,8 +10,8 @@ class MovieCast(Base):
     actor_id = Column(Integer, ForeignKey("actors.id", ondelete="CASCADE"), primary_key=True)
     __table_args__ = (UniqueConstraint("movie_id", "actor_id", name="movie_cast_uc"),)
 
-    movie = relationship("Movie", back_populates="movie_cast")
-    actor = relationship("Actor", back_populates="movie_cast", lazy="subquery")
+    movie = relationship("Movie", back_populates="movie_cast", lazy="joined")
+    actor = relationship("Actor", back_populates="movie_cast", lazy="joined")
 
     def __init__(self, movie_id: int, actor_id: int):
         self.movie_id = movie_id

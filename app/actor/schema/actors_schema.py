@@ -3,9 +3,9 @@ from pydantic import BaseModel, StrictStr
 
 
 class ActorSchema(BaseModel):
-    id : int
-    full_name : str
-    nationality : str
+    id: int
+    full_name: str
+    nationality: str
 
     class Config:
         orm_mode = True

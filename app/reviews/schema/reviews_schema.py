@@ -1,14 +1,14 @@
 """Module for Reviews schemas"""
 from pydantic import BaseModel, Field, typing
 
-from app.movie.schema import MovieOnlyTitleSchema
-from app.users.schema import UserOnlyNameSchema
+from app.movie.schema import MovieOnlyTitleSchema, MovieIdAndTitleSchema
+from app.users.schema import UserOnlyNameSchema, UserIdNameSchema
 
 
 class ReviewSchema(BaseModel):
     id: int
-    movie_id: int
-    user_id: int
+    movie : MovieIdAndTitleSchema
+    user: UserIdNameSchema
     rating_number: int
     review: str
 

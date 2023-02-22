@@ -41,6 +41,18 @@ class ReviewController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
+    def get_review_by_id(review_id: int):
+        """
+        The function returns review by its id.
+        """
+        try:
+            return ReviewService.get_review_by_id(review_id)
+        except ReviewNotFound as err:
+            raise HTTPException(status_code=404, detail=err.message) from err
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
     def get_average_rating_and_count_for_all_movies():
         """
         Returns average rating and number of user rating movie.
@@ -141,6 +153,8 @@ class ReviewController:
         """
         try:
             return ReviewService.get_users_not_reviewed_movies(user_id)
+        except UserNotFound as err:
+            raise HTTPException(status_code=400, detail=str(err)) from err
         except ReviewNotFound as err:
             raise HTTPException(status_code=404, detail=str(err)) from err
         except Exception as err:

@@ -2,8 +2,9 @@
 from typing import Optional
 from fastapi import APIRouter, Depends
 from app.movie.controller import MovieController
-from app.movie.schema import MovieSchemaJoined, MovieSchemaIn, MovieCastSchema, MovieSchemaAll, MovieSchema, \
-    MovieGenreSchema, MovieSchemaUpdateTitle, MovieSchemaUpdateDirector, MovieSchemaUpdateReleaseYear
+from app.movie.schema import MovieSchemaJoined, MovieGenreSchema, MovieSchemaIn, MovieSchemaAll, \
+    MovieSchema, MovieSchemaUpdateTitle, \
+    MovieSchemaUpdateDirector, MovieSchemaUpdateReleaseYear, MovieCastSchema
 from app.users.controller import JWTBearer
 
 movie_router = APIRouter(prefix="/api/movies", tags=["Movies"])
@@ -43,7 +44,7 @@ def get_all_movies_with_cast_and_genre():
     return MovieController.get_all()
 
 
-@movie_superuser_router.get("/get-all-movie_cast", response_model=list[MovieCastSchema],
+@movie_superuser_router.get("/get-all-movie_cast", response_model=list[dict],
                             dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_movies_cast():
     """

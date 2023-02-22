@@ -16,9 +16,9 @@ class Movie(Base):
     number_of_ratings = Column(Integer)
     __table_args__ = (UniqueConstraint("title", "director", "release_year", "country_of_origin", name="movie_uc"),)
 
-    movie_cast = relationship("MovieCast", cascade="all, delete-orphan", back_populates="movie", lazy="subquery")
-    movie_genre = relationship("MovieGenre", cascade="all, delete-orphan", back_populates="movie", lazy="subquery")
-    review = relationship("Review", cascade="all, delete-orphan", back_populates="movie", lazy="subquery")
+    movie_cast = relationship("MovieCast", cascade="all, delete-orphan", back_populates="movie", lazy="joined")
+    movie_genre = relationship("MovieGenre", cascade="all, delete-orphan", back_populates="movie", lazy="joined")
+    review = relationship("Review", cascade="all, delete-orphan", back_populates="movie", lazy="joined")
 
     def __init__(self, title: str, director: str, release_year: int, country_of_origin: str, average_rating=None,
                  number_of_ratings=None):

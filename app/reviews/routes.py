@@ -4,8 +4,8 @@ from starlette.requests import Request
 
 from app.movie.schema import MovieSchemaOut
 from app.reviews.controller import ReviewController
-from app.reviews.schema import ReviewSchema, ReviewSchemaOut, ReviewSchemaIn, \
-    ReviewSchemaChangeRating, MovieAverageAndCountSchema, TopMoviesSchema
+from app.reviews.schema import ReviewSchemaOut, ReviewSchemaIn, \
+    ReviewSchemaChangeRating, MovieAverageAndCountSchema, TopMoviesSchema, ReviewSchema
 from app.users.controller import JWTBearer, extract_user_id_from_token
 
 reviews_router = APIRouter(prefix="/api/reviews", tags=["Reviews & Ratings"])
@@ -130,13 +130,31 @@ def delete_movie_review(movie_title: str, request: Request):
     return ReviewController.delete_review_by_user(movie_title, user_id)
 
 
-@reviews_superuser_router.get("/get-all-ratings-and-reviews", response_model=list[ReviewSchema],
+@reviews_superuser_router.get("/get-all-reviews", response_model=list[ReviewSchema],
                               dependencies=[Depends(JWTBearer("super_user"))])
 def get_all_reviews():
     """
     The function returns a list of all reviews in the database.
     """
     return ReviewController.get_all_reviews()
+
+
+@reviews_superuser_router.get("/get-review-by/{review_id}", response_model=ReviewSchema,
+                              dependencies=[Depends(JWTBearer("super_user"))])
+def get_review_by_review_id(review_id: int):
+    """
+    The function returns a list of all reviews in the database.
+    """
+    return ReviewController.get_review_by_id(review_id)
+
+
+@reviews_superuser_router.get("/get-all-reviews-by/{user_id}", response_model=list[ReviewSchema],
+                              dependencies=[Depends(JWTBearer("super_user"))])
+def get_all_reviews_by_user_id(user_id: int):
+    """
+    The function returns a list of all reviews in the database.
+    """
+    return ReviewController.get_personal_reviews(user_id)
 
 
 @reviews_superuser_router.delete("/delete-review-by-id", dependencies=[Depends(JWTBearer("super_user"))])

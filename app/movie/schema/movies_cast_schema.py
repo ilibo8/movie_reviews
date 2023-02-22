@@ -11,7 +11,7 @@ class MovieCastSchema(BaseModel):
         orm_mode = True
 
 
-class MovieCastSchemaOut(BaseModel):
+class MovieCastActorSchemaOut(BaseModel):
     actor_id: int
     actor: ActorSchemaOut
 

@@ -36,7 +36,7 @@ class RecommendationRepository:
         """
         post = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if post is None:
-            raise RecommendationNotFound(f"No post with id {recommendation_id}")
+            raise RecommendationNotFound(f"There is no post with id {recommendation_id}")
         return post
 
     def get_all_posts_by_group_id(self, group_id: int) -> list[Type[Recommendation]]:
@@ -51,7 +51,7 @@ class RecommendationRepository:
 
     def get_all_posts_by_user_id(self, user_id: int) -> list[Type[Recommendation]]:
         """
-        The get_all_posts_by_user_id function takes in a user_id and returns all the posts that belong to that user.
+        The function takes in a user_id and returns all the posts that belong to that user.
         """
         recommendations = self.db.query(Recommendation). \
             join(GroupUser).filter(GroupUser.user_id == user_id).all()
@@ -59,13 +59,13 @@ class RecommendationRepository:
 
     def change_post_by_id(self, recommendation_id: int, new_post: str) -> Type[Recommendation]:
         """
-        The change_post_by_id function takes a recommendation id and new post as arguments.
+        The function takes a recommendation id and new post as arguments.
         It finds the recommendation with that id, changes its post to the new_post argument,
         and returns it.
         """
         recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
-            raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
+            raise RecommendationNotFound(f"There is no post with id {recommendation_id}.")
         recommendation.post = new_post
         self.db.add(recommendation)
         self.db.commit()
@@ -97,7 +97,7 @@ class RecommendationRepository:
         """
         recommendation = self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
         if recommendation is None:
-            raise RecommendationNotFound(f"There is no recommendation with id {recommendation_id}.")
+            raise RecommendationNotFound(f"There is no post with id {recommendation_id}.")
         self.db.delete(recommendation)
         self.db.commit()
         return True
