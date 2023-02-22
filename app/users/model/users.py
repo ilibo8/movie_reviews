@@ -12,8 +12,8 @@ class User(Base):
     email = Column(String(50), unique=True)
     is_superuser = Column(Boolean, default=False)
 
-    review = relationship("Review", back_populates="user", lazy="subquery")
-    group_user = relationship("GroupUser", back_populates="user", lazy="joined")
+    review = relationship("Review", cascade="all, delete-orphan", back_populates="user", lazy="subquery")
+    group_user = relationship("GroupUser", cascade="all, delete-orphan", back_populates="user", lazy="joined")
 
     def __init__(self, user_name: str, password: str, email: str, is_superuser=False):
         self.user_name = user_name
