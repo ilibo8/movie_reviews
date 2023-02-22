@@ -21,14 +21,14 @@ pip install -r requirements.txt
 ```
 
 #### Troubleshooting
-Edit Run/Debug configurations. 
-Script path - \movie_reviews\app\main.py  
-Working directory - \movie_reviews  
+Edit Run/Debug configurations.   
+Script path - \movie_reviews\app\main.py   
+Working directory - \movie_reviews    
 
 #### Database
-Start MySQL server and execute all commands in:
-**_init_db/init_db.sql_**
-**_init_db/init_data.sql_**
+Start MySQL server and execute all commands in:   
+**_init_db/init_db.sql_**   
+**_init_db/init_data.sql_**   
 
 ### Login for super_user
     user_name : superuser
