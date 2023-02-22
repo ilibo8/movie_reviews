@@ -1,7 +1,7 @@
-.idea/
-**/__pycache__/
+idea/
+venv/
+
 .gitattributes
 .pytest_cache/
-venv/
 .coverage
 venv_activate.md
