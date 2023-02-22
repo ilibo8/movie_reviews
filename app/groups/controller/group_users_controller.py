@@ -28,7 +28,7 @@ class GroupUserController:
     @staticmethod
     def get_all_joined():
         """
-        The get_all_joined function returns a list of all the groups that the user is in.
+        The function returns a list of all the groups that the user is in.
         """
         try:
             return GroupUserService.get_all_joined()
@@ -36,12 +36,14 @@ class GroupUserController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
-    def get_all_group_members(group_id: int):
+    def get_all_groups_having_user_by_user_id(user_id: int) -> list[str]:
         """
-        The get_all_group_members function returns all the members of a group.
+        The function returns a list of all groups user is part of.
         """
         try:
-            return GroupUserService.get_all_group_members(group_id)
+            return GroupUserService.get_all_groups_having_user_by_user_id(user_id)
+        except GroupNotFound as err:
+            raise HTTPException(status_code=404, detail=err.message) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 

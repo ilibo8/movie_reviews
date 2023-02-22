@@ -66,14 +66,18 @@ class GroupUserService:
             return all_groups_and_members
 
     @staticmethod
-    def get_all_group_members(group_id: int):
+    def get_all_groups_having_user_by_user_id(user_id: int) -> list[str]:
         """
-        The get_all_group_members function returns a list of all the user ids that are members of a given group.
-        The function takes in one parameter, which is the id of the group you want to get all members for.
+        The function returns a list of all groups user is part of.
         """
         with SessionLocal() as db:
             group_user_repository = GroupUserRepository(db)
-            return group_user_repository.get_all_group_members_ids(group_id)
+            group_repository = GroupRepository(db)
+            group_ids = group_user_repository.get_all_groups_having_user_by_user_id(user_id)
+            if len(group_ids) == 0:
+                raise GroupNotFound("Not part of any group yet.")
+            group_names = [group_repository.get_group_name_by_id(g_id) for g_id in group_ids]
+            return group_names
 
     @staticmethod
     def delete_group_user(group_id: int, user_id: int):

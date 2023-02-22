@@ -25,6 +25,15 @@ def get_all_groups_with_members():
     return GroupUserController.get_all_joined()
 
 
+@group_router.get("/your-group-names", response_model=list[str], dependencies=[Depends(JWTBearer("classic_user"))])
+def get_your_groups(request: Request):
+    """
+    The function returns a list of all groups user is part of.
+    """
+    user_id = extract_user_id_from_token(request)
+    return GroupUserController.get_all_groups_having_user_by_user_id(user_id)
+
+
 @group_router.post("/create-group", response_model=GroupSchemaOut, dependencies=[Depends(JWTBearer("classic_user"))])
 def create_group(group: GroupSchemaIn, request: Request):
     """

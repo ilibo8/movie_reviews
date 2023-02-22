@@ -39,10 +39,18 @@ class GroupUserRepository:
 
     def get_all_group_members_ids(self, group_id: int) -> list[int]:
         """
-        The get_all_group_members_ids function accepts a group_id as an argument and returns a list of all the user ids
+        The function accepts a group_id as an argument and returns a list of all the user ids
         that are members of that group.
         """
         ids_list_of_tuples = self.db.query(GroupUser.user_id).filter(GroupUser.group_id == group_id).all()
+        ids = [x[0] for x in ids_list_of_tuples]
+        return ids
+
+    def get_all_groups_having_user_by_user_id(self, user_id: int) -> list[int]:
+        """
+        The function returns a list of all groups user is part of.
+        """
+        ids_list_of_tuples = self.db.query(GroupUser.group_id).filter(GroupUser.user_id == user_id).all()
         ids = [x[0] for x in ids_list_of_tuples]
         return ids
 
