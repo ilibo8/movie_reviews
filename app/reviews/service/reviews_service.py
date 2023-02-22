@@ -218,14 +218,8 @@ class ReviewService:
                     movie_obj.number_of_ratings = movie[2]
                     movies.append({f"rank": count + 1, "movie": movie_obj})
                 return movies
-                # for count, movie in enumerate(movies):
-                #     movie_name = movie_repository.get_title_by_id(movie[0])
-                #     movies_reformatted.append({f"Movie No. {count + 1}": movie_name, "average_rating": float(movie[1]),
-                #                                "number_of_ratings": movie[2]})
-                # return movies_reformatted
         except Exception as err:
             raise err
-
 
     @staticmethod
     def change_movie_rating_number(movie_name: str, user_id: int, new_rating: int):

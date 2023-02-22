@@ -200,8 +200,6 @@ class ReviewController:
     def delete_review_by_id(review_id: int):
         """
         The delete_review_by_id function deletes a review from the database.
-        It takes in an integer representing the id of the review to be deleted, and returns a response object with either
-        a status code of 200 or 500 depending on whether it was successful or not.
         """
         try:
             if ReviewService.delete_review_by_id(review_id):

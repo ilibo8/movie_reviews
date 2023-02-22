@@ -11,11 +11,16 @@ visible only to group members.
 
 ### Installation
 
-##### Create virtual environment
+##### Create and activate virtual environment
 ##### Dependencies
 ```bash
 pip install -r requirements.txt
 ```
+#### Troubleshooting
+Edit Run/Debug configurations. 
+Script path - \movie_reviews\app\main.py
+Working directory - \movie_reviews
+
 #### Database
 Start MySQL server and execute all commands in **_init_db/init_db.sql_** 
 After running application execute all commands from **_init_db/init_data.sql_** for initial data

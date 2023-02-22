@@ -6,7 +6,8 @@ from app.config import settings
 from app.db import Base
 from app.main import app
 
-MYSQL_URL_TEST = f"{settings.DB_HOST}://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOSTNAME}:{settings.DB_PORT}/{settings.DB_NAME_TEST}"
+MYSQL_URL_TEST = f"{settings.DB_HOST}://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOSTNAME}:" \
+                 f"{settings.DB_PORT}/{settings.DB_NAME_TEST}"
 
 engine = create_engine(MYSQL_URL_TEST, echo=True)
 
