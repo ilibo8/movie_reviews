@@ -31,9 +31,3 @@ Open terminal and navigate to project directory, than run
 |          | PowerShell | $ venv/bin/Activate.ps1                 |
 | Windows  | cmd.exe    | C:\> venv\Scripts\activate.bat          |
 |          | PowerShell | PS C:\> venv\Scripts\Activate.ps1       |
-
-### Dependencies
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install dependencies.
-```bash
-pip install -r requirements.txt
-```
