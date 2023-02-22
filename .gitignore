@@ -1,6 +1,0 @@
-venv/
-.gitattributes
-.pytest_cache/
-.coverage
-venv_activate.md
-.idea
