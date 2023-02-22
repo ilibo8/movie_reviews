@@ -1,0 +1,7 @@
+.idea/
+**/__pycache__/
+.gitattributes
+.pytest_cache/
+venv/
+.coverage
+venv_activate.md
