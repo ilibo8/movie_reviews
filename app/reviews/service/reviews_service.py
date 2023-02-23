@@ -2,6 +2,7 @@
 from app.db import SessionLocal
 from app.genre.exceptions import GenreNotFound
 from app.genre.repository import GenreRepository
+from app.movie.exceptions import MovieNotFound
 from app.movie.repository import MovieRepository
 from app.reviews.repository import ReviewRepository
 from app.reviews.exceptions import ReviewNotFound, Unauthorized, ReviewDuplicateEntry
@@ -90,24 +91,33 @@ class ReviewService:
                 movie = movie_repository.get_movie_by_id(movie_id)
                 movie.average_rating = rating_and_count[0]
                 movie.number_of_ratings = rating_and_count[1]
+                if movie.number_of_ratings == 0:
+                    raise ReviewNotFound("There are no ratings for this movie yet.")
                 return movie
         except Exception as err:
             raise err
 
     @staticmethod
-    def get_average_rating_and_count_for_all_movies():
+    def get_movies_rating_between(bottom_rating: int, top_rating: int):
         """
-        Returns average rating and number of user rating movie.
+        The function accepts a movie title as an argument and returns the average rating for that movie.
         """
         try:
             with SessionLocal() as db:
+                if bottom_rating >= top_rating or bottom_rating not in range(1, 11) or top_rating not in range(1, 11):
+                    raise ValueError
                 review_repository = ReviewRepository(db)
                 movie_repository = MovieRepository(db)
                 all_movies = movie_repository.get_all_movies_order_by_name()
+                movies_in_range = []
                 for movie in all_movies:
                     movie.average_rating = review_repository.get_average_rating_and_count_by_movie_id(movie.id)[0]
                     movie.number_of_ratings = review_repository.get_average_rating_and_count_by_movie_id(movie.id)[1]
-                return all_movies
+                    if bottom_rating <= movie.average_rating <= top_rating:
+                        movies_in_range.append(movie)
+                if len(movies_in_range) == 0:
+                    raise MovieNotFound("There are no movies with this range")
+                return movies_in_range
         except Exception as err:
             raise err
 
@@ -177,7 +187,7 @@ class ReviewService:
                 users_reformatted = []
                 for count, user in enumerate(users):
                     user_name = user_repository.get_user_name_by_user_id(user[0])
-                    users_reformatted.append({f"No. {count+1}" : user_name, "number_of_ratings": user[1]})
+                    users_reformatted.append({f"No. {count + 1}": user_name, "number_of_ratings": user[1]})
                 return users_reformatted
         except Exception as err:
             raise err
@@ -200,7 +210,7 @@ class ReviewService:
                     movie_obj = movie_repository.get_movie_by_id(movie[0])
                     movie_obj.average_rating = movie[1]
                     movie_obj.number_of_ratings = movie[2]
-                    movies.append({"rank": count + 1, "movie" : movie_obj})
+                    movies.append({"rank": count + 1, "movie": movie_obj})
                 return movies
         except Exception as err:
             raise err

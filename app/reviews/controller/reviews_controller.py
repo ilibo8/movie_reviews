@@ -53,16 +53,6 @@ class ReviewController:
             raise HTTPException(status_code=500, detail=str(err)) from err
 
     @staticmethod
-    def get_average_rating_and_count_for_all_movies():
-        """
-        Returns average rating and number of user rating movie.
-        """
-        try:
-            return ReviewService.get_average_rating_and_count_for_all_movies()
-        except Exception as err:
-            raise HTTPException(status_code=500, detail=str(err)) from err
-
-    @staticmethod
     def get_average_rating_and_count_for_movie(movie_title: str):
         """
         The get_average_rating_for_movie function accepts a movie title as an argument and returns the average
@@ -71,9 +61,24 @@ class ReviewController:
         try:
             return ReviewService.get_average_rating_for_movie(movie_title)
         except ReviewNotFound as err:
-            raise HTTPException(status_code=404, detail=str(err)) from err
+            raise HTTPException(status_code=404, detail=err.message) from err
         except MovieNotFound as err:
             raise HTTPException(status_code=400, detail=str(err)) from err
+        except Exception as err:
+            raise HTTPException(status_code=500, detail=str(err)) from err
+
+    @staticmethod
+    def get_movies_rating_between(bottom_rating: int, top_rating: int):
+        """
+        The function accepts a movie title as an argument and returns the average rating for that movie.
+        """
+        try:
+            return ReviewService.get_movies_rating_between(bottom_rating, top_rating)
+        except ValueError as err:
+            raise HTTPException(status_code=400, detail="Numbers must be in range 1 - 10. "
+                                                        "First must be lower than second.") from err
+        except MovieNotFound as err:
+            raise HTTPException(status_code=404, detail=err.message) from err
         except Exception as err:
             raise HTTPException(status_code=500, detail=str(err)) from err
 

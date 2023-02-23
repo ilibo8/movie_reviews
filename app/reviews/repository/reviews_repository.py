@@ -113,7 +113,7 @@ class ReviewRepository:
         avg = self.db.query(func.round(func.avg(Review.rating_number), 2)).filter(Review.movie_id == movie_id).scalar()
         count = self.db.query(func.count(Review.rating_number)).filter(Review.movie_id == movie_id).scalar()
         if count == 0:
-            return None, 0
+            return 0, 0
         return avg, count
 
     def change_movie_rating(self, movie_id: int, user_id: int, new_rating: int) -> Type[Review]:

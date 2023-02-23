@@ -1,5 +1,5 @@
 """Module for Reviews schemas"""
-from pydantic import BaseModel, Field, typing
+from pydantic import BaseModel, Field, typing, PositiveInt, validator
 
 from app.movie.schema import MovieOnlyTitleSchema, MovieIdAndTitleSchema
 from app.users.schema import UserOnlyNameSchema, UserIdNameSchema

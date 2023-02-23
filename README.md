@@ -22,10 +22,10 @@ pip install -r requirements.txt
 
 #### Troubleshooting with PyCharm
 Edit Run/Debug configurations.   
-**_Script path_**   ..\movie_reviews\app\main.py   
-**_Working directory_**..\movie_reviews    
+**_Script path_**     ..\movie_reviews\app\main.py   
+**_Working directory_**     ..\movie_reviews    
 
-#### Database
+### Database
 Start MySQL server and execute all commands in:   
 __init_db/init_db.sql__   
 __init_db/init_data.sql__   

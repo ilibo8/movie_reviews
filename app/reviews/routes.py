@@ -12,20 +12,20 @@ reviews_router = APIRouter(prefix="/api/reviews", tags=["Reviews & Ratings"])
 reviews_superuser_router = APIRouter(prefix="/api/superuser/reviews", tags=["superuser - Reviews & Ratings"])
 
 
-@reviews_router.get("/get-average-ratings-for-all-movies", response_model=list[MovieAverageAndCountSchema])
-def get_average_ratings_for_all_movies():
-    """
-    Returns average rating for every movie in database.
-    """
-    return ReviewController.get_average_rating_and_count_for_all_movies()
-
-
 @reviews_router.get("/get-average-rating-for-movie-by-title", response_model=MovieAverageAndCountSchema)
 def get_average_rating_for_movie_by_title(movie_title: str):
     """
     The function accepts a movie title as an argument and returns the average rating for that movie.
     """
     return ReviewController.get_average_rating_and_count_for_movie(movie_title)
+
+
+@reviews_router.get("/get-movies-with-rating-in-range-of-numbers", response_model=list[MovieAverageAndCountSchema])
+def get_movies_with_average_rating_between(bottom_rating: int, top_rating: int):
+    """
+    The function returns list of movies with rating between provided numbers
+    """
+    return ReviewController.get_movies_rating_between(bottom_rating, top_rating)
 
 
 @reviews_router.get("/get-reviews-by-movie-title/{movie_title}", response_model=list[ReviewSchemaOut])
