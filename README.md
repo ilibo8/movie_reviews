@@ -20,15 +20,15 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install depende
 pip install -r requirements.txt
 ```
 
-#### Troubleshooting
+#### Troubleshooting with PyCharm
 Edit Run/Debug configurations.   
-Script path - \movie_reviews\app\main.py   
-Working directory - \movie_reviews    
+**_Script path_**   ..\movie_reviews\app\main.py   
+**_Working directory_**..\movie_reviews    
 
 #### Database
 Start MySQL server and execute all commands in:   
-**_init_db/init_db.sql_**   
-**_init_db/init_data.sql_**   
+__init_db/init_db.sql__   
+__init_db/init_data.sql__   
 
 ### Login for super_user
     user_name : superuser

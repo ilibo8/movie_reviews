@@ -1,17 +1,16 @@
-"""Module for JWTBearer"""
+"""Module for User authentication and authorization controller."""
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from app.users.service import decodeJWT
+from app.users.service import decode_JWT
 
 
 def extract_user_id_from_token(request: Request) -> int:
     """Function for extracting user id from authorised request."""
     bearer = request.headers["authorization"]
     token = bearer.split()[1]
-    decoded = decodeJWT(token)
+    decoded = decode_JWT(token)
     user_id = decoded["user_id"]
     return user_id
-
 
 
 class JWTBearer(HTTPBearer):
@@ -37,11 +36,13 @@ class JWTBearer(HTTPBearer):
             return credentials.credentials
         raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
-
     @staticmethod
     def verify_jwt(jwt_token: str) -> dict:
+        """
+        Method for verifying jwt token.
+        """
         try:
-            payload = decodeJWT(jwt_token)
+            payload = decode_JWT(jwt_token)
         except Exception as err:
             print(err)
             payload = None

@@ -2,7 +2,7 @@
 from fastapi import HTTPException, Response
 from sqlalchemy.exc import IntegrityError
 from app.users.exceptions import UserInvalidPassword, AlreadyExist, UserNotFound
-from app.users.service import UserService, signJWT
+from app.users.service import UserService, sign_JWT
 
 
 class UserController:
@@ -52,8 +52,8 @@ class UserController:
         try:
             user = UserService.login_user(user_name, password)
             if user.is_superuser:
-                return signJWT(user.id, "super_user")
-            return signJWT(user.id, "classic_user")
+                return sign_JWT(user.id, "super_user")
+            return sign_JWT(user.id, "classic_user")
         except UserNotFound as err:
             raise HTTPException(status_code=err.code, detail=err.message) from err
         except UserInvalidPassword as err:
