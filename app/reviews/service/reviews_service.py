@@ -117,6 +117,7 @@ class ReviewService:
                         movies_in_range.append(movie)
                 if len(movies_in_range) == 0:
                     raise MovieNotFound("There are no movies with this range")
+                movies_in_range.sort(key=lambda x: x.title)
                 return movies_in_range
         except Exception as err:
             raise err
@@ -255,6 +256,7 @@ class ReviewService:
                 unreviewed_movies = [movies_repository.get_movie_by_id(m_id) for m_id in unreviewed]
                 if len(unreviewed_movies) == 0:
                     raise ReviewNotFound("You've reviewed all movies.")
+                unreviewed_movies.sort(key=lambda x: x.title)
                 return unreviewed_movies
         except Exception as err:
             raise err

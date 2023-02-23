@@ -48,6 +48,7 @@ class GroupService:
                 owner_name = user_repository.get_user_name_by_user_id(group.owner_id)
                 all_groups.append({"group_name": group.group_name, "owner_user_name": owner_name,
                                    "description": group.description, "date_created": group.date_created})
+            all_groups = sorted(all_groups, key=lambda x: x['group_name'])
             return all_groups
 
     @staticmethod

@@ -48,22 +48,26 @@ class GroupUserService:
             - date_created: When this particular group was created.
 
         """
-        with SessionLocal() as db:
-            group_user_repository = GroupUserRepository(db)
-            user_repository = UserRepository(db)
-            group_repository = GroupRepository(db)
-            all_groups = group_repository.get_all()
-            all_groups_and_members = []
-            for group in all_groups:
-                group_name = group_repository.get_group_name_by_id(group.id)
-                owner_user_name = user_repository.get_user_name_by_user_id(group.owner_id)
-                members_ids = group_user_repository.get_all_group_members_ids(group.id)
-                members_names = [user_repository.get_user_name_by_user_id(id) for id in members_ids]
-                members_names.sort()
-                all_groups_and_members.append({"group_name": group_name, "owner_user_name": owner_user_name,
-                                               "description": group.description, "date_created": group.date_created,
-                                               "group_users": members_names})
-            return all_groups_and_members
+        try:
+            with SessionLocal() as db:
+                group_user_repository = GroupUserRepository(db)
+                user_repository = UserRepository(db)
+                group_repository = GroupRepository(db)
+                all_groups = group_repository.get_all()
+                all_groups_and_members = []
+                for group in all_groups:
+                    group_name = group_repository.get_group_name_by_id(group.id)
+                    owner_user_name = user_repository.get_user_name_by_user_id(group.owner_id)
+                    members_ids = group_user_repository.get_all_group_members_ids(group.id)
+                    members_names = [user_repository.get_user_name_by_user_id(id) for id in members_ids]
+                    members_names.sort()
+                    all_groups_and_members.append({"group_name": group_name, "owner_user_name": owner_user_name,
+                                                   "description": group.description, "date_created": group.date_created,
+                                                   "group_users": members_names})
+                all_groups_and_members = sorted(all_groups_and_members, key=lambda x: x["group_name"])
+                return all_groups_and_members
+        except Exception as err:
+            raise err
 
     @staticmethod
     def get_all_groups_having_user_by_user_id(user_id: int) -> list[str]:

@@ -63,6 +63,7 @@ class RecommendationService:
                     post_reformatted = {"user name" : user_name, "post": post.post}
                     print(post_reformatted)
                     all_posts.append(post_reformatted)
+                all_posts = sorted(all_posts, key=lambda x: x["user name"])
                 return all_posts
 
         except GroupUserNotFound as err:

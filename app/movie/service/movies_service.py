@@ -103,7 +103,7 @@ class MovieService:
                     full_names.sort()
                     movie.genre = genres_names
                     movie.actors = full_names
-            return movies
+                return movies
         except Exception as err:
             raise err
 
@@ -130,10 +130,9 @@ class MovieService:
                 full_names.sort()
                 movie.genre = genres_names
                 movie.actors = full_names
-            return movie
+                return movie
         except Exception as err:
             raise err
-
 
     @staticmethod
     def get_movies_by_actor_full_name(actor_full_name: str):
@@ -166,6 +165,7 @@ class MovieService:
                     full_names.sort()
                     movie.genre = genres_names
                     movie.actors = full_names
+                all_movies.sort(key=lambda x : x.title)
                 return all_movies
         except Exception as err:
             raise err
@@ -274,6 +274,7 @@ class MovieService:
                     full_names.sort()
                     movie.genre = genres_names
                     movie.actors = full_names
+                movies.sort(key=lambda x: x.title)
                 return movies
         except Exception as err:
             raise err

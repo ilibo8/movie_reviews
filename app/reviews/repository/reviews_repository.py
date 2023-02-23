@@ -39,7 +39,7 @@ class ReviewRepository:
         """
         The get_all_reviews function returns a list of all reviews in the database.
         """
-        reviews = self.db.query(Review).all()
+        reviews = self.db.query(Review).order_by(Review.movie_id).all()
         return reviews
 
     def get_reviews_by_movie_id(self, movie_id: int) -> list[Type[Review]]:
